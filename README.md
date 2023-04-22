@@ -13,4 +13,3 @@ Funcionalidades da aplicação:
 
 •	Criação de Cartões dos Jogadores -  ajudar a Junta de Freguesia a conseguir criar os cartões para cada jogador mais eficientemente.
 
-•	Exportação de dados para uma folha de cálculo – esta funcionalidade irá permitir à Junta obter uma folha de cálculo onde irão poder encontrar o nome da equipa, nome do escalão, nome do jogador e dados dos pais de modo a que possam averiguar se o jogador ou pelo menos um dos pais do jogador realmente residem em uma das Juntas de Freguesia que representam a União de Freguesias de Almargem do Bispo, Pêro Pinheiro e Montelavar.
