@@ -1,0 +1,170 @@
+@import "home.css";
+.App {
+  width: 100vw;
+  height: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* BODY */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(189, 182, 182);
+}
+
+body .a{
+  border-collapse: collapse;
+  border: 1px solid black;
+  text-align: center;
+  table-layout: auto;
+  width: 100%;
+}
+
+body .a th, td{
+  border: 1px solid black;
+}
+
+body .lander{
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  text-align: center;
+}
+body p{
+  text-align: center;
+}
+body .escalao{
+  text-align: center;
+}
+body .escalao ul{
+  display: inline-block;
+  text-align: left;
+}
+body .links{
+  text-align: center;
+}
+body .links ul{
+  display: inline-block;
+  text-align: left;
+}
+
+/* Login*/
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100px;
+  height: auto;
+  padding: 150px;
+  align-items: center;
+}
+
+.loginContainer input,
+button {
+  width: 200px;
+  height: 50px;
+  border-radius: 8px;
+  border: none;
+  margin: 10px;
+}
+
+.loginContainer button {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.loginContainer input {
+  border: 2px solid dodgerblue;
+}
+
+/*Inscrição Tecnicos e Jogadores CSS*/
+.Inscrição {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100vw;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 500px;
+  height: auto;
+  padding: 20px;
+  border: 5px solid dodgerblue;
+  border-radius: 5px;
+}
+
+.formContainer #inputCreatePost {
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding-left: 10px;
+  font-size: 20px;
+}
+
+.formContainer button {
+  margin-top: 15px;
+  height: 40px;
+  border: none;
+  background-color: lightskyblue;
+  border-radius: 5px;
+  color: white;
+}
+
+.formContainer button:hover {
+  cursor: pointer;
+  background-color: dodgerblue;
+}
+
+
+
+/* NAVBAR */
+
+.navbar {
+  width: 100%;
+  height: 70px;
+  background-color: green;
+  display:flex;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+
+.navbar a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: black;
+}
+
+.navbar .login-right{
+  flex: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+}
+
+.navbar button{
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: white;
+}
+
+.navbar h1 {
+  text-align: right;
+  margin-right: 10px;
+  color: black;
+  font-weight: lighter;
+}
