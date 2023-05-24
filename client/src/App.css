@@ -168,3 +168,8 @@ button {
   color: black;
   font-weight: lighter;
 }
+
+span {
+  color: red;
+  font-size: small;
+}

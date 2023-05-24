@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.STRING,
             allowNull:false
         },
+        Clube :{
+            type: DataTypes.STRING,
+            allowNull:false
+        },
         Morada :{
             type: DataTypes.STRING,
             allowNull:false

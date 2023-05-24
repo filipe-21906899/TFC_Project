@@ -68,10 +68,10 @@ function Inscricao() {
           <label>Data Nascimento: </label>
           <input type='date'/>
           <label>Imagem: </label>
-          <input type='file'/>
+          <input type='file' accept='image/*'/>
           <label>Ficha de Inscrição PDF: </label>
-          <input type='file'/>
-          <button type='submit'>Inscrever Técnico</button>
+          <input type='file' accept="application/pdf"/>
+          <button type='submit'>Inscrever Jogador</button>
         </Form>
       </Formik>
     </div>

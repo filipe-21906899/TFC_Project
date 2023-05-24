@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {TecnicosType} = require('../models');
 
-router.get("/", async (req, res) =>{
-    const listOfPost = await TecnicosType.findAll();
-    res.json(listOfPost);
-});
+router.get('/', async (req, res) => {
+    const listOfTecnicosType = await TecnicosType.findAll();
+    res.json(listOfTecnicosType);
+  });
 
 router.post("/", async (req, res) =>{
     const cc = req.body;

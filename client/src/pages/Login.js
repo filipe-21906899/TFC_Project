@@ -21,6 +21,10 @@ function Login() {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("username", response.data.username);
         localStorage.setItem("usersTypeId", response.data.UsersTypeId);
+        if(response.data.UsersTypeId !== 1){
+          localStorage.setItem("clubeId", response.data.clubId);
+          localStorage.setItem("clubeName", response.data.clubName);
+        }
         go('/');
         window.location.reload('/');
       }
