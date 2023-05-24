@@ -7,10 +7,25 @@ router.get("/", async (req, res) =>{
     res.json(listOfPost);
 });
 
-router.post("/", async (req, res) =>{
-    const cc = req.body;
-    await Tecnicos.create(cc);
-    res.json(cc);
-})
+router.post('/', async (req, res) => {
+    try {
+      const { Imagem, ...rest } = req.body;
+  
+      // Convert the Base64 image data to a string
+      const imageString = Imagem.toString();
+  
+      // Create a new Tecnicos record
+      const tecnicos = await Tecnicos.create({
+        ...rest,
+        Imagem: imageString,
+      });
+  
+      res.json(tecnicos);
+    } catch (error) {
+      console.error('Error creating Tecnicos:', error);
+      res.status(500).json({ error: 'Failed to create Tecnicos' });
+    }
+  });
+  
 
 module.exports = router
