@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import {Formik, Form, Field, ErrorMessage, useField} from "formik";
 import * as Yup from 'yup';
 
 function InscricaoTecnicos() {
@@ -63,7 +63,7 @@ function InscricaoTecnicos() {
     }
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, { setSubmitting, setFieldValue }) => {
     try {
       const response = await fetch('http://localhost:3001/caderno_eleitoral');
       const cadernoEleitoralData = await response.json();
@@ -117,6 +117,26 @@ function InscricaoTecnicos() {
       console.error('Error:', error);
       // Handle the error
     }
+  };
+
+  const CustomFileInput = ({ field, form, ...props }) => {
+    const [fieldInput, meta] = useField(props);
+
+    return (
+      <>
+        <input
+          id={props.id}
+          type="file"
+          {...fieldInput}
+          {...props}
+          onChange={(event) => {
+            const file = event.currentTarget.files[0];
+            form.setFieldValue(field.name, file);
+          }}
+        />
+        {meta.touched && meta.error && <div className="error">{meta.error}</div>}
+      </>
+    );
   };
   
   return (
@@ -212,19 +232,8 @@ function InscricaoTecnicos() {
           <ErrorMessage name="TecnicosType" component="span" />
 
           <label>Imagem: </label>
-          <input
-            id='file'
-            name='Imagem'
-            type='file'
-            accept='image/*'
-            onChange={(event) => {
-              const file = event.target.files[0];
-              if (file) {
-                setFieldValue('Imagem', file);
-              }
-            }}
-          />
-          <ErrorMessage name='Imagem' component='span' />
+          <Field name="Imagem" as={CustomFileInput} />
+          <ErrorMessage name="Imagem" component="span" />
 
           <button type='submit'>Inscrever Técnico</button>
         </Form>
