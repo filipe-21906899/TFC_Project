@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Formik, Form, Field, ErrorMessage, useField} from "formik";
+import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from 'yup';
 
 function InscricaoTecnicos() {
@@ -30,9 +30,13 @@ function InscricaoTecnicos() {
     Contacto: Yup.number().required("Campo Obrigatório"),
     Email: Yup.string().required("Campo Obrigatório"),
     CC: Yup.number().required("Campo Obrigatório"),
-    DataNascimento: Yup.date().required("Campo Obrigatório"),
+    DataNascimento: Yup.string().required("Campo Obrigatório"),
     TecnicosType: Yup.string().required("Campo Obrigatório"),
-    Imagem: Yup.mixed().required("Campo Obrigatório"),
+    Imagem: Yup.mixed()
+    .test("fileRequired", "Campo Obrigatório", (value) => {
+      // Check if any file is selected
+      return value && value.length > 0;
+    })
   })
 
   useEffect(() => {
@@ -63,39 +67,18 @@ function InscricaoTecnicos() {
     }
   };
 
-  const onSubmit = async (data, { setSubmitting, setFieldValue }) => {
+  const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:3001/caderno_eleitoral');
       const cadernoEleitoralData = await response.json();
-
+      
       const ccValues = cadernoEleitoralData.map((item) => item.CC);
       const ccFieldValue = data.CC;
-
+      
       if (ccValues.includes(ccFieldValue)) {
         data.Reside = true;
       }
-
-      // Convert the image file to Base64
-      const file = data.Imagem;
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        // Set the Base64 data as the value of the 'Imagem' field
-        data.Imagem = reader.result;
-
-        // Submit the form data to the database
-        submitFormData(data);
-      };
-
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle the error
-    }
-  };
-
-  const submitFormData = async (data) => {
-    try {
+      
       // Submit the form data to the database
       const submitResponse = await fetch('http://localhost:3001/tecnicos', {
         method: 'POST',
@@ -104,7 +87,7 @@ function InscricaoTecnicos() {
         },
         body: JSON.stringify(data),
       });
-
+  
       // Handle the response
       if (submitResponse.ok) {
         console.log('Form submitted successfully');
@@ -117,26 +100,6 @@ function InscricaoTecnicos() {
       console.error('Error:', error);
       // Handle the error
     }
-  };
-
-  const CustomFileInput = ({ field, form, ...props }) => {
-    const [fieldInput, meta] = useField(props);
-
-    return (
-      <>
-        <input
-          id={props.id}
-          type="file"
-          {...fieldInput}
-          {...props}
-          onChange={(event) => {
-            const file = event.currentTarget.files[0];
-            form.setFieldValue(field.name, file);
-          }}
-        />
-        {meta.touched && meta.error && <div className="error">{meta.error}</div>}
-      </>
-    );
   };
   
   return (
@@ -182,7 +145,7 @@ function InscricaoTecnicos() {
           id ="morada" 
           name="Morada" 
           placeholder="Ex. Rua Mario Santos nº33"/>
-          <ErrorMessage name='Morada' component="span"/>
+          <ErrorMessage name="Morada" component="span"/>
 
           <label>Código Postal: </label>
           <Field
@@ -204,7 +167,7 @@ function InscricaoTecnicos() {
           <Field
           autoComplete="off" 
           id ="Email" 
-          name="email" 
+          name="Email" 
           placeholder="Ex. teste@gmail.com"/>
           <ErrorMessage name='Email' component="span"/>
 
@@ -217,9 +180,9 @@ function InscricaoTecnicos() {
           <ErrorMessage name='CC' component="span"/>
 
           <label>Data Nascimento: </label>
-          <input id='data' name='DataNascimento' type='date'/>
-          <ErrorMessage name='DataNascimento' component="span"/>
-
+          <Field autoComplete="off" id="data" name="DataNascimento" type="date" />
+          <ErrorMessage name="DataNascimento" component="span" /> 
+          
           <label>Tipo de Técnico: </label>
           <Field as="select" name="TecnicosType">
             <option value="">Select Tipo de Técnico</option>
@@ -232,8 +195,8 @@ function InscricaoTecnicos() {
           <ErrorMessage name="TecnicosType" component="span" />
 
           <label>Imagem: </label>
-          <Field name="Imagem" as={CustomFileInput} />
-          <ErrorMessage name="Imagem" component="span" />
+          <input id='imagem' name='Imagem' type='file' accept='image/*'/>
+          <ErrorMessage name='Imagem' component='span' />
 
           <button type='submit'>Inscrever Técnico</button>
         </Form>
