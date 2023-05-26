@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) =>{
             allowNull:false
         },
         Imagem :{
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT('long'),
             allowNull:false
         },
         File :{

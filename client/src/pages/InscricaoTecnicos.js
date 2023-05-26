@@ -8,7 +8,7 @@ function InscricaoTecnicos() {
   const [tecnicosTypeOptions, setTecnicosTypeOptions] = useState([]);
 
   const initialValues = {
-    Escalao: "",
+    EscalaoId: "",
     Nome: "",
     Clube: localStorage.getItem('clubeName'),
     Reside: 0,
@@ -18,12 +18,12 @@ function InscricaoTecnicos() {
     Email: "",
     CC: "",
     DataNascimento: "",
-    TecnicosType: "",
+    TecnicosTypeId: "",
     Imagem: "",
   };
 
   const validationSchema = Yup.object().shape({
-    Escalao: Yup.string().required("Campo Obrigatório"),
+    EscalaoId: Yup.string().required("Campo Obrigatório"),
     Nome: Yup.string().required("Campo Obrigatório"),
     Morada: Yup.string().required("Campo Obrigatório"),
     CodigoPostal: Yup.number().required("Campo Obrigatório"),
@@ -31,7 +31,7 @@ function InscricaoTecnicos() {
     Email: Yup.string().required("Campo Obrigatório"),
     CC: Yup.number().required("Campo Obrigatório"),
     DataNascimento: Yup.string().required("Campo Obrigatório"),
-    TecnicosType: Yup.string().required("Campo Obrigatório"),
+    TecnicosTypeId: Yup.string().required("Campo Obrigatório"),
     Imagem: Yup.mixed()
     .test("fileRequired", "Campo Obrigatório", (value) => {
       // Check if any file is selected
@@ -64,13 +64,15 @@ function InscricaoTecnicos() {
   const handleSubmit = async (values) => {
     try {
       // Check if the value of CC exists in the CadernoEleitoral table
-      const ccExists = await fetch(`http://localhost:3001/caderno_eleitoral?CC=${values.CC}`);
+      const ccExists = await fetch(`http://localhost:3001/caderno_eleitoral/tecnicos?CC=${values.CC}`);
       const ccData = await ccExists.json();
   
       if (ccData.length > 0) {
-        // If CC exists, update the Reside field to 1
-        values.Reside = 1;
+        values.Reside = 1; // Update the Reside field to 1 if CC exists in the CadernoEleitoral table
+      } else {
+        values.Reside = 0; // Set the Reside field to 0 if CC does not exist
       }
+      console.log(values)
   
       const response = await fetch('http://localhost:3001/tecnicos', {
         method: 'POST',
@@ -105,7 +107,7 @@ function InscricaoTecnicos() {
         <h1>Inscrição Equipa Técnica</h1>
 
         <label>Escalão: </label>
-        <Field as="select" name="Escalao">
+        <Field as="select" name="EscalaoId">
             <option value="">Select Escalão</option>
             {escalaoOptions.map((option) => (
               <option key={option.id} value={option.id}>
@@ -113,7 +115,7 @@ function InscricaoTecnicos() {
               </option>
             ))}
           </Field>
-          <ErrorMessage name='Escalao' component="span" />
+          <ErrorMessage name='EscalaoId' component="span" />
 
           <Field
           autoComplete="off" 
@@ -174,7 +176,7 @@ function InscricaoTecnicos() {
           <ErrorMessage name="DataNascimento" component="span" /> 
           
           <label>Tipo de Técnico: </label>
-          <Field as="select" name="TecnicosType">
+          <Field as="select" name="TecnicosTypeId">
             <option value="">Select Tipo de Técnico</option>
             {tecnicosTypeOptions.map((option) => (
             <option key={option.id} value={option.id}>
@@ -182,7 +184,7 @@ function InscricaoTecnicos() {
             </option>
             ))}
           </Field>
-          <ErrorMessage name="TecnicosType" component="span" />
+          <ErrorMessage name="TecnicosTypeId" component="span" />
 
           <label>Imagem: </label>
           <Field id='imagem' name='Imagem' type='file' accept='image/*'/>

@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       Imagem: {
-        type: DataTypes.BLOB,
+        type: DataTypes.TEXT('long'),
         allowNull: false
       }
     });

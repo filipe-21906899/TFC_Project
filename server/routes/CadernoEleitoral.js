@@ -4,7 +4,17 @@ const { CadernoEleitoral } = require('../models');
 
 router.get('/', async (req, res) => {
   try {
-    const listOfCC = await CadernoEleitoral.findAll();
+    const listOfCC = await CadernoEleitoral.findAll({ where: { CC: req.query.CC, CCGuardian: req.query.CCGuardian}});
+    return res.json(listOfCC);
+  } catch (error) {
+    console.error('Error fetching CadernoEleitoral data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.get('/tecnicos', async (req, res) => {
+  try {
+    const listOfCC = await CadernoEleitoral.findAll({ where: { CC: req.query.CC}});
     return res.json(listOfCC);
   } catch (error) {
     console.error('Error fetching CadernoEleitoral data:', error);
