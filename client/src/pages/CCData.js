@@ -30,6 +30,19 @@ function CCData() {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleDeleteAll = async () => {
+    const confirmation = window.confirm('Are you sure you want to delete all data?');
+
+    if (confirmation) {
+      try {
+        await axios.delete('http://localhost:3001/caderno_eleitoral/delete-all');
+        setSuccessMsg('All data deleted successfully');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   return (
     <div>
       <h1>Dados CC Upload</h1>
@@ -38,6 +51,7 @@ function CCData() {
         <input type="file" id="file-input" onChange={handleFileUpload} />
       </div>
       <button onClick={handleSubmit}>Submeter</button>
+      <button onClick={handleDeleteAll}>Delete All</button>
       {successMsg && <p>{successMsg}</p>}
     </div>
   );

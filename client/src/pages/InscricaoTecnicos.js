@@ -11,7 +11,7 @@ function InscricaoTecnicos() {
     Escalao: "",
     Nome: "",
     Clube: localStorage.getItem('clubeName'),
-    Reside: false,
+    Reside: 0,
     Morada: "",
     CodigoPostal: "",
     Contacto: "",
@@ -40,72 +40,68 @@ function InscricaoTecnicos() {
   })
 
   useEffect(() => {
-    fetchTecnicosTypeOptions();
-  }, []);
+    // Fetch and set the options for escalao and tecnicosType
+    // Example code to fetch options from the server:
+    const fetchOptions = async () => {
+      try {
+        const escalaoResponse = await fetch('http://localhost:3001/escalao');
+        const escalaoData = await escalaoResponse.json();
+        setEscalaoOptions(escalaoData);
 
-  const fetchTecnicosTypeOptions = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/tecnicos_type');
-      const data = await response.json();
-      setTecnicosTypeOptions(data);
-    } catch (error) {
-      console.error('Error fetching TecnicosType options:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchEscalaoOptions();
-  }, []);
-
-  const fetchEscalaoOptions = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/escalao');
-      const data = await response.json();
-      setEscalaoOptions(data);
-    } catch (error) {
-      console.error('Error fetching Escalao options:', error);
-    }
-  };
-
-  const onSubmit = async (data) => {
-    try {
-      const response = await fetch('http://localhost:3001/caderno_eleitoral');
-      const cadernoEleitoralData = await response.json();
-      
-      const ccValues = cadernoEleitoralData.map((item) => item.CC);
-      const ccFieldValue = data.CC;
-      
-      if (ccValues.includes(ccFieldValue)) {
-        data.Reside = true;
+        const tecnicosTypeResponse = await fetch('http://localhost:3001/tecnicos_type');
+        const tecnicosTypeData = await tecnicosTypeResponse.json();
+        setTecnicosTypeOptions(tecnicosTypeData);
+      } catch (error) {
+        console.error('Error fetching options:', error);
       }
-      
-      // Submit the form data to the database
-      const submitResponse = await fetch('http://localhost:3001/tecnicos', {
+    };
+
+    fetchOptions();
+  }, []);
+
+  
+
+  const handleSubmit = async (values) => {
+    try {
+      // Check if the value of CC exists in the CadernoEleitoral table
+      const ccExists = await fetch(`http://localhost:3001/caderno_eleitoral?CC=${values.CC}`);
+      const ccData = await ccExists.json();
+  
+      if (ccData.length > 0) {
+        // If CC exists, update the Reside field to 1
+        values.Reside = 1;
+      }
+  
+      const response = await fetch('http://localhost:3001/tecnicos', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(values)
       });
   
-      // Handle the response
-      if (submitResponse.ok) {
-        console.log('Form submitted successfully');
-        // Handle any further actions or redirects
+      if (response.ok) {
+        const createdTecnico = await response.json();
+        console.log('Created Tecnico:', createdTecnico);
+        // Handle success, e.g., show a success message or redirect to another page
       } else {
-        console.log('Failed to submit form');
-        // Handle the error
+        // Handle error response
+        console.error('Failed to create Tecnico:', response);
       }
     } catch (error) {
-      console.error('Error:', error);
-      // Handle the error
+      // Handle network error or other exceptions
+      console.error('Error creating Tecnico:', error);
     }
   };
+  
+  
+  
+  
   
   return (
     <div className='Inscrição'>
-      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-        <Form className='formContainer'>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+        <Form className='formContainer' encType="multipart/form-data">
         <h1>Inscrição Equipa Técnica</h1>
 
         <label>Escalão: </label>
@@ -123,12 +119,6 @@ function InscricaoTecnicos() {
           autoComplete="off" 
           id ="clube" 
           name="Clube" 
-          type="hidden"/>
-
-          <Field
-          autoComplete="off" 
-          id ="residente" 
-          name="Reside" 
           type="hidden"/>
 
           <label>Nome: </label>
@@ -195,7 +185,7 @@ function InscricaoTecnicos() {
           <ErrorMessage name="TecnicosType" component="span" />
 
           <label>Imagem: </label>
-          <input id='imagem' name='Imagem' type='file' accept='image/*'/>
+          <Field id='imagem' name='Imagem' type='file' accept='image/*'/>
           <ErrorMessage name='Imagem' component='span' />
 
           <button type='submit'>Inscrever Técnico</button>

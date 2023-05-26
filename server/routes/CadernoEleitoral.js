@@ -17,10 +17,22 @@ router.post('/cc-data', async (req, res) => {
 
   try {
     await CadernoEleitoral.bulkCreate(ccData);
-    res.json({ message: 'Data inserted successfully' });
+    return res.json({ message: 'Data inserted successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.delete('/delete-all', async (req, res) => {
+  try {
+    await CadernoEleitoral.destroy({
+      truncate: true, // Deletes all rows from the table
+    });
+    return res.json({ message: 'All data deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
