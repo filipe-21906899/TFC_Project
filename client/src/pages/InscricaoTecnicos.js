@@ -7,6 +7,9 @@ function InscricaoTecnicos() {
   const [escalaoOptions, setEscalaoOptions] = useState([]);
   const [tecnicosTypeOptions, setTecnicosTypeOptions] = useState([]);
 
+
+
+
   const initialValues = {
     EscalaoId: "",
     Nome: "",

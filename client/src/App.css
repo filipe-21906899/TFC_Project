@@ -88,6 +88,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .formContainer {
@@ -99,6 +100,7 @@ button {
   padding: 20px;
   border: 5px solid dodgerblue;
   border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .formContainer #inputCreatePost {
@@ -173,3 +175,45 @@ span {
   color: red;
   font-size: small;
 }
+
+/*Torneio */
+
+.torneio {
+  width: 300px;
+  height: 100px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  border: 1px solid lightgray;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.torneio-container {
+  display: flex; /* Create a container for the torneio elements */
+  justify-content: space-between; /* Position the torneio elements with space between */
+  width: 85%; /* Set the width to 100% to span the container */
+  margin-top: 20px; /* Add margin at the top for spacing */
+}
+
+.torneio:hover {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  cursor: pointer;
+}
+.torneio .ano {
+  flex: 20%;
+  border-bottom: 1px solid lightgray;
+  background-color: dodgerblue;
+  display: grid;
+  place-content: center;
+  color: white;
+}
+
+.torneio .escalao {
+  flex: 60%;
+  display: grid;
+  place-content: center;
+}
+
