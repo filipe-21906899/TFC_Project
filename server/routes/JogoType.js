@@ -3,8 +3,8 @@ const router = express.Router();
 const {JogoType} = require('../models');
 
 router.get("/", async (req, res) =>{
-    const listOfPost = await JogoType.findAll();
-    res.json(listOfPost);
+    const listOfJogoType = await JogoType.findAll();
+    res.json(listOfJogoType);
 });
 
 router.post("/", async (req, res) =>{

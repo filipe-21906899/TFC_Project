@@ -10,6 +10,8 @@ import FichaJogo from './pages/FichaJogo';
 import Cartoes from './pages/Cartoes';
 import Login from './pages/Login';
 import CCData from './pages/CCData';
+import Jogos from './pages/Jogos';
+import JogoInfo from './pages/JogoInfo';
 
 function App() {
   const logout = () => {
@@ -56,6 +58,8 @@ function App() {
           <Route path="/cartoes" exact element={<Cartoes />} />
           <Route path="/login" exact element={<Login />} />
           <Route path="/ccdata" exact element={<CCData />} />
+          <Route path="/torneio/:id" exact element={<Jogos />} />
+          <Route path="/jogo/:id" exact element={<JogoInfo />} />
         </Routes>
       </Router>
     </div>

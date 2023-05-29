@@ -7,6 +7,12 @@ router.get('/', async (req, res) => {
   res.json(listOfTorneio);
 });
 
+router.get('/:id', async (req, res) => {
+  const id = req.params.id;
+  const escalao = await Torneio.findByPk(id);
+  return res.json(escalao);
+});
+
 router.post('/', async (req, res) => {
   try {
     const newTorneio = await Torneio.create(req.body);

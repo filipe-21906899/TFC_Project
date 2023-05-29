@@ -2,10 +2,13 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from 'yup';
+import { useNavigate } from "react-router-dom"
 
 function Torneio() {
   const [escalaoOptions, setEscalaoOptions] = useState([]);
   const username = localStorage.getItem('username');
+
+  const go = useNavigate();
 
   const [listOfTorneios, setListOfTorneios] = useState([]);
 
@@ -68,7 +71,7 @@ function Torneio() {
       {username === 'Admin' ? ( // Render the form only if the username is "Admin"
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
           <Form className="formContainer" encType="multipart/form-data">
-            <h1>Inscrição Equipa Técnica</h1>
+            <h1>Criação Torneio</h1>
 
             <label>Escalão: </label>
             <Field as="select" name="EscalaoId">
@@ -95,7 +98,7 @@ function Torneio() {
           const escalaoOption = escalaoOptions.find((option) => option.id === value.EscalaoId);
           const escalaoNome = escalaoOption ? escalaoOption.Nome : '';
           return (
-            <div className="torneio" key={key}>
+            <div className="torneio" onClick={()=> {go(`/torneio/${value.id}`)}} key={key}>
               <div className="ano">{value.Ano}</div>
               <div className="escalao">{escalaoNome}</div>
             </div>

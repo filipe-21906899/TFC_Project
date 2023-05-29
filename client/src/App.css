@@ -217,3 +217,68 @@ span {
   place-content: center;
 }
 
+/*Torneio */
+
+.Inscrição .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.Inscrição .back-button {
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-right: auto;
+}
+
+.jogo {
+  width: 300px;
+  height: 100px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  border: 1px solid lightgray;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.jogo:hover {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  cursor: pointer;
+}
+
+.jogo .DataJogo {
+  flex: 20%;
+  border-bottom: 1px solid lightgray;
+  background-color: dodgerblue;
+  display: grid;
+  place-content: center;
+  color: white;
+}
+
+.jogo .Home {
+  flex: 60%;
+  display: grid;
+  place-content: center;
+}
+.jogo .Away {
+  flex: 60%;
+  display: grid;
+  place-content: center;
+}
+
+.jogo .JogoTypeId {
+  flex: 20%;
+  place-content: center;
+  border-top: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  background-color: dodgerblue;
+  color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}

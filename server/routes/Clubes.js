@@ -14,4 +14,14 @@ router.post("/", async (req, res) =>{
     res.json(cc);
 })
 
+router.get('/', async (req, res) => {
+    try {
+      const clubes = await Clubes.findAll();
+      return res.json(clubes);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server Error' });
+    }
+  });
+
 module.exports = router
