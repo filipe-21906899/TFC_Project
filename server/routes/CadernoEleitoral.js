@@ -1,10 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const { CadernoEleitoral } = require('../models');
+const { Op } = require('sequelize');
 
 router.get('/', async (req, res) => {
   try {
-    const listOfCC = await CadernoEleitoral.findAll({ where: { CC: req.query.CC, CCGuardian: req.query.CCGuardian}});
+    const listOfCC = await CadernoEleitoral.findAll({
+      where: {
+        [Op.or]: [
+          { CC: req.query.CC },
+          { CC: req.query.CCGuardiao }
+        ]
+      }
+    });
     return res.json(listOfCC);
   } catch (error) {
     console.error('Error fetching CadernoEleitoral data:', error);

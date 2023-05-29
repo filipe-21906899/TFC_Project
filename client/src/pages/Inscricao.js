@@ -34,7 +34,6 @@ function Inscricao() {
     CC: Yup.number().required("Campo Obrigatório"),
     CCGuardiao: Yup.number().required("Campo Obrigatório"),
     DataNascimento: Yup.string().required("Campo Obrigatório"),
-    TecnicosTypeId: Yup.string().required("Campo Obrigatório"),
     Imagem: Yup.mixed()
     .test("fileRequired", "Campo Obrigatório", (value) => {
       // Check if any file is selected
@@ -64,7 +63,7 @@ function Inscricao() {
     fetchOptions();
   }, []);
 
-  const Submit = async (values) => {
+  const submitJogador = async (values) => {
     console.log("here")
     try {
       // Check if the value of CC exists in the CadernoEleitoral table
@@ -102,7 +101,7 @@ function Inscricao() {
 
   return (
     <div className='Inscrição'>
-      <Formik initialValues={initialValues} onSubmit={Submit} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={submitJogador} validationSchema={validationSchema}>
         <Form className='formContainer' encType="multipart/form-data">
         <h1>Inscrição Jogadores</h1>
 
@@ -119,14 +118,14 @@ function Inscricao() {
 
           <Field
           autoComplete="off" 
-          id ="clube" 
+          id ="clube1" 
           name="Clube" 
           type="hidden"/>
 
           <label>Nome: </label>
           <Field
           autoComplete="off" 
-          id ="name" 
+          id ="name1" 
           name="Nome" 
           placeholder="Ex. João Pedro Pascal"/>
           <ErrorMessage name='Nome' component="span" />
@@ -134,7 +133,7 @@ function Inscricao() {
           <label>Morada: </label>
           <Field
           autoComplete="off" 
-          id ="morada" 
+          id ="morada1" 
           name="Morada" 
           placeholder="Ex. Rua Mario Santos nº33"/>
           <ErrorMessage name="Morada" component="span"/>
@@ -142,7 +141,7 @@ function Inscricao() {
           <label>Código Postal: </label>
           <Field
           autoComplete="off" 
-          id ="cpostal" 
+          id ="cpostal1" 
           name="CodigoPostal" 
           placeholder="Ex. 2453-993"/>
           <ErrorMessage name='CodigoPostal' component="span"/>
@@ -150,7 +149,7 @@ function Inscricao() {
           <label>Contacto: </label>
           <Field
           autoComplete="off" 
-          id ="contacto" 
+          id ="contacto1" 
           name="Contacto" 
           placeholder="Ex. 945645321"/>
           <ErrorMessage name='Contacto' component="span"/>
@@ -158,7 +157,7 @@ function Inscricao() {
           <label>Email: </label>
           <Field
           autoComplete="off" 
-          id ="Email" 
+          id ="Email1" 
           name="Email" 
           placeholder="Ex. teste@gmail.com"/>
           <ErrorMessage name='Email' component="span"/>
@@ -166,7 +165,7 @@ function Inscricao() {
           <label>Nº CC: </label>
           <Field
           autoComplete="off" 
-          id ="cc" 
+          id ="CC" 
           name="CC" 
           placeholder="Ex. 155555554XW3"/>
           <ErrorMessage name='CC' component="span"/>
@@ -174,7 +173,7 @@ function Inscricao() {
           <label>Nº CC Guardião: </label>
           <Field
           autoComplete="off" 
-          id ="cc" 
+          id ="CCGuardiao" 
           name="CCGuardiao" 
           placeholder="Ex. 155555554XW3"/>
           <ErrorMessage name='CCGuardiao' component="span"/>
@@ -184,11 +183,11 @@ function Inscricao() {
           <ErrorMessage name="DataNascimento" component="span" /> 
 
           <label>Imagem: </label>
-          <Field id='imagem' name='Imagem' type='file' accept='image/*'/>
+          <Field id='imagem1' name='Imagem' type='file' accept='image/*'/>
           <ErrorMessage name='Imagem' component='span' />
 
           <label>Ficheiro PDF: </label>
-          <Field id='pdf' name='File' type='file' accept='application/pdf'/>
+          <Field id='pdf1' name='File' type='file' accept='application/pdf'/>
           <ErrorMessage name='File' component='span' />
 
           <button type='submit'>Inscrever Jogador</button>
