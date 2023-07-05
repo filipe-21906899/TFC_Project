@@ -13,7 +13,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(189, 182, 182);
+  background-color: #A9BA9D;
 }
 
 body .a{
@@ -72,13 +72,15 @@ button {
 }
 
 .loginContainer button {
-  background-color: dodgerblue;
+  background-color: #004526;
   color: white;
 }
 
+/*
 .loginContainer input {
-  border: 2px solid dodgerblue;
+  border: 2px solid black;
 }
+*/
 
 /*Inscrição Tecnicos e Jogadores CSS*/
 .Inscrição {
@@ -98,7 +100,6 @@ button {
   width: 500px;
   height: auto;
   padding: 20px;
-  border: 5px solid dodgerblue;
   border-radius: 5px;
   margin-bottom: 20px;
 }
@@ -107,7 +108,7 @@ button {
   height: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: 2px solid grey;
+  border: 2px solid white;
   border-radius: 5px;
   padding-left: 10px;
   font-size: 20px;
@@ -117,14 +118,14 @@ button {
   margin-top: 15px;
   height: 40px;
   border: none;
-  background-color: lightskyblue;
+  background-color:  #00452679;
   border-radius: 5px;
   color: white;
 }
 
 .formContainer button:hover {
   cursor: pointer;
-  background-color: dodgerblue;
+  background-color:  #004526;
 }
 
 
@@ -134,7 +135,7 @@ button {
 .navbar {
   width: 100%;
   height: 70px;
-  background-color: green;
+  background-color: #367c2b;
   display:flex;
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
@@ -188,7 +189,7 @@ span {
   border: 1px solid lightgray;
   font-family: Arial, Helvetica, sans-serif;
   margin-top: 0;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: lightgray 0px 2px 8px 0px;
 }
 
 .torneio-container {
@@ -205,7 +206,7 @@ span {
 .torneio .ano {
   flex: 20%;
   border-bottom: 1px solid lightgray;
-  background-color: dodgerblue;
+  background-color: #004526;
   display: grid;
   place-content: center;
   color: white;
@@ -253,7 +254,7 @@ span {
 .jogo .DataJogo {
   flex: 20%;
   border-bottom: 1px solid lightgray;
-  background-color: dodgerblue;
+  background-color: #004526;
   display: grid;
   place-content: center;
   color: white;
@@ -277,7 +278,7 @@ span {
   display: flex;
   align-items: center;
   padding-left: 15px;
-  background-color: dodgerblue;
+  background-color: #004526;
   color: white;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;

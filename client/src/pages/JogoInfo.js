@@ -8,7 +8,7 @@ function JogoInfo() {
   return (
     <div className='Inscrição'>
       <button className="back-button" onClick={() => navigate(-1)}>Back</button>
-      <h1>Infomação Jogo</h1>
+      <h1>Informação Jogo</h1>
     </div>
   )
 }
