@@ -1,0 +1,4 @@
+Equipa
+id
+clube
+escalao

@@ -1,0 +1,3 @@
+Users Type
+-id
+-name (admin/clube)

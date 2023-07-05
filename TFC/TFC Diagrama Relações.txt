@@ -1,0 +1,33 @@
+barnabe/src/containers/ - frontend
+node_barnabe/views/ - ficha de jogo
+
+
+Users Type - Users (One to Many)
+
+Users - Clubes (One to One)
+
+Clubes - Equipa (One to Many)
+
+Equipa - Equipa-Jogadores (Many to Many)
+
+Escalao - Equipa (One to Many)
+
+Escalao - Torneio (One to One)
+
+Torneio - Jogo (One to Many)
+
+Jogo - Golos (One to Many)
+
+Jogo - Cartoes (One to Many)
+
+Jogadores - Cartoes (One to Many)
+
+Jogadores - Golos (One to Many)
+
+Jogadores - Equipa-Jogadores (One to One)
+
+Escalao - Jogadores (One to Many)
+
+JogoType - Joog (One To Many)
+
+TecnicosType - Tecnicos ()

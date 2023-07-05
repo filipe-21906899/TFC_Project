@@ -1,0 +1,4 @@
+Clubes
+-id
+-nome
+-user

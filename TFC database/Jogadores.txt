@@ -1,0 +1,13 @@
+Jogadores
+-id
+-nome
+-morada
+-c.postal
+-contacto
+-data nascimento
+-email
+-CC
+-CC guardiao
+-escalao
+
+

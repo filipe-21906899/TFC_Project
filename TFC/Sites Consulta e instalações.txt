@@ -1,0 +1,33 @@
+React
+
+NodeJS/Express
+
+MySQL
+
+SequelizeJS - Object Relational Mapper baseado em NodeJS que facilita o trabalho com Bases de Dados MySQL entre outras. Um Object Relational Mapper executa funções como manipulação de registos de Bases de Dados, representando os dados como objetos.
+
+MySQL Workbench - MySQL Workbench é uma ferramenta de design de banco de dados visual que integra desenvolvimento SQL, administração, design de banco de dados, criação e manutenção em um único ambiente de desenvolvimento integrado para o sistema de banco de dados MySQL.
+
+Insomnia REST - Aplicativo desktop de código aberto que facilita a interação e o design, a depuração e o teste de APIs. O Insomnia combina uma interface fácil de usar com funcionalidades avançadas, como auxiliares de autenticação, geração de código e variáveis ​​de ambiente. 
+
+https://legacy.reactjs.org/docs/forms.html - 15/04/2023
+
+Package server -
+npm init - cria no server package.json
+npm install express - framework para criar o REST API
+npm install cors - connectar o client e o server
+npm install mysql2
+npm install nodemon - reinicia o server sempre que alterações forem guardadas
+npm install sequelize sequelize-cli
+sequelize init - irá criar no server os seguintes folders(config, migrations, models, seeders), mas só precisaremos de (models e config)
+npm start -irá inicializar server e cliente (para inicializar o client e o server precisamos de 2 terminais: primeiro terminal escrever cd server para aceder ao server e depois o comando para inicial o server e no segunto terminal cd client e depois o comando para inicializar o client)
+npm install bcrypt - faz com que as passwords fiquem encriptadas
+npm install jsonwebtoken - gera e valida tokens 
+
+Package client -
+npmx create-react-app . - irá criar uma aplicação react
+npm install axios - ajuda a fazer pedidos API mais facilmente
+npm install react-router-dom - implementa roteamento dinâmico em aplicações web
+npm install formik - criação mais simplificada de formulários
+npm install yup - construtor de esquema JavaScript para análise e validação de valor
+

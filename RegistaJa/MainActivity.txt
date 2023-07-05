@@ -1,0 +1,176 @@
+package pt.ulusofona.deisi.cm2223.g21906899_21702200
+
+import android.content.Context
+import android.content.res.AssetManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.projectcm.R
+import com.example.projectcm.databinding.ActivityMainBinding
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import pt.ulusofona.deisi.cm2223.g21906899_21702200.data.local.DatabaseApp
+import pt.ulusofona.deisi.cm2223.g21906899_21702200.data.local.ProjectRoom
+import pt.ulusofona.deisi.cm2223.g21906899_21702200.models.CinemaFile
+import pt.ulusofona.deisi.cm2223.g21906899_21702200.models.Cinema
+import java.io.IOException
+import java.util.*
+import kotlin.math.sqrt
+
+
+class MainActivity : AppCompatActivity(), SensorEventListener {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var room: ProjectRoom
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var lastShakeTime: Long = 0
+    private val shakeThreshold = 800
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        FusedLocation.start(this)
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        room = ProjectRoom(
+            DatabaseApp.getInstance(applicationContext).cinemasDao(),
+            DatabaseApp.getInstance(applicationContext).filmesDao(),
+            DatabaseApp.getInstance(applicationContext).registoDao()
+        )
+
+        val cine = readCinemasJson2()
+        if (cine != null) {
+            room.getCinema { }
+            room.clearAllCinema { }
+            room.insertCinema(cine) {}
+        }
+
+        if (savedInstanceState == null) {
+            // Set the default fragment as DashboardFragment
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, DashboardFragment())
+                .commit()
+        }
+
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_dashboard -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, DashboardFragment())
+                        .commit()
+                    true
+                }
+                R.id.navigation_register -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, PickMovieFragment())
+                        .commit()
+                    true
+                }
+                R.id.navigation_list -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ListFragment())
+                        .commit()
+                    true
+                }
+
+                R.id.navigation_map -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, MapFragment())
+                        .commit()
+                    true
+                }
+                R.id.navigation_extra -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ExtraFragment())
+                        .commit()
+                    true
+                }
+                /*
+                R.id.navigation_timer -> {
+                    val timerFragment = TimerFragment()
+                    timerFragment.show(supportFragmentManager, "timer")
+                    true
+                }*/
+                else -> false
+            }
+        }
+    }
+
+    // Function to read the cinemas.json file from the assets folder
+    private fun readCinemasJson2(): List<Cinema>? {
+        val assetManager: AssetManager = applicationContext.assets
+        return try {
+            val inputStream = assetManager.open("cinemas.json")
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+            val json = String(buffer, Charsets.UTF_8)
+
+            val jsonObject = Gson().fromJson(json, JsonObject::class.java)
+
+            val response = Gson().fromJson<CinemaFile>(jsonObject, CinemaFile::class.java)
+            response.cinemas
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    // Function to read the cinemas.json file from the assets folder
+    private fun readCinemasJson(): JsonObject? {
+        val assetManager: AssetManager = applicationContext.assets
+        return try {
+            val inputStream = assetManager.open("cinemas.json")
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+            val json = String(buffer, Charsets.UTF_8)
+            Gson().fromJson(json, JsonObject::class.java)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Ignore
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            val currentTime = System.currentTimeMillis()
+            if ((currentTime - lastShakeTime) > shakeThreshold) {
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                val acceleration = sqrt(x * x + y * y + z * z)
+                if (acceleration > 10) {
+                    lastShakeTime = currentTime
+                    NavigationManager.goToSearch2(supportFragmentManager, "sim")
+                }
+            }
+        }
+    }
+
+}

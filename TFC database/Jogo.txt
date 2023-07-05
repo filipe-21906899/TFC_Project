@@ -1,0 +1,5 @@
+Jogo
+-id
+-home
+-away
+-torneio
