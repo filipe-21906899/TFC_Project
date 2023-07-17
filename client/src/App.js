@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import CCData from './pages/CCData';
 import Jogos from './pages/Jogos';
 import JogoInfo from './pages/JogoInfo';
+import EquipasInscricao from './pages/EquipasInscrição';
+import Information from './pages/Information';
 
 function App() {
   const logout = () => {
@@ -32,6 +34,7 @@ function App() {
           <Link to="/">Taça Barnabé</Link>
           <Link to="/documentos">Documentos</Link>
           <Link to="/torneio">Torneios</Link>
+          <Link to="/info">Informação Jogadores</Link>
           {localStorage.getItem('accessToken') && (
             <>
               <Link to="/inscrição">Inscrição Jogadores</Link>
@@ -39,6 +42,7 @@ function App() {
               {isAdmin && <Link to="/ficha_jogo">Ficha de Jogo</Link>}
               {isAdmin && <Link to="/cartoes">Cartões Jogadores</Link>}
               {isAdmin && <Link to="/ccdata">CC Dados</Link>}
+              {isAdmin && <Link to="/equipa_inscricao">Inscrição Equipas</Link>}
             </>
           )}
           <div className="login-right">
@@ -60,6 +64,8 @@ function App() {
           <Route path="/ccdata" exact element={<CCData />} />
           <Route path="/torneio/:id" exact element={<Jogos />} />
           <Route path="/jogo/:id" exact element={<JogoInfo />} />
+          <Route path="/equipa_inscricao" exact element={<EquipasInscricao />} />
+          <Route path="/info" exact element={<Information />} />
         </Routes>
       </Router>
     </div>

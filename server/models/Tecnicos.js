@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      CC: {
+      CCTecnico: {
         type: DataTypes.INTEGER,
         allowNull: false
       },

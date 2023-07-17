@@ -1,5 +1,0 @@
-Users
--id
--username
--passe
--type

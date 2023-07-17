@@ -1,3 +1,0 @@
-Escalao
-id
-nome

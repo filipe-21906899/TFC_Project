@@ -8,11 +8,42 @@ router.get("/:userId", async (req, res) =>{
     res.json(clubes); 
 });
 
-router.post("/", async (req, res) =>{
-    const cc = req.body;
-    await Clubes.create(cc);
-    res.json(cc);
-})
+router.post("/", async (req, res) => {
+  try {
+      const preDefinedValues = [
+          { Nome: "Sabugo", UserId: 2 },
+          { Nome: "Saloios Dª Maria", UserId: 3 },
+          { Nome: "Maceira", UserId: 4 },
+          { Nome: "Montelavar", UserId: 5 },
+          { Nome: "Negrais", UserId: 6 },
+          { Nome: "Almargem Do Bispo", UserId: 7 },
+          { Nome: "Albogas", UserId: 8 },
+          { Nome: "Vale De Lobo", UserId: 9 },
+          { Nome: "Camarões", UserId: 10 },
+          { Nome: "Anços", UserId: 11 },
+          { Nome: "Almornos", UserId: 12 },
+          { Nome: "Aruil", UserId: 13 },
+          { Nome: "Camponeses Dª Maria", UserId: 14 },
+          { Nome: "Covas de Ferro", UserId: 15 },
+          { Nome: "Pêro Pinheiro", UserId: 16 },
+      ];
+
+      // Loop through the pre-defined values and create them in the database
+      for (const value of preDefinedValues) {
+          const existingValue = await Clubes.findOne({ where: { Nome: value.Nome, UserId: value.UserId } });
+
+          // If the value doesn't exist, create it in the database
+          if (!existingValue) {
+              await Clubes.create(value);
+          }
+      }
+
+      res.status(201).json({ message: "Pre-defined values added successfully!" });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to add pre-defined values to the database." });
+  }
+});
 
 router.get('/', async (req, res) => {
     try {

@@ -1,4 +1,0 @@
-Equipa-Jogadores
-id
-equipa
-jogador

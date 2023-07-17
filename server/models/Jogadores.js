@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.STRING,
             allowNull:false
         },
-        CC :{
+        CCJogador :{
             type: DataTypes.INTEGER,
             allowNull:false
         },

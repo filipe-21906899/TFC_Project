@@ -13,6 +13,7 @@ router.get("/:usersTypeId", async (req, res) =>{
 
 router.post("/", async (req, res) =>{
     const {Username, Password, UsersTypeId} = req.body;
+
     bcrypt.hash(Password, 10).then((hash) => {
         Users.create({
             Username: Username,

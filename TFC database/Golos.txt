@@ -1,5 +1,0 @@
-Golos
--id
--jogador
--jogo
--tempo jogo

@@ -1,7 +1,0 @@
-Cartões
--id
--jogador
--jogo
--tipo
--served
--tempojogo
