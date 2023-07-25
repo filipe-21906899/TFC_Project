@@ -43,15 +43,24 @@ function CCData() {
     }
   };
 
+  const handleDownload = async () => {
+    
+  };
+
   return (
     <div>
-      <h1>Dados CC Upload</h1>
+      <h1>CCs Upload</h1>
       <div>
         <label htmlFor="file-input">Select a file: </label>
-        <input type="file" id="file-input" onChange={handleFileUpload} />
+        <input disabled type="file" id="file-input" onChange={handleFileUpload} />
       </div>
-      <button onClick={handleSubmit}>Submeter</button>
-      <button onClick={handleDeleteAll}>Delete All</button>
+      <button disabled onClick={handleSubmit}>Submeter</button>
+      <button disabled onClick={handleDeleteAll}>Delete All</button>
+      <div>
+        <h1>Download CCs para uma folha Exel</h1>
+        <button onClick={handleDownload}>Download</button>
+      </div>
+    
       {successMsg && <p>{successMsg}</p>}
     </div>
   );

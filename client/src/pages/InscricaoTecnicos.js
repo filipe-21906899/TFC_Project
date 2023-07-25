@@ -26,15 +26,44 @@ function InscricaoTecnicos() {
   };
 
   const validationSchema = Yup.object().shape({
-    EscalaoId: Yup.string().required("Campo Obrigatório"),
-    Nome: Yup.string().required("Campo Obrigatório"),
-    Morada: Yup.string().required("Campo Obrigatório"),
-    CodigoPostal: Yup.number().required("Campo Obrigatório"),
-    Contacto: Yup.number().required("Campo Obrigatório"),
-    Email: Yup.string().required("Campo Obrigatório"),
-    CC: Yup.number().required("Campo Obrigatório"),
-    DataNascimento: Yup.string().required("Campo Obrigatório"),
-    TecnicosTypeId: Yup.string().required("Campo Obrigatório"),
+    
+    EscalaoId: Yup.string()
+    .required("Campo Obrigatório"),
+
+    Nome: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)*$/, "Deve conter apenas letras")
+    .min(2, "Nome muito curto")
+    .max(50, "Nome muito longo"),
+
+    Morada: Yup.string()
+    .required("Campo Obrigatório")
+    .min(5, "Morada muito curta")
+    .max(100, "Morada muito longa")
+    .matches(/^[A-Za-zÀ-ÿÇç0-9\s.,'-]*$/, "Morada inválida"),
+
+    CodigoPostal: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{4}-\d{3}$/, "Código Postal inválido"),
+
+    Contacto: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{9}$/, "Contacto inválido"),
+
+    Email: Yup.string()
+    .required("Campo Obrigatório")
+    .email("Email inválido"),
+
+    CC: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
+
+    DataNascimento: Yup.string()
+    .required("Campo Obrigatório"),
+
+    TecnicosTypeId: Yup.string()
+    .required("Campo Obrigatório"),
+
     Imagem: Yup.mixed()
     .test("fileRequired", "Campo Obrigatório", (value) => {
       // Check if any file is selected
@@ -61,6 +90,21 @@ function InscricaoTecnicos() {
 
     fetchOptions();
   }, []);
+
+  const handleSubmit2 = async (values) => {
+    try {
+      // Log the form values
+      console.log('Form Values:', values);
+
+      // Your API call here...
+
+      // For demonstration purposes, we are just logging the success message.
+      console.log('Form submitted successfully!');
+    } catch (error) {
+      // Handle error
+      console.error('Error creating Equipa:', error);
+    }
+  };
 
   
 
@@ -105,7 +149,7 @@ function InscricaoTecnicos() {
   
   return (
     <div className='Inscrição'>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit2} validationSchema={validationSchema}>
         <Form className='formContainer' encType="multipart/form-data">
         <h1>Inscrição Equipa Técnica</h1>
 

@@ -2,6 +2,38 @@ import React, {useState, useEffect} from 'react';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from 'yup';
 
+function calculateAge(date) {
+  const today = new Date();
+  const birthDate = new Date(date);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+// Function to validate age based on EscalaoId
+function validateAge(escalaoId, dateOfBirth) {
+  const age = calculateAge(dateOfBirth);
+
+  switch (escalaoId) {
+    case "1":
+      return { valid: age >= 5 && age <= 8, message: "A idade do jogador deve estar entre 5 e 8 anos." };
+    case "2":
+      return { valid: age >= 8 && age <= 12, message: "A idade do jogador deve estar entre 8 e 12 anos." };
+    case "3":
+      return { valid: age >= 13 && age <= 17, message: "A idade do jogador deve estar entre 13 e 17 anos." };
+    case "4":
+      return { valid: age >= 18, message: "O jogador deve ter mais de 17 anos." };
+    case "5":
+      return { valid: age >= 12, message: "O jogador deve ter mais de 12 anos." };
+    default:
+      return { valid: false, message: "Selecione um escalão válido." };
+  }
+}
+
+
 function Inscricao() {
 
   const [escalaoOptions, setEscalaoOptions] = useState([]);
@@ -26,19 +58,53 @@ function Inscricao() {
 
   const validationSchema = Yup.object().shape({
     EscalaoId: Yup.string().required("Campo Obrigatório"),
-    Nome: Yup.string().required("Campo Obrigatório"),
-    Morada: Yup.string().required("Campo Obrigatório"),
-    CodigoPostal: Yup.number().required("Campo Obrigatório"),
-    Contacto: Yup.number().required("Campo Obrigatório"),
-    Email: Yup.string().required("Campo Obrigatório"),
-    CC: Yup.number().required("Campo Obrigatório"),
-    CCGuardiao: Yup.number().required("Campo Obrigatório"),
-    DataNascimento: Yup.string().required("Campo Obrigatório"),
+
+    Nome: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)*$/, "Deve conter apenas letras")
+    .min(2, "Nome muito curto")
+    .max(50, "Nome muito longo"),
+
+    Morada: Yup.string()
+    .required("Campo Obrigatório")
+    .min(5, "Morada muito curta")
+    .max(100, "Morada muito longa")
+    .matches(/^[A-Za-zÀ-ÿÇç0-9\s.,'-]*$/, "Morada inválida"),
+
+    CodigoPostal: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{4}-\d{3}$/, "Código Postal inválido"),
+
+    Contacto: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{9}$/, "Contacto inválido"),
+
+    Email: Yup.string()
+    .required("Campo Obrigatório")
+    .email("Email inválido"),
+
+    CC: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
+
+    CCGuardiao: Yup.string()
+    .required("Campo Obrigatório")
+    .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
+
+    DataNascimento: Yup.string()
+    .required("Campo Obrigatório")
+    .test("validAge", function (value) {
+      const { EscalaoId } = this.parent;
+      const { valid, message } = validateAge(EscalaoId, value);
+      return valid || this.createError({ message });
+    }),
+
     Imagem: Yup.mixed()
     .test("fileRequired", "Campo Obrigatório", (value) => {
       // Check if any file is selected
       return value && value.length > 0;
     }),
+
     File: Yup.mixed()
     .test("fileRequired", "Campo Obrigatório", (value) => {
       // Check if any file is selected
@@ -62,6 +128,21 @@ function Inscricao() {
 
     fetchOptions();
   }, []);
+
+  const submitJogador2 = async (values) => {
+    try {
+      // Log the form values
+      console.log('Form Values:', values);
+
+      // Your API call here...
+
+      // For demonstration purposes, we are just logging the success message.
+      console.log('Form submitted successfully!');
+    } catch (error) {
+      // Handle error
+      console.error('Error creating Equipa:', error);
+    }
+  };
 
   const submitJogador = async (values) => {
     console.log("here")
@@ -101,7 +182,7 @@ function Inscricao() {
 
   return (
     <div className='Inscrição'>
-      <Formik initialValues={initialValues} onSubmit={submitJogador} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={submitJogador2} validationSchema={validationSchema}>
         <Form className='formContainer' encType="multipart/form-data">
         <h1>Inscrição Jogadores</h1>
 

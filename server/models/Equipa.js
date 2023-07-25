@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.INTEGER,
             allowNull:false
         },
+        Ano :{
+            type: DataTypes.INTEGER,
+            allowNull:false
+        },
     })
 
     Equipas.associate = (models) => {
