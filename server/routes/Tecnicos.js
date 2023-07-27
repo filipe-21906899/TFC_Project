@@ -12,6 +12,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET all CCTecnicos values
+router.get('/cc', async (req, res) => {
+  try {
+    const listOfCCTecnicos = await Tecnicos.findAll({
+      attributes: ['CCTecnico'], // Specify the column you want to fetch
+    });
+    const ccTecnicosValues = listOfCCTecnicos.map((tecnico) => tecnico.CCTecnicos);
+    return res.json(ccTecnicosValues);
+  } catch (error) {
+    console.error('Error fetching CCTecnico:', error);
+    return res.status(500).json({ error: 'Failed to fetch CCTecnico' });
+  }
+});
+
+
 router.post('/', async (req, res) => {
   try {
     const tecnicosData = req.body;

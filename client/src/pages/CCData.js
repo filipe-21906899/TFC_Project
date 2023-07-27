@@ -44,7 +44,54 @@ function CCData() {
   };
 
   const handleDownload = async () => {
-    
+    try {
+      // Fetch data from the server for Jogadores, Tecnicos, and CCGuardiao
+      const jogadoresResponse = await axios.get('http://localhost:3001/jogadores/cc');
+      const tecnicosResponse = await axios.get('http://localhost:3001/tecnicos/cc');
+      const ccGuardiaoResponse = await axios.get('http://localhost:3001/jogadores/cc/guardiao');
+  
+      // Extract data from the responses
+      const jogadoresData = jogadoresResponse.data;
+      const tecnicosData = tecnicosResponse.data;
+      const ccGuardiaoData = ccGuardiaoResponse.data;
+  
+      // Create a new Excel workbook and sheet
+      const workbook = XLSX.utils.book_new();
+      const sheet = XLSX.utils.aoa_to_sheet([
+        ['CCJogador', 'CCTecnico', 'CCGuardiao'],
+        ...jogadoresData.map((jogador, index) => [jogador.ccNumber, tecnicosData[index]?.ccNumber, ccGuardiaoData[index]?.ccNumber])
+      ]);
+  
+      // Add the sheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, sheet, 'CC_Data');
+  
+      // Generate a binary string from the workbook
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  
+      // Create a Blob from the buffer
+      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+      // Generate a URL for the Blob
+      const url = URL.createObjectURL(blob);
+  
+      // Create a temporary anchor element to trigger the download
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'CC_Data.xlsx';
+      anchor.style.display = 'none'; // Hide the anchor element
+  
+      // Append the anchor to the DOM
+      document.body.appendChild(anchor);
+  
+      // Simulate a click on the anchor element to initiate the download
+      anchor.click();
+  
+      // Clean up: remove the anchor from the DOM and revoke the Blob URL
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading data:', error);
+    }
   };
 
   return (
