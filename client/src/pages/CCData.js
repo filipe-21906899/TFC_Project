@@ -58,8 +58,8 @@ function CCData() {
       // Create a new Excel workbook and sheet
       const workbook = XLSX.utils.book_new();
       const sheet = XLSX.utils.aoa_to_sheet([
-        ['CCJogador', 'CCTecnico', 'CCGuardiao'],
-        ...jogadoresData.map((jogador, index) => [jogador.ccNumber, tecnicosData[index]?.ccNumber, ccGuardiaoData[index]?.ccNumber])
+        ['CCJogador', 'CCGuardiao', 'CCTecnico'],
+        ...jogadoresData.map((jogador, index) => [jogador.ccNumber, ccGuardiaoData[index]?.ccNumber, tecnicosData[index]?.ccNumber])
       ]);
   
       // Add the sheet to the workbook
