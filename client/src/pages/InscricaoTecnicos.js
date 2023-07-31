@@ -9,7 +9,6 @@ function InscricaoTecnicos() {
 
 
 
-
   const initialValues = {
     EscalaoId: "",
     Nome: "",
@@ -72,13 +71,29 @@ function InscricaoTecnicos() {
   })
 
   useEffect(() => {
-    // Fetch and set the options for escalao and tecnicosType
-    // Example code to fetch options from the server:
     const fetchOptions = async () => {
       try {
         const escalaoResponse = await fetch('http://localhost:3001/escalao');
         const escalaoData = await escalaoResponse.json();
-        setEscalaoOptions(escalaoData);
+
+        // Retrieve the 'clubeId' from local storage
+        const loggedInClubeId = localStorage.getItem('clubeId');
+
+        // Fetch all the 'equipas' with the 'ClubeId' of the logged-in team
+        const equipasResponse = await fetch(
+          `http://localhost:3001/equipa?ClubeId=${loggedInClubeId}`
+        );
+        const equipasData = await equipasResponse.json();
+
+        // Get the current year
+        const currentYear = new Date().getFullYear();
+
+        // Extract 'EscalaoId' values from the fetched 'equipas' data
+        const escalaoOptionsFiltered = escalaoData.filter((option) =>
+          equipasData.some((equipa) => equipa.EscalaoId === option.id && equipa.Ano === currentYear)
+        );
+
+        setEscalaoOptions(escalaoOptionsFiltered);
 
         const tecnicosTypeResponse = await fetch('http://localhost:3001/tecnicos_type');
         const tecnicosTypeData = await tecnicosTypeResponse.json();
@@ -90,6 +105,7 @@ function InscricaoTecnicos() {
 
     fetchOptions();
   }, []);
+
 
   const handleSubmit2 = async (values) => {
     try {

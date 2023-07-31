@@ -127,6 +127,7 @@ function EquipasInscricao() {
 
             <Field type= "hidden" name="Ano"/>
             <Field type= "hidden" name="Pontos"/>
+          
 
             <button type="submit">Inscrever Equipa</button>
           </Form>

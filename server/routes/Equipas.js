@@ -2,9 +2,21 @@ const express = require('express')
 const router = express.Router()
 const { Equipas } = require('../models')
 
-router.get("/", async (req, res) =>{
-    const listOfPost = await Equipas.findAll();
+router.get('/', async (req, res) => {
+  try {
+    const { ClubeId } = req.query;
+    if (!ClubeId) {
+      // If 'ClubeId' is not provided in the query parameters, return an error
+      return res.status(400).json({ error: 'ClubeId is required in the query parameters.' });
+    }
+
+    // Fetch 'equipas' with the provided 'ClubeId'
+    const listOfPost = await Equipas.findAll({ where: { ClubeId } });
     res.json(listOfPost);
+  } catch (error) {
+    console.error('Error fetching equipas:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
 });
 
 router.post("/", async (req, res) => {
