@@ -48,7 +48,7 @@ function Inscricao() {
     CodigoPostal: "",
     Contacto: "",
     Email: "",
-    CC: "",
+    CCJogador: "",
     CCGuardiao: "",
     DataNascimento: "",
     TecnicosTypeId: "",
@@ -83,7 +83,7 @@ function Inscricao() {
     .required("Campo Obrigatório")
     .email("Email inválido"),
 
-    CC: Yup.string()
+    CCJogador: Yup.string()
     .required("Campo Obrigatório")
     .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
 
@@ -147,6 +147,7 @@ function Inscricao() {
     fetchOptions();
   }, []);
 
+  /*
   const submitJogador2 = async (values) => {
     try {
       // Log the form values
@@ -161,9 +162,9 @@ function Inscricao() {
       console.error('Error creating Equipa:', error);
     }
   };
+  */
 
   const submitJogador = async (values) => {
-    console.log("here")
     try {
       // Check if the value of CC exists in the CadernoEleitoral table
       const ccExists = await fetch(`http://localhost:3001/caderno_eleitoral?CC=${values.CC}&CCGuardiao=${values.CCGuardiao}`);
@@ -174,20 +175,53 @@ function Inscricao() {
       } else {
         values.Reside = 0; // Set the Reside field to 0 if CC does not exist
       }
-      console.log(values)
+      console.log(values);
   
+      // Step 1: Create and save the Jogador in the jogadores table
       const response = await fetch('http://localhost:3001/jogadores', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
       });
   
       if (response.ok) {
-        const createdJogadores = await response.json();
-        console.log('Created Jogador:', createdJogadores);
-        // Handle success, e.g., show a success message or redirect to another page
+        const createdJogador = await response.json();
+  
+        // Step 2: Retrieve the equipaId based on the provided EscalaoId, ClubeId, and Ano
+        const equipaResponse = await fetch(`http://localhost:3001/equipa/equipaId?EscalaoId=${values.EscalaoId}&ClubeId=${localStorage.getItem('clubeId')}&Ano=${new Date().getFullYear()}`);
+        const equipaData = await equipaResponse.json();
+  
+        if (equipaData.equipaId) {
+          const equipaId = equipaData.equipaId;
+  
+          // Step 3: Save the id and the corresponding EscalaoId in the equipa_jogadores table
+          const equipaJogadoresData = {
+            JogadoreId: createdJogador.id,
+            EquipaId: equipaId,
+          };
+  
+          const equipaJogadoresResponse = await fetch('http://localhost:3001/equipa_jogadores', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(equipaJogadoresData),
+          });
+  
+          if (equipaJogadoresResponse.ok) {
+            const createdEquipaJogadores = await equipaJogadoresResponse.json();
+            console.log('Created EquipaJogadores:', createdEquipaJogadores);
+            // Handle success, e.g., show a success message or redirect to another page
+          } else {
+            // Handle error response
+            console.error('Failed to create EquipaJogadores:', equipaJogadoresResponse);
+          }
+        } else {
+          // Handle the case when no matching equipa is found for the selected EscalaoId
+          console.error('No matching equipa found for the selected EscalaoId:', values.EscalaoId);
+        }
       } else {
         // Handle error response
         console.error('Failed to create Jogador:', response);
@@ -198,9 +232,10 @@ function Inscricao() {
     }
   };
 
+
   return (
     <div className='Inscrição'>
-      <Formik initialValues={initialValues} onSubmit={submitJogador2} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={submitJogador} validationSchema={validationSchema}>
         <Form className='formContainer' encType="multipart/form-data">
         <h1>Inscrição Jogadores</h1>
 
@@ -265,9 +300,9 @@ function Inscricao() {
           <Field
           autoComplete="off" 
           id ="CC" 
-          name="CC" 
+          name="CCJogador" 
           placeholder="Ex. 155555554XW3"/>
-          <ErrorMessage name='CC' component="span"/>
+          <ErrorMessage name='CCJogador' component="span"/>
 
           <label>Nº CC Guardião: </label>
           <Field

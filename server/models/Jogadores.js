@@ -31,11 +31,11 @@ module.exports = (sequelize, DataTypes) =>{
             allowNull:false
         },
         CCJogador :{
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull:false
         },
         CCGuardiao :{
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull:false
         },
         Reside :{

@@ -36,4 +36,28 @@ router.post("/", async (req, res) => {
     res.json(createdTeam);
   });
 
+  // New GET endpoint to fetch the equipaId based on EscalaoId, ClubeId, and Ano
+router.get('/equipaId', async (req, res) => {
+  try {
+    const { EscalaoId, ClubeId, Ano } = req.query;
+
+    // Check if all required parameters are provided
+    if (!EscalaoId || !ClubeId || !Ano) {
+      return res.status(400).json({ error: 'EscalaoId, ClubeId, and Ano are required in the query parameters.' });
+    }
+
+    // Fetch equipaId with the provided EscalaoId, ClubeId, and Ano
+    const equipa = await Equipas.findOne({ where: { EscalaoId, ClubeId, Ano } });
+
+    if (!equipa) {
+      return res.status(404).json({ error: 'No matching equipa found for the provided EscalaoId, ClubeId, and Ano.' });
+    }
+
+    res.json({ equipaId: equipa.id });
+  } catch (error) {
+    console.error('Error fetching equipaId:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
 module.exports = router

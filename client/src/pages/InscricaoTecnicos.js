@@ -18,7 +18,7 @@ function InscricaoTecnicos() {
     CodigoPostal: "",
     Contacto: "",
     Email: "",
-    CC: "",
+    CCTecnico: "",
     DataNascimento: "",
     TecnicosTypeId: "",
     Imagem: "",
@@ -53,7 +53,7 @@ function InscricaoTecnicos() {
     .required("Campo Obrigatório")
     .email("Email inválido"),
 
-    CC: Yup.string()
+    CCTecnico: Yup.string()
     .required("Campo Obrigatório")
     .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
 
@@ -106,6 +106,8 @@ function InscricaoTecnicos() {
     fetchOptions();
   }, []);
 
+  /*
+
 
   const handleSubmit2 = async (values) => {
     try {
@@ -122,6 +124,8 @@ function InscricaoTecnicos() {
     }
   };
 
+  */
+
   
 
   const handleSubmit = async (values) => {
@@ -135,20 +139,53 @@ function InscricaoTecnicos() {
       } else {
         values.Reside = 0; // Set the Reside field to 0 if CC does not exist
       }
-      console.log(values)
+      console.log(values);
   
+      // Step 1: Create and save the Tecnico in the tecnicos table
       const response = await fetch('http://localhost:3001/tecnicos', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
       });
   
       if (response.ok) {
         const createdTecnico = await response.json();
-        console.log('Created Tecnico:', createdTecnico);
-        // Handle success, e.g., show a success message or redirect to another page
+  
+        // Step 2: Retrieve the equipaId based on the provided EscalaoId, ClubeId, and Ano
+        const equipaResponse = await fetch(`http://localhost:3001/equipa/equipaId?EscalaoId=${values.EscalaoId}&ClubeId=${localStorage.getItem('clubeId')}&Ano=${new Date().getFullYear()}`);
+        const equipaData = await equipaResponse.json();
+  
+        if (equipaData.equipaId) {
+          const equipaId = equipaData.equipaId;
+  
+          // Step 3: Save the id and the corresponding EscalaoId in the equipatecnica table
+          const equipaTecnicaData = {
+            TecnicoId: createdTecnico.id,
+            EquipaId: equipaId,
+          };
+  
+          const equipaTecnicaResponse = await fetch('http://localhost:3001/equipa_tecnica', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(equipaTecnicaData),
+          });
+  
+          if (equipaTecnicaResponse.ok) {
+            const createdEquipaTecnica = await equipaTecnicaResponse.json();
+            console.log('Created EquipaTecnica:', createdEquipaTecnica);
+            // Handle success, e.g., show a success message or redirect to another page
+          } else {
+            // Handle error response
+            console.error('Failed to create EquipaTecnica:', equipaTecnicaResponse);
+          }
+        } else {
+          // Handle the case when no matching equipa is found for the selected EscalaoId
+          console.error('No matching equipa found for the selected EscalaoId:', values.EscalaoId);
+        }
       } else {
         // Handle error response
         console.error('Failed to create Tecnico:', response);
@@ -160,12 +197,13 @@ function InscricaoTecnicos() {
   };
   
   
-  
-  
+
+
+
   
   return (
     <div className='Inscrição'>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit2} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         <Form className='formContainer' encType="multipart/form-data">
         <h1>Inscrição Equipa Técnica</h1>
 
@@ -230,9 +268,10 @@ function InscricaoTecnicos() {
           <Field
           autoComplete="off" 
           id ="cc" 
-          name="CC" 
-          placeholder="Ex. 155555554XW3"/>
-          <ErrorMessage name='CC' component="span"/>
+          name="CCTecnico" 
+          placeholder="Ex. 155555554XW3"
+          />
+          <ErrorMessage name='CCTecnico' component="span"/>
 
           <label>Data Nascimento: </label>
           <Field autoComplete="off" id="data" name="DataNascimento" type="date" />
