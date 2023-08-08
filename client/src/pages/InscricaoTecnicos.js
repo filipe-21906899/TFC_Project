@@ -111,12 +111,9 @@ function InscricaoTecnicos() {
 
   const handleSubmit2 = async (values) => {
     try {
-      // Log the form values
+
       console.log('Form Values:', values);
 
-      // Your API call here...
-
-      // For demonstration purposes, we are just logging the success message.
       console.log('Form submitted successfully!');
     } catch (error) {
       // Handle error
@@ -133,11 +130,13 @@ function InscricaoTecnicos() {
       // Check if the value of CC exists in the CadernoEleitoral table
       const ccExists = await fetch(`http://localhost:3001/caderno_eleitoral/tecnicos?CC=${values.CC}`);
       const ccData = await ccExists.json();
+
+      //this will not be used so the value of reside will always be 1 and only change after manualy
   
       if (ccData.length > 0) {
         values.Reside = 1; // Update the Reside field to 1 if CC exists in the CadernoEleitoral table
       } else {
-        values.Reside = 0; // Set the Reside field to 0 if CC does not exist
+        values.Reside = 1; // Set the Reside field to 0 if CC does not exist
       }
       console.log(values);
   

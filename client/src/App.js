@@ -15,14 +15,16 @@ import JogoInfo from './pages/JogoInfo';
 import EquipasInscricao from './pages/EquipasInscrição';
 import Information from './pages/Information';
 
+
 function App() {
+  
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
     localStorage.removeItem('usersTypeId');
     localStorage.removeItem('clubeId');
     localStorage.removeItem('clubeName');
-    window.location.reload(false);
+    window.location.href = '/';
   };
 
   const isAdmin = localStorage.getItem('username') === 'Admin';

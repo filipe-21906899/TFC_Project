@@ -320,3 +320,10 @@ span {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* Info Players*/
+
+.club-name {
+  font-size: 25px;
+  margin-bottom: 10px; /* Adjust the margin value as needed */ 
+}
