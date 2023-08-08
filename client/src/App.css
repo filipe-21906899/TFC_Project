@@ -303,6 +303,9 @@ span {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .custom-alert p {
@@ -319,6 +322,7 @@ span {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  align-self: center;
 }
 
 /* Info Players*/
@@ -326,4 +330,44 @@ span {
 .club-name {
   font-size: 25px;
   margin-bottom: 10px; /* Adjust the margin value as needed */ 
+}
+
+.custom-alert-overlay2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  z-index: 9999;
+}
+
+.custom-alert2 {
+  background-color: lightgray;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.custom-alert2 p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.custom-alert2 button {
+  padding: 8px 16px;
+  background-color: #004526;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: center;
 }

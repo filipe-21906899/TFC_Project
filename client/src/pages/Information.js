@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 
 function Info() {
@@ -9,12 +9,13 @@ function Info() {
   const [clubeOptions, setClubeOptions] = useState([]);
   const username = localStorage.getItem('username');
   const clubeName = localStorage.getItem('clubeName');
+  const [showAlert, setShowAlert] = useState(false)
 
   const isAdmin = username === 'Admin';
-  
+
   const initialValues = {
 
-    ClubeId: '',
+    ClubeId: isAdmin ? '' : localStorage.getItem('clubeId'),
     EscalaoId: "",
     Tipo: "",
   };
@@ -22,15 +23,19 @@ function Info() {
   const validationSchema = Yup.object().shape({
 
     ClubeId: Yup.string()
-    .required("Campo Obrigatório"),
-    
+      .required("Campo Obrigatório"),
+
     EscalaoId: Yup.string()
-    .required("Campo Obrigatório"),
+      .required("Campo Obrigatório"),
 
     Tipo: Yup.string()
-    .required("Campo Obrigatório"),
+      .required("Campo Obrigatório"),
 
   })
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -40,7 +45,7 @@ function Info() {
 
         // Retrieve the 'clubeId' from local storage
         const loggedInClubeId = localStorage.getItem('clubeId');
-        
+
 
         // Fetch all the 'equipas' with the 'ClubeId' of the logged-in team
         const equipasResponse = await fetch(
@@ -75,24 +80,63 @@ function Info() {
 
   const handleSubmit2 = async (values) => {
     try {
-
       console.log('Form Values:', values);
 
-      console.log('Form submitted successfully!');
+      if (isAdmin) {
+        // Check if the combination of ClubeId, EscalaoId, and CurrentYear exists in the equipas table
+        const response = await fetch(`http://localhost:3001/equipa/check?ClubeId=${values.ClubeId}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
+        const equipaIdData = await response.json();
+
+        if (equipaIdData.equipaId != null) {
+          console.log('Combination of ClubeId and EscalaoId exists in equipas table for the current year.');
+          console.log("equipaId value:", equipaIdData.equipaId);
+          
+          //fazer verificação do tipo se for jogador vai procurar a equipaJogador se for tecnico vai procurar na equipatecnica
+          //fazer a validação se alguma equipa foi criada se nao mostrar pop up se sim criar tabela com os jogadores ou tecnicos 
+          //que tenham sido inscritos nessa equipa mostrar em tabela os jogadores todos inscritos nessa equipa
+
+        } else {
+          // Show a popup message indicating that the combination is not found
+          setShowAlert(true);
+        }
+      }else{
+        const response = await fetch(`http://localhost:3001/equipa/check?ClubeId=${localStorage.getItem('clubeId')}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
+        const equipaIdData = await response.json();
+
+        if (equipaIdData.equipaId != null) {
+          console.log("equipaId value:", equipaIdData.equipaId);
+
+          //fazer verificação do tipo se for jogador vai procurar a equipaJogador se for tecnico vai procurar na equipatecnica
+          //fazer a validação se alguma equipa foi criada se nao mostrar pop up se sim criar tabela com os jogadores ou tecnicos 
+          //que tenham sido inscritos nessa equipa mostrar em tabela os jogadores todos inscritos nessa equipa
+
+        } else {
+          // Show a popup message
+          setShowAlert(true);
+        }
+      }
+
+
     } catch (error) {
       // Handle error
-      console.error('Error creating Equipa:', error);
+      console.error('Error:', error);
     }
   };
+
+
+
+
+
+
 
 
   return (
     <div className='info'>
       <Formik initialValues={initialValues} onSubmit={handleSubmit2} validationSchema={validationSchema}>
         <Form className='formContainer' encType="multipart/form-data">
-        <h1>Informação Jogadores</h1>
+          <h1>Informação Jogadores</h1>
 
-        {isAdmin ? (
+          {isAdmin ? (
             <>
               <label>Clube: </label>
               <Field as='select' name='ClubeId'>
@@ -137,7 +181,7 @@ function Info() {
               </Field>
               <ErrorMessage name='EscalaoId' component='span' />
             </>
-          )}  
+          )}
 
           <label>Tipo: </label>
           <Field as="select" name="Tipo">
@@ -150,6 +194,14 @@ function Info() {
           <button type='submit'>Obter Informação</button>
         </Form>
       </Formik>
+      {showAlert && (
+        <div className='custom-alert-overlay2'>
+          <div className="custom-alert2">
+            <p>Clube não inscrito no escalão selecionado!</p>
+            <button onClick={handleCloseAlert}>OK</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

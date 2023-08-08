@@ -60,4 +60,28 @@ router.get('/equipaId', async (req, res) => {
   }
 });
 
+router.get('/check', async (req, res) => {
+  try {
+    const { ClubeId, EscalaoId, CurrentYear } = req.query;
+
+    // Check if all required parameters are provided
+    if (!ClubeId || !EscalaoId || !CurrentYear) {
+      return res.status(400).json({ error: 'ClubeId, EscalaoId, and CurrentYear are required in the query parameters.' });
+    }
+
+    // Fetch record with the provided ClubeId, EscalaoId, and CurrentYear
+    const equipa = await Equipas.findOne({ where: { ClubeId, EscalaoId, Ano: CurrentYear } });
+
+    if (!equipa) {
+      return res.json({ equipaId: null, message: 'Combination of ClubeId, EscalaoId, and CurrentYear does not exist in equipas table.' });
+    }
+
+    res.json({ equipaId: equipa.id });
+  } catch (error) {
+    console.error('Error checking combination:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
 module.exports = router
