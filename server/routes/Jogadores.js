@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const { Jogadores } = require('../models')
 
-router.get("/", async (req, res) =>{
-    const listOfPost = await Jogadores.findAll();
-    res.json(listOfPost);
+router.get("/", async (req, res) => {
+  const listOfPost = await Jogadores.findAll();
+  res.json(listOfPost);
 });
 
 // GET all CCGuardiao values
@@ -36,14 +36,33 @@ router.get('/cc', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    try {
-      const jogadoresData = req.body;
-      const createdJogadores = await Jogadores.create(jogadoresData);
-      return res.json(createdJogadores);
-    } catch (error) {
-      console.error('Error creating Jogador:', error);
-      return res.status(500).json({ error: 'Failed to create Jogador' });
+  try {
+    const jogadoresData = req.body;
+    const createdJogadores = await Jogadores.create(jogadoresData);
+    return res.json(createdJogadores);
+  } catch (error) {
+    console.error('Error creating Jogador:', error);
+    return res.status(500).json({ error: 'Failed to create Jogador' });
+  }
+});
+
+// GET detailed information for a specific JogadoreId
+router.get('/:id', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+
+    // Fetch detailed information for the specified JogadoreId
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      res.json(jogadore);
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
     }
-  });
+  } catch (error) {
+    console.error('Error fetching Jogadore:', error);
+    res.status(500).json({ error: 'Failed to fetch Jogadore' });
+  }
+});
 
 module.exports = router

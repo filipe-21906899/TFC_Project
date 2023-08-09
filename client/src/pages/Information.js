@@ -90,25 +90,151 @@ function Info() {
         if (equipaIdData.equipaId != null) {
           console.log('Combination of ClubeId and EscalaoId exists in equipas table for the current year.');
           console.log("equipaId value:", equipaIdData.equipaId);
-          
-          //fazer verificação do tipo se for jogador vai procurar a equipaJogador se for tecnico vai procurar na equipatecnica
-          //fazer a validação se alguma equipa foi criada se nao mostrar pop up se sim criar tabela com os jogadores ou tecnicos 
-          //que tenham sido inscritos nessa equipa mostrar em tabela os jogadores todos inscritos nessa equipa
+
+          // Check the 'tipo' field
+          if (values.Tipo === 'Jogador') {
+            console.log("Jogador")
+
+            // Fetch jogadores data from the server for the given equipaId
+            const jogadoresResponse = await fetch(`http://localhost:3001/equipa_jogadores/check?equipaId=${equipaIdData.equipaId}`);
+            const jogadoresData = await jogadoresResponse.json();
+
+            if (jogadoresData.length > 0) {
+              console.log('Jogadores found in equipaJogadores table for equipaId:', equipaIdData.equipaId);
+              console.log('Jogadores:', jogadoresData);
+
+              // Fetch detailed information for each JogadoreId in the array
+              const detailedJogadores = await Promise.all(
+                jogadoresData.map(async (jogadorId) => {
+                  const jogadorResponse = await fetch(`http://localhost:3001/jogadores/${jogadorId}`);
+                  const jogadorInfo = await jogadorResponse.json();
+                  return jogadorInfo;
+                })
+              );
+
+              console.log('Detailed Jogadores:', detailedJogadores);
+
+
+            } else {
+              console.log('No jogadores found in equipaJogadores table for equipaId:', equipaIdData.equipaId);
+
+            }
+
+          } else if (values.Tipo === 'Tecnico') {
+            console.log("Tecnico")
+            // Fetch tecnicos data from the server for the given equipaId
+            const tecnicosResponse = await fetch(`http://localhost:3001/equipa_tecnica/check?equipaId=${equipaIdData.equipaId}`);
+            const tecnicosData = await tecnicosResponse.json();
+
+            if (tecnicosData.length > 0) {
+              console.log('Tecnicos found in equipaTecnicas table for equipaId:', equipaIdData.equipaId);
+              console.log('Tecnicos:', tecnicosData);
+
+              // Fetch detailed information for each JogadoreId in the array
+              const detailedTecnico = await Promise.all(
+                tecnicosData.map(async (tecnicosIds) => {
+                  const tecnicoResponse = await fetch(`http://localhost:3001/tecnicos/${tecnicosIds}`);
+                  const tecnicoInfo = await tecnicoResponse.json();
+                  return tecnicoInfo;
+                })
+              );
+
+              console.log('Detailed Tecnicos:', detailedTecnico);
+
+
+            } else {
+              console.log('No tecnicos found in tecnicosEquipa table for equipaId:', equipaIdData.equipaId);
+
+            }
+
+
+          } else {
+            // Handle invalid 'tipo' value
+            console.log("Invalid 'tipo' value:", values.Tipo);
+          }
+
+          //add a couple of equipa and tecnicos ao equipaJogadores e equipaTecnicos e testar o codigo acima para ambos
+          //meter os dados guardados no array numa tablela para dar display e limitar os dados se o username nao for Admin
+          //add a function to change the residente to false e change is color to red
+
 
         } else {
           // Show a popup message indicating that the combination is not found
           setShowAlert(true);
         }
-      }else{
+      } else {
         const response = await fetch(`http://localhost:3001/equipa/check?ClubeId=${localStorage.getItem('clubeId')}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
         const equipaIdData = await response.json();
 
         if (equipaIdData.equipaId != null) {
           console.log("equipaId value:", equipaIdData.equipaId);
 
-          //fazer verificação do tipo se for jogador vai procurar a equipaJogador se for tecnico vai procurar na equipatecnica
-          //fazer a validação se alguma equipa foi criada se nao mostrar pop up se sim criar tabela com os jogadores ou tecnicos 
-          //que tenham sido inscritos nessa equipa mostrar em tabela os jogadores todos inscritos nessa equipa
+          // Check the 'tipo' field
+          if (values.Tipo === 'Jogador') {
+            console.log("Jogador")
+
+            // Fetch jogadores data from the server for the given equipaId
+            const jogadoresResponse = await fetch(`http://localhost:3001/equipa_jogadores/check?equipaId=${equipaIdData.equipaId}`);
+            const jogadoresData = await jogadoresResponse.json();
+
+            if (jogadoresData.length > 0) {
+              console.log('Jogadores found in equipaJogadores table for equipaId:', equipaIdData.equipaId);
+              console.log('Jogadores:', jogadoresData);
+
+              // Fetch detailed information for each JogadoreId in the array
+              const detailedJogadores = await Promise.all(
+                jogadoresData.map(async (jogadorId) => {
+                  const jogadorResponse = await fetch(`http://localhost:3001/jogadores/${jogadorId}`);
+                  const jogadorInfo = await jogadorResponse.json();
+                  return jogadorInfo;
+                })
+              );
+
+              console.log('Detailed Jogadores:', detailedJogadores);
+
+            } else {
+              console.log('No jogadores found in equipaJogadores table for equipaId:', equipaIdData.equipaId);
+              // Show a message or take appropriate action
+              // ...
+            }
+
+          } else if (values.Tipo === 'Técnico') {
+            console.log("Tecnico")
+            // Fetch tecnicos data from the server for the given equipaId
+            const tecnicosResponse = await fetch(`http://localhost:3001/equipa_tecnica/check?equipaId=${equipaIdData.equipaId}`);
+            const tecnicosData = await tecnicosResponse.json();
+
+            if (tecnicosData.length > 0) {
+              console.log('Tecnicos found in equipaTecnicas table for equipaId:', equipaIdData.equipaId);
+              console.log('Tecnicos:', tecnicosData);
+
+              // Fetch detailed information for each JogadoreId in the array
+              const detailedTecnico = await Promise.all(
+                tecnicosData.map(async (tecnicosIds) => {
+                  const tecnicoResponse = await fetch(`http://localhost:3001/tecnicos/${tecnicosIds}`);
+                  const tecnicoInfo = await tecnicoResponse.json();
+                  return tecnicoInfo;
+                })
+              );
+
+              console.log('Detailed Tecnicos:', detailedTecnico);
+
+
+            } else {
+              console.log('No tecnicos found in tecnicosEquipa table for equipaId:', equipaIdData.equipaId);
+              // Show a message or take appropriate action
+              // ...
+            }
+
+          } else {
+            // Handle invalid 'tipo' value
+            console.log("Invalid 'tipo' value:", values.Tipo);
+          }
+
+          //add a couple of equipa and tecnicos ao equipaJogadores e equipaTecnicos e testar o codigo acima para ambos
+          //meter os dados guardados no array numa tablela para dar display e limitar os dados se o username nao for Admin
+          //add a function to change the residente to false e change is color to red
+
 
         } else {
           // Show a popup message

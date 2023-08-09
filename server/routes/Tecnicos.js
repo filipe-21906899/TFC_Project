@@ -38,5 +38,24 @@ router.post('/', async (req, res) => {
   }
 });
 
+// GET detailed information for a specific TecnicoId
+router.get('/:id', async (req, res) => {
+  try {
+    const tecnicoId = req.params.id;
+
+    // Fetch detailed information for the specified JogadoreId
+    const tecnico = await Tecnicos.findByPk(tecnicoId);
+
+    if (tecnico) {
+      res.json(tecnico);
+    } else {
+      res.status(404).json({ error: 'Tecnico not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching Tecnico:', error);
+    res.status(500).json({ error: 'Failed to fetch Tecnico' });
+  }
+});
+
 
 module.exports = router;
