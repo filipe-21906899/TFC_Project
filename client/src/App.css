@@ -329,7 +329,7 @@ span {
 
 .club-name {
   font-size: 25px;
-  margin-bottom: 10px; /* Adjust the margin value as needed */ 
+  margin-bottom: 10px;
 }
 
 .custom-alert-overlay2 {
@@ -371,3 +371,38 @@ span {
   cursor: pointer;
   align-self: center;
 }
+
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-table {
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto; /* Add scrollbar when content overflows */
+  
+}
+
+.info-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table th,
+.info-table td {
+  border: 1px solid #004526;
+  padding: 8px;
+  text-align: left;
+}
+
+.info-table th {
+  background-color: #004526;
+  color: lightgray;
+}
+
+
+
+

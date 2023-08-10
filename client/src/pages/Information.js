@@ -10,6 +10,11 @@ function Info() {
   const username = localStorage.getItem('username');
   const clubeName = localStorage.getItem('clubeName');
   const [showAlert, setShowAlert] = useState(false)
+  const [detailedJogadores, setDetailedJogadores] = useState([]);
+  const [detailedTecnico, setDetailedTecnico] = useState([]);
+  const [tecnicosType, setTecnicosType] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
 
   const isAdmin = username === 'Admin';
 
@@ -78,9 +83,30 @@ function Info() {
     fetchOptions();
   }, []);
 
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const tecnicosTypeResponse = await fetch('http://localhost:3001/tecnicos_type');
+        const tecnicosTypeData = await tecnicosTypeResponse.json();
+
+        setTecnicosType(tecnicosTypeData);
+
+      } catch (error) {
+        console.error('Error fetching options:', error);
+      }
+    };
+
+    fetchOptions();
+  }, []);
+
   const handleSubmit2 = async (values) => {
     try {
       console.log('Form Values:', values);
+
+      // Clear previous data and set visibility
+      setFormSubmitted(false);
+      setDetailedJogadores([]);
+      setDetailedTecnico([]);
 
       if (isAdmin) {
         // Check if the combination of ClubeId, EscalaoId, and CurrentYear exists in the equipas table
@@ -112,6 +138,8 @@ function Info() {
                 })
               );
 
+              setDetailedJogadores(detailedJogadores);
+
               console.log('Detailed Jogadores:', detailedJogadores);
 
 
@@ -120,7 +148,7 @@ function Info() {
 
             }
 
-          } else if (values.Tipo === 'Tecnico') {
+          } else if (values.Tipo === 'Técnico') {
             console.log("Tecnico")
             // Fetch tecnicos data from the server for the given equipaId
             const tecnicosResponse = await fetch(`http://localhost:3001/equipa_tecnica/check?equipaId=${equipaIdData.equipaId}`);
@@ -130,7 +158,6 @@ function Info() {
               console.log('Tecnicos found in equipaTecnicas table for equipaId:', equipaIdData.equipaId);
               console.log('Tecnicos:', tecnicosData);
 
-              // Fetch detailed information for each JogadoreId in the array
               const detailedTecnico = await Promise.all(
                 tecnicosData.map(async (tecnicosIds) => {
                   const tecnicoResponse = await fetch(`http://localhost:3001/tecnicos/${tecnicosIds}`);
@@ -138,6 +165,8 @@ function Info() {
                   return tecnicoInfo;
                 })
               );
+
+              setDetailedTecnico(detailedTecnico);
 
               console.log('Detailed Tecnicos:', detailedTecnico);
 
@@ -153,9 +182,7 @@ function Info() {
             console.log("Invalid 'tipo' value:", values.Tipo);
           }
 
-          //add a couple of equipa and tecnicos ao equipaJogadores e equipaTecnicos e testar o codigo acima para ambos
-          //meter os dados guardados no array numa tablela para dar display e limitar os dados se o username nao for Admin
-          //add a function to change the residente to false e change is color to red
+          //add the funcionality to change the residence to false
 
 
         } else {
@@ -190,6 +217,8 @@ function Info() {
                 })
               );
 
+              setDetailedJogadores(detailedJogadores);
+
               console.log('Detailed Jogadores:', detailedJogadores);
 
             } else {
@@ -208,7 +237,7 @@ function Info() {
               console.log('Tecnicos found in equipaTecnicas table for equipaId:', equipaIdData.equipaId);
               console.log('Tecnicos:', tecnicosData);
 
-              // Fetch detailed information for each JogadoreId in the array
+
               const detailedTecnico = await Promise.all(
                 tecnicosData.map(async (tecnicosIds) => {
                   const tecnicoResponse = await fetch(`http://localhost:3001/tecnicos/${tecnicosIds}`);
@@ -217,23 +246,21 @@ function Info() {
                 })
               );
 
+              setDetailedTecnico(detailedTecnico);
+
               console.log('Detailed Tecnicos:', detailedTecnico);
 
 
             } else {
               console.log('No tecnicos found in tecnicosEquipa table for equipaId:', equipaIdData.equipaId);
-              // Show a message or take appropriate action
-              // ...
+
             }
 
           } else {
-            // Handle invalid 'tipo' value
             console.log("Invalid 'tipo' value:", values.Tipo);
           }
 
-          //add a couple of equipa and tecnicos ao equipaJogadores e equipaTecnicos e testar o codigo acima para ambos
-          //meter os dados guardados no array numa tablela para dar display e limitar os dados se o username nao for Admin
-          //add a function to change the residente to false e change is color to red
+          //add the funcionality to change the residence to false
 
 
         } else {
@@ -242,6 +269,7 @@ function Info() {
         }
       }
 
+      setFormSubmitted(true);
 
     } catch (error) {
       // Handle error
@@ -258,68 +286,268 @@ function Info() {
 
   return (
     <div className='info'>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit2} validationSchema={validationSchema}>
-        <Form className='formContainer' encType="multipart/form-data">
-          <h1>Informação Jogadores</h1>
+      <div className="form-wrapper">
+        <Formik initialValues={initialValues} onSubmit={handleSubmit2} validationSchema={validationSchema}>
+          <Form className='formContainer' encType="multipart/form-data">
+            <h1>Informação Jogadores</h1>
 
-          {isAdmin ? (
-            <>
-              <label>Clube: </label>
-              <Field as='select' name='ClubeId'>
-                <option value=''>Select Clube</option>
-                {clubeOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.Nome}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage name='ClubeId' component='span' />
-            </>
-          ) : (
-            <>
-              <label className='club-name'>Clube: {clubeName}</label>
-            </>
+            {isAdmin ? (
+              <>
+                <label>Clube: </label>
+                <Field as='select' name='ClubeId'>
+                  <option value=''>Select Clube</option>
+                  {clubeOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.Nome}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage name='ClubeId' component='span' />
+              </>
+            ) : (
+              <>
+                <label className='club-name'>Clube: {clubeName}</label>
+              </>
+            )}
+
+            {isAdmin ? (
+              <>
+                <label>Escalão: </label>
+                <Field as='select' name='EscalaoId'>
+                  <option value=''>Select Escalão</option>
+                  {escalaoOptions2.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.Nome}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage name='EscalaoId' component='span' />
+              </>
+            ) : (
+              <>
+                <label>Escalão: </label>
+                <Field as='select' name='EscalaoId'>
+                  <option value=''>Select Escalão</option>
+                  {escalaoOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.Nome}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage name='EscalaoId' component='span' />
+              </>
+            )}
+
+            <label>Tipo: </label>
+            <Field as="select" name="Tipo">
+              <option value="">Select Jogador ou Técnico</option>
+              <option value="Jogador">Jogador</option>
+              <option value="Técnico">Técnico</option>
+            </Field>
+            <ErrorMessage name='Tipo' component="span" />
+
+            <button type='submit'>Obter Informação</button>
+          </Form>
+        </Formik>
+      </div>
+
+      {formSubmitted && (
+        <>
+          {!isAdmin && detailedJogadores.length > 0 && (
+            <div className="info-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Clube</th>
+                    <th>Morada</th>
+                    <th>Codigo-Postal</th>
+                    <th>Contacto</th>
+                    <th>Data Nascimento</th>
+                    <th>Email</th>
+                    <th>CC Jogador</th>
+                    <th>CC Guardião</th>
+                    <th>Foto</th>
+                    <th>PDF</th>
+                    {/* Add more columns based on the detailed jogadores information */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailedJogadores.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.Nome}</td>
+                      <td>{item.Clube}</td>
+                      <td>{item.Morada}</td>
+                      <td>{item.CodigoPostal}</td>
+                      <td>{item.Contacto}</td>
+                      <td>{item.DataNascimento}</td>
+                      <td>{item.Email}</td>
+                      <td>{item.CCJogador}</td>
+                      <td>{item.CCGuardiao}</td>
+                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
+                      <td><a href={item.File} target="_blank" rel="noopener noreferrer">PDF</a></td>
+                      {/* Add more cells based on the detailed jogadores information */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
 
-          {isAdmin ? (
-            <>
-              <label>Escalão: </label>
-              <Field as='select' name='EscalaoId'>
-                <option value=''>Select Escalão</option>
-                {escalaoOptions2.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.Nome}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage name='EscalaoId' component='span' />
-            </>
-          ) : (
-            <>
-              <label>Escalão: </label>
-              <Field as='select' name='EscalaoId'>
-                <option value=''>Select Escalão</option>
-                {escalaoOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.Nome}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage name='EscalaoId' component='span' />
-            </>
+          {isAdmin && detailedJogadores.length > 0 && (
+            <div className="info-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Clube</th>
+                    <th>Morada</th>
+                    <th>Codigo-Postal</th>
+                    <th>Contacto</th>
+                    <th>Data Nascimento</th>
+                    <th>Email</th>
+                    <th>CC Jogador</th>
+                    <th>CC Guardião</th>
+                    <th>Residente</th>
+                    <th>Foto</th>
+                    <th>PDF</th>
+                    {/* Add more columns based on the detailed jogadores information */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailedJogadores.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.Nome}</td>
+                      <td>{item.Clube}</td>
+                      <td>{item.Morada}</td>
+                      <td>{item.CodigoPostal}</td>
+                      <td>{item.Contacto}</td>
+                      <td>{item.DataNascimento}</td>
+                      <td>{item.Email}</td>
+                      <td>{item.CCJogador}</td>
+                      <td>{item.CCGuardiao}</td>
+                      <td
+                        style={{
+                          color: item.Reside ? 'inherit' : 'inherit',
+                          backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                        }}
+                      >
+                        {item.Reside ? 'Sim' : 'Não'}
+                      </td>
+                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
+                      <td><a href={item.File} target="_blank" rel="noopener noreferrer">PDF</a></td>
+
+                      {/* Add more cells based on the detailed jogadores information */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
 
-          <label>Tipo: </label>
-          <Field as="select" name="Tipo">
-            <option value="">Select Jogador ou Técnico</option>
-            <option value="Jogador">Jogador</option>
-            <option value="Técnico">Técnico</option>
-          </Field>
-          <ErrorMessage name='Tipo' component="span" />
+          {!isAdmin && detailedTecnico.length > 0 && (
+            <div className="info-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Clube</th>
+                    <th>Morada</th>
+                    <th>Codigo-Postal</th>
+                    <th>Contacto</th>
+                    <th>Data Nascimento</th>
+                    <th>Email</th>
+                    <th>CC Tecnico</th>
+                    <th>Tipo Tecnico</th>
+                    <th>Foto</th>
+                    {/* Add more columns based on the detailed tecnico information */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailedTecnico.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.Nome}</td>
+                      <td>{item.Clube}</td>
+                      <td>{item.Morada}</td>
+                      <td>{item.CodigoPostal}</td>
+                      <td>{item.Contacto}</td>
+                      <td>{item.DataNascimento}</td>
+                      <td>{item.Email}</td>
+                      <td>{item.CCTecnico}</td>
+                      <td>
+                        {tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}
+                      </td>
+                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
+                      {/* Add more cells based on the detailed tecnico information */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-          <button type='submit'>Obter Informação</button>
-        </Form>
-      </Formik>
+          {isAdmin && detailedTecnico.length > 0 && (
+            <div className="info-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Clube</th>
+                    <th>Morada</th>
+                    <th>Codigo-Postal</th>
+                    <th>Contacto</th>
+                    <th>Data Nascimento</th>
+                    <th>Email</th>
+                    <th>CC Tecnico</th>
+                    <th>Residente</th>
+                    <th>Tipo Tecnico</th>
+                    <th>Foto</th>
+                    {/* Add more columns based on the detailed tecnico information */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailedTecnico.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.Nome}</td>
+                      <td>{item.Clube}</td>
+                      <td>{item.Morada}</td>
+                      <td>{item.CodigoPostal}</td>
+                      <td>{item.Contacto}</td>
+                      <td>{item.DataNascimento}</td>
+                      <td>{item.Email}</td>
+                      <td>{item.CCTecnico}</td>
+                      <td
+                        style={{
+                          color: item.Reside ? 'inherit' : 'inherit',
+                          backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                        }}
+                      >
+                        {item.Reside ? 'Sim' : 'Não'}
+                      </td>
+                      <td>
+                        {tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}
+                      </td>
+                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
+                      {/* Add more cells based on the detailed tecnico information */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
+
+
+
       {showAlert && (
         <div className='custom-alert-overlay2'>
           <div className="custom-alert2">
@@ -328,6 +556,7 @@ function Info() {
           </div>
         </div>
       )}
+
     </div>
   )
 }
