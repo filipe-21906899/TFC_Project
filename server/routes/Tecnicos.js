@@ -18,7 +18,7 @@ router.get('/cc', async (req, res) => {
     const listOfCCTecnicos = await Tecnicos.findAll({
       attributes: ['CCTecnico'], // Specify the column you want to fetch
     });
-    const ccTecnicosValues = listOfCCTecnicos.map((tecnico) => tecnico.CCTecnicos);
+    const ccTecnicosValues = listOfCCTecnicos.map((tecnico) => tecnico.CCTecnico);
     return res.json(ccTecnicosValues);
   } catch (error) {
     console.error('Error fetching CCTecnico:', error);
@@ -54,6 +54,29 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching Tecnico:', error);
     res.status(500).json({ error: 'Failed to fetch Tecnico' });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const tecnicosId = req.params.id;
+    const updatedResideValue = req.body.Reside;
+
+    // Fetch the Jogadore by ID
+    const tecnico = await Tecnicos.findByPk(tecnicosId);
+
+    if (tecnico) {
+      // Update the Reside field
+      tecnico.Reside = updatedResideValue;
+      await tecnico.save(); // Save the updated Jogadore
+
+      res.json(tecnico);
+    } else {
+      res.status(404).json({ error: 'Tecnicos not found' });
+    }
+  } catch (error) {
+    console.error('Error updating Tecnicos Reside:', error);
+    res.status(500).json({ error: 'Failed to update Tecnicos Reside' });
   }
 });
 

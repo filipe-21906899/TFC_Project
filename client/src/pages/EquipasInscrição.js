@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 //import { useNavigate } from "react-router-dom"
 
@@ -69,7 +69,7 @@ function EquipasInscricao() {
   const handleSubmit = async (values) => {
     try {
       console.log(values);
-  
+
       const response = await fetch('http://localhost:3001/equipa', {
         method: 'POST',
         headers: {
@@ -77,9 +77,9 @@ function EquipasInscricao() {
         },
         body: JSON.stringify(values),
       });
-  
+
       const responseData = await response.json();
-  
+
       if (response.ok) {
         console.log('Equipa inscrita:', responseData);
         // Handle success, e.g., show a success message or redirect to another page
@@ -100,47 +100,49 @@ function EquipasInscricao() {
   return (
     <div className='equipas'>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-          <Form className="formContainer" encType="multipart/form-data">
-            <h1>Inscrição Equipas</h1>
+        <Form className="formContainer" encType="multipart/form-data">
+          <h1>Inscrição Equipas</h1>
 
-            <label>Escalão: </label>
-            <Field as="select" name="EscalaoId">
-              <option value="">Select Escalão</option>
-              {escalaoOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.Nome}
-                </option>
-              ))}
-            </Field>
-            <ErrorMessage name="EscalaoId" component="span" />
+          <label className='field'>Escalão: </label>
+          <Field as="select" name="EscalaoId">
+            <option value="">Select Escalão</option>
+            {escalaoOptions.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.Nome}
+              </option>
+            ))}
+          </Field>
+          <ErrorMessage name="EscalaoId" component="span" />
 
-            <label>Clube: </label>
-            <Field as="select" name="ClubeId">
-              <option value="">Select Clube</option>
-              {clubeOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.Nome}
-                </option>
-              ))}
-            </Field>
-            <ErrorMessage name="ClubeId" component="span" />
+          <label className='field'>Clube: </label>
+          <Field as="select" name="ClubeId">
+            <option value="">Select Clube</option>
+            {clubeOptions.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.Nome}
+              </option>
+            ))}
+          </Field>
+          <ErrorMessage name="ClubeId" component="span" />
 
-            <Field type= "hidden" name="Ano"/>
-            <Field type= "hidden" name="Pontos"/>
-          
+          <Field type="hidden" name="Ano" />
+          <Field type="hidden" name="Pontos" />
 
+          <div className='btnInfo'>
             <button type="submit">Inscrever Equipa</button>
-          </Form>
-        </Formik>
+          </div>
 
-        {showAlert && (
-          <div className='custom-alert-overlay'>
-            <div className="custom-alert">
+        </Form>
+      </Formik>
+
+      {showAlert && (
+        <div className='custom-alert-overlay'>
+          <div className="custom-alert">
             <p>Equipa já inscrita!</p>
             <button onClick={handleCloseAlert}>OK</button>
-            </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   )
 }

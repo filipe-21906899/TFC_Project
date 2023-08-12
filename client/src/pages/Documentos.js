@@ -8,7 +8,8 @@ function Documentos() {
   return (
     
     <table className='a'>
-        <tr>
+        
+        <tr id='topo'>
             <th>Nome</th>
             <th>Tipo</th>
             <th>Download</th>

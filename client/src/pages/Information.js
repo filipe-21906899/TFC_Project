@@ -25,6 +25,10 @@ function Info() {
     Tipo: "",
   };
 
+  const initialValues2 = {
+    id: "",
+  };
+
   const validationSchema = Yup.object().shape({
 
     ClubeId: Yup.string()
@@ -182,8 +186,6 @@ function Info() {
             console.log("Invalid 'tipo' value:", values.Tipo);
           }
 
-          //add the funcionality to change the residence to false
-
 
         } else {
           // Show a popup message indicating that the combination is not found
@@ -260,7 +262,6 @@ function Info() {
             console.log("Invalid 'tipo' value:", values.Tipo);
           }
 
-          //add the funcionality to change the residence to false
 
 
         } else {
@@ -278,9 +279,67 @@ function Info() {
   };
 
 
-
-
-
+  const handleSubmit = async (values) => {
+    try {
+      console.log('Form Values:', values);
+  
+      let detailedData = null;
+      let updatedDetailedItems = [];
+      
+      if (detailedJogadores.length > 0) {
+        const response = await fetch(`http://localhost:3001/jogadores/${values.id}`);
+        detailedData = await response.json();
+        
+        if (detailedData) {
+          const updatedResideValue = !detailedData.Reside;
+  
+          // Send a PUT request to update the "Reside" value
+          await fetch(`http://localhost:3001/jogadores/${values.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Reside: updatedResideValue })
+          });
+  
+          updatedDetailedItems = detailedJogadores.map(item =>
+            item.id === detailedData.id ? { ...detailedData, Reside: updatedResideValue } : item
+          );
+        }
+      } else if (detailedTecnico.length > 0) {
+        const response = await fetch(`http://localhost:3001/tecnicos/${values.id}`);
+        detailedData = await response.json();
+        
+        if (detailedData) {
+          const updatedResideValue = !detailedData.Reside;
+  
+          // Send a PUT request to update the "Reside" value
+          await fetch(`http://localhost:3001/tecnicos/${values.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Reside: updatedResideValue })
+          });
+  
+          updatedDetailedItems = detailedTecnico.map(item =>
+            item.id === detailedData.id ? { ...detailedData, Reside: updatedResideValue } : item
+          );
+        }
+      }
+  
+      // Set the appropriate state based on the condition
+      if (detailedJogadores.length > 0) {
+        setDetailedJogadores(updatedDetailedItems);
+      } else if (detailedTecnico.length > 0) {
+        setDetailedTecnico(updatedDetailedItems);
+      }
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+  };
+  
+  
 
 
 
@@ -288,12 +347,14 @@ function Info() {
     <div className='info'>
       <div className="form-wrapper">
         <Formik initialValues={initialValues} onSubmit={handleSubmit2} validationSchema={validationSchema}>
-          <Form className='formContainer' encType="multipart/form-data">
-            <h1>Informação Jogadores</h1>
+          <Form className='formContainer3' encType="multipart/form-data">
+            <div style={{ textAlign: 'center' }}>
+              <h1>Informação</h1>
+            </div>
 
             {isAdmin ? (
               <>
-                <label>Clube: </label>
+                <label className='field' >Clube: </label>
                 <Field as='select' name='ClubeId'>
                   <option value=''>Select Clube</option>
                   {clubeOptions.map((option) => (
@@ -312,7 +373,7 @@ function Info() {
 
             {isAdmin ? (
               <>
-                <label>Escalão: </label>
+                <label className='field'>Escalão: </label>
                 <Field as='select' name='EscalaoId'>
                   <option value=''>Select Escalão</option>
                   {escalaoOptions2.map((option) => (
@@ -325,7 +386,7 @@ function Info() {
               </>
             ) : (
               <>
-                <label>Escalão: </label>
+                <label className='field'>Escalão: </label>
                 <Field as='select' name='EscalaoId'>
                   <option value=''>Select Escalão</option>
                   {escalaoOptions.map((option) => (
@@ -338,7 +399,7 @@ function Info() {
               </>
             )}
 
-            <label>Tipo: </label>
+            <label className='field'>Tipo: </label>
             <Field as="select" name="Tipo">
               <option value="">Select Jogador ou Técnico</option>
               <option value="Jogador">Jogador</option>
@@ -346,13 +407,66 @@ function Info() {
             </Field>
             <ErrorMessage name='Tipo' component="span" />
 
-            <button type='submit'>Obter Informação</button>
+            <div className='btnInfo'>
+              <button type='submit'>Obter Informação</button>
+            </div>
           </Form>
         </Formik>
       </div>
 
+
       {formSubmitted && (
         <>
+          <Formik initialValues={initialValues2} onSubmit={handleSubmit}>
+            <Form className='formContainer3' encType="multipart/form-data">
+              <div className='formRight'>
+                {isAdmin && detailedJogadores.length > 0 && (
+                  <>
+                    <div style={{ textAlign: 'center' }}>
+                      <h1>Residencia</h1>
+                    </div>
+                    <label className='ids'>ID Jogador/Tecnico: </label>
+                    <Field name='id' component='select'>
+                      <option value=''>Select Id</option>
+                      {detailedJogadores.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.id}
+                        </option>
+                      ))}
+
+
+                    </Field>
+                    <ErrorMessage name='id' component='span' />
+                    <div className='btnInfo'>
+                      <button type='submit'> Residente</button>
+                    </div>
+                  </>
+                )}
+                {isAdmin && detailedTecnico.length > 0 && (
+                  <>
+                    <div style={{ textAlign: 'center' }}>
+                      <h1>Residencia</h1>
+                    </div>
+                    <label className='ids'>ID Jogador/Tecnico: </label>
+                    <Field name='id' component='select'>
+                      <option value=''>Select Id</option>
+                      {detailedTecnico.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.id}
+                        </option>
+                      ))}
+
+
+                    </Field>
+                    <ErrorMessage name='id' component='span' />
+                    <div className='btnInfo'>
+                      <button type='submit'>Residente</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </Form>
+          </Formik>
           {!isAdmin && detailedJogadores.length > 0 && (
             <div className="info-table">
               <table>

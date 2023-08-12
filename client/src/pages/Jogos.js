@@ -111,70 +111,76 @@ function Jogos() {
       console.error('Error creating Jogo:', error);
     }
   };
-  
+
   return (
-    <div className='Inscrição'>
+    <div className='Inscrição3'>
       <button className="back-button" onClick={() => navigate(-1)}>Back</button>
-      <h1>Jogos Escalão: {escalaoData?.Nome}</h1>
       {username === 'Admin' ? (<Formik
-    initialValues={{
-      DataJogo: '',
-      Home: '',
-      Away: '',
-      JogoTypeId: '',
-      TorneioId: id, // Set the TorneioId field with the value from the URL parameter
-    }}
-    validationSchema={validationSchema}
-    onSubmit={handleSubmit}
-  >
-    <Form className='formContainer' encType='multipart/form-data'>
-      <label htmlFor='date'>Dia do Jogo:</label>
-      <Field type='date' id='date' name='DataJogo' />
-      <ErrorMessage name='DataJogo' component='div' className='error' />
+        initialValues={{
+          DataJogo: '',
+          Home: '',
+          Away: '',
+          JogoTypeId: '',
+          TorneioId: id, // Set the TorneioId field with the value from the URL parameter
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form className='formContainer3' encType='multipart/form-data'>
 
-      <label htmlFor='select1'>Tipo de Jogo:</label>
-      <Field as='select' id='select3' name='JogoTypeId'>
-        <option value=''>Select an option</option>
-        {jogoType.map((jogoType) => (
-          <option value={jogoType.id} key={jogoType.id}>
-            {jogoType.Nome}
-          </option>
-        ))}
-      </Field>
-      <ErrorMessage name='JogoTypeId' component='div' className='error' />
+          <div style={{ textAlign: 'center' }}>
+            <h1>Jogos Escalão: {escalaoData?.Nome}</h1>
+          </div>
+          <label className='field' >Dia do Jogo:</label>
+          <Field type='date' id='date' name='DataJogo' />
+          <ErrorMessage name='DataJogo' component='div' className='error' />
 
-      <label htmlFor='select1'>Equipa 1:</label>
-      <Field as='select' id='select1' name='Home'>
-        <option value=''>Select an option</option>
-        {clubes.map((clube) => (
-          <option value={clube.Nome} key={clube.id}>
-            {clube.Nome}
-          </option>
-        ))}
-      </Field>
-      <ErrorMessage name='Home' component='div' className='error' />
+          <label className='field' >Tipo de Jogo:</label>
+          <Field as='select' id='select3' name='JogoTypeId'>
+            <option value=''>Select an option</option>
+            {jogoType.map((jogoType) => (
+              <option value={jogoType.id} key={jogoType.id}>
+                {jogoType.Nome}
+              </option>
+            ))}
+          </Field>
+          <ErrorMessage name='JogoTypeId' component='div' className='error' />
 
-      <label htmlFor='select2'>Equipa 2:</label>
-      <Field as='select' id='select2' name='Away'>
-        <option value=''>Select an option</option>
-        {clubes.map((clube) => (
-          <option value={clube.Nome} key={clube.id}>
-            {clube.Nome}
-          </option>
-        ))}
-      </Field>
-      <ErrorMessage name='Away' component='div' className='error' />
+          <label className='field'>Equipa 1:</label>
+          <Field as='select' id='select1' name='Home'>
+            <option value=''>Select an option</option>
+            {clubes.map((clube) => (
+              <option value={clube.Nome} key={clube.id}>
+                {clube.Nome}
+              </option>
+            ))}
+          </Field>
+          <ErrorMessage name='Home' component='div' className='error' />
 
-      <button type='submit'>Submit</button>
-    </Form>
-  </Formik>) : null}
+          <label className='field'>Equipa 2:</label>
+          <Field as='select' id='select2' name='Away'>
+            <option value=''>Select an option</option>
+            {clubes.map((clube) => (
+              <option value={clube.Nome} key={clube.id}>
+                {clube.Nome}
+              </option>
+            ))}
+          </Field>
+          <ErrorMessage name='Away' component='div' className='error' />
+
+          <div className='btnInfo'>
+            <button type='submit'>Submit</button>
+          </div>
+
+        </Form>
+      </Formik>) : null}
       <div className='torneio-container'>
         {listOfjogos.map((value, key) => {
           const formattedDate = format(new Date(value.DataJogo), 'yyyy-MM-dd');
           // Find the corresponding JogoType based on JogoTypeId
           const jogoTypeItem = jogoType.find((type) => type.id === value.JogoTypeId);
           return (
-            <div className='jogo' onClick={()=> {go(`/jogo/${value.id}`)}} key={key}>
+            <div className='jogo' onClick={() => { go(`/jogo/${value.id}`) }} key={key}>
               <div className='DataJogo'>{formattedDate}</div>
               <div className='Home'>{value.Home}</div>
               <div className='Away'>{value.Away}</div>

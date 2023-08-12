@@ -65,4 +65,28 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+    const updatedResideValue = req.body.Reside;
+
+    // Fetch the Jogadore by ID
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      // Update the Reside field
+      jogadore.Reside = updatedResideValue;
+      await jogadore.save(); // Save the updated Jogadore
+
+      res.json(jogadore);
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
+    }
+  } catch (error) {
+    console.error('Error updating Jogadore Reside:', error);
+    res.status(500).json({ error: 'Failed to update Jogadore Reside' });
+  }
+});
+
+
 module.exports = router

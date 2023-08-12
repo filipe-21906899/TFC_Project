@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 
 function InscricaoTecnicos() {
@@ -25,49 +25,49 @@ function InscricaoTecnicos() {
   };
 
   const validationSchema = Yup.object().shape({
-    
+
     EscalaoId: Yup.string()
-    .required("Campo Obrigatório"),
+      .required("Campo Obrigatório"),
 
     Nome: Yup.string()
-    .required("Campo Obrigatório")
-    .matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)*$/, "Deve conter apenas letras")
-    .min(2, "Nome muito curto")
-    .max(50, "Nome muito longo"),
+      .required("Campo Obrigatório")
+      .matches(/^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)*$/, "Deve conter apenas letras")
+      .min(2, "Nome muito curto")
+      .max(50, "Nome muito longo"),
 
     Morada: Yup.string()
-    .required("Campo Obrigatório")
-    .min(5, "Morada muito curta")
-    .max(100, "Morada muito longa")
-    .matches(/^[A-Za-zÀ-ÿÇç0-9\s.,'-]*$/, "Morada inválida"),
+      .required("Campo Obrigatório")
+      .min(5, "Morada muito curta")
+      .max(100, "Morada muito longa")
+      .matches(/^[A-Za-zÀ-ÿÇç0-9\s.,'-]*$/, "Morada inválida"),
 
     CodigoPostal: Yup.string()
-    .required("Campo Obrigatório")
-    .matches(/^\d{4}-\d{3}$/, "Código Postal inválido"),
+      .required("Campo Obrigatório")
+      .matches(/^\d{4}-\d{3}$/, "Código Postal inválido"),
 
     Contacto: Yup.string()
-    .required("Campo Obrigatório")
-    .matches(/^\d{9}$/, "Contacto inválido"),
+      .required("Campo Obrigatório")
+      .matches(/^\d{9}$/, "Contacto inválido"),
 
     Email: Yup.string()
-    .required("Campo Obrigatório")
-    .email("Email inválido"),
+      .required("Campo Obrigatório")
+      .email("Email inválido"),
 
     CCTecnico: Yup.string()
-    .required("Campo Obrigatório")
-    .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
+      .required("Campo Obrigatório")
+      .matches(/^\d{9}[A-Z][A-Z]\d$/, "CC inválido - Deve ter 9 números seguidos por 2 letras maiúsculas e 1 número."),
 
     DataNascimento: Yup.string()
-    .required("Campo Obrigatório"),
+      .required("Campo Obrigatório"),
 
     TecnicosTypeId: Yup.string()
-    .required("Campo Obrigatório"),
+      .required("Campo Obrigatório"),
 
     Imagem: Yup.mixed()
-    .test("fileRequired", "Campo Obrigatório", (value) => {
-      // Check if any file is selected
-      return value && value.length > 0;
-    })
+      .test("fileRequired", "Campo Obrigatório", (value) => {
+        // Check if any file is selected
+        return value && value.length > 0;
+      })
   })
 
   useEffect(() => {
@@ -123,7 +123,7 @@ function InscricaoTecnicos() {
 
   */
 
-  
+
 
   const handleSubmit = async (values) => {
     try {
@@ -132,14 +132,14 @@ function InscricaoTecnicos() {
       const ccData = await ccExists.json();
 
       //this will not be used so the value of reside will always be 1 and only change after manualy
-  
+
       if (ccData.length > 0) {
         values.Reside = 1; // Update the Reside field to 1 if CC exists in the CadernoEleitoral table
       } else {
         values.Reside = 1; // Set the Reside field to 0 if CC does not exist
       }
       console.log(values);
-  
+
       // Step 1: Create and save the Tecnico in the tecnicos table
       const response = await fetch('http://localhost:3001/tecnicos', {
         method: 'POST',
@@ -148,23 +148,23 @@ function InscricaoTecnicos() {
         },
         body: JSON.stringify(values),
       });
-  
+
       if (response.ok) {
         const createdTecnico = await response.json();
-  
+
         // Step 2: Retrieve the equipaId based on the provided EscalaoId, ClubeId, and Ano
         const equipaResponse = await fetch(`http://localhost:3001/equipa/equipaId?EscalaoId=${values.EscalaoId}&ClubeId=${localStorage.getItem('clubeId')}&Ano=${new Date().getFullYear()}`);
         const equipaData = await equipaResponse.json();
-  
+
         if (equipaData.equipaId) {
           const equipaId = equipaData.equipaId;
-  
+
           // Step 3: Save the id and the corresponding EscalaoId in the equipatecnica table
           const equipaTecnicaData = {
             TecnicoId: createdTecnico.id,
             EquipaId: equipaId,
           };
-  
+
           const equipaTecnicaResponse = await fetch('http://localhost:3001/equipa_tecnica', {
             method: 'POST',
             headers: {
@@ -172,7 +172,7 @@ function InscricaoTecnicos() {
             },
             body: JSON.stringify(equipaTecnicaData),
           });
-  
+
           if (equipaTecnicaResponse.ok) {
             const createdEquipaTecnica = await equipaTecnicaResponse.json();
             console.log('Created EquipaTecnica:', createdEquipaTecnica);
@@ -194,104 +194,114 @@ function InscricaoTecnicos() {
       console.error('Error creating Tecnico:', error);
     }
   };
-  
-  
 
 
 
-  
+
+
+
   return (
     <div className='Inscrição'>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-        <Form className='formContainer' encType="multipart/form-data">
-        <h1>Inscrição Equipa Técnica</h1>
+        <Form className='formContainer2' encType="multipart/form-data">
+          <div style={{ textAlign: 'center' }}>
+            <h1>Inscrição Equipa Técnica</h1>
+          </div>
 
-        <label>Escalão: </label>
-        <Field as="select" name="EscalaoId">
-            <option value="">Select Escalão</option>
-            {escalaoOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.Nome}
-              </option>
-            ))}
-          </Field>
-          <ErrorMessage name='EscalaoId' component="span" />
+          <div style={{ display: 'flex' }}>
 
-          <Field
-          autoComplete="off" 
-          id ="clube" 
-          name="Clube" 
-          type="hidden"/>
+            <div className='formLeft'>
+              <label className='field'>Escalão: </label>
+              <Field as="select" name="EscalaoId">
+                <option value="">Select Escalão</option>
+                {escalaoOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.Nome}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage name='EscalaoId' component="span" />
 
-          <label>Nome: </label>
-          <Field
-          autoComplete="off" 
-          id ="name" 
-          name="Nome" 
-          placeholder="Ex. João Pedro Pascal"/>
-          <ErrorMessage name='Nome' component="span" />
+              <Field
+                autoComplete="off"
+                id="clube"
+                name="Clube"
+                type="hidden" />
 
-          <label>Morada: </label>
-          <Field
-          autoComplete="off" 
-          id ="morada" 
-          name="Morada" 
-          placeholder="Ex. Rua Mario Santos nº33"/>
-          <ErrorMessage name="Morada" component="span"/>
+              <label className='field'>Nome: </label>
+              <Field
+                autoComplete="off"
+                id="name"
+                name="Nome"
+                placeholder="Ex. João Pedro Pascal" />
+              <ErrorMessage name='Nome' component="span" />
 
-          <label>Código Postal: </label>
-          <Field
-          autoComplete="off" 
-          id ="cpostal" 
-          name="CodigoPostal" 
-          placeholder="Ex. 2453-993"/>
-          <ErrorMessage name='CodigoPostal' component="span"/>
+              <label className='field'>Morada: </label>
+              <Field
+                autoComplete="off"
+                id="morada"
+                name="Morada"
+                placeholder="Ex. Rua Mario Santos nº33" />
+              <ErrorMessage name="Morada" component="span" />
 
-          <label>Contacto: </label>
-          <Field
-          autoComplete="off" 
-          id ="contacto" 
-          name="Contacto" 
-          placeholder="Ex. 945645321"/>
-          <ErrorMessage name='Contacto' component="span"/>
+              <label className='field'>Código Postal: </label>
+              <Field
+                autoComplete="off"
+                id="cpostal"
+                name="CodigoPostal"
+                placeholder="Ex. 2453-993" />
+              <ErrorMessage name='CodigoPostal' component="span" />
 
-          <label>Email: </label>
-          <Field
-          autoComplete="off" 
-          id ="Email" 
-          name="Email" 
-          placeholder="Ex. teste@gmail.com"/>
-          <ErrorMessage name='Email' component="span"/>
+              <label className='field'>Contacto: </label>
+              <Field
+                autoComplete="off"
+                id="contacto"
+                name="Contacto"
+                placeholder="Ex. 945645321" />
+              <ErrorMessage name='Contacto' component="span" />
+            </div>
+            <div className='formRight'>
+              <label className='field'>Email: </label>
+              <Field
+                autoComplete="off"
+                id="Email"
+                name="Email"
+                placeholder="Ex. teste@gmail.com" />
+              <ErrorMessage name='Email' component="span" />
 
-          <label>Nº CC: </label>
-          <Field
-          autoComplete="off" 
-          id ="cc" 
-          name="CCTecnico" 
-          placeholder="Ex. 155555554XW3"
-          />
-          <ErrorMessage name='CCTecnico' component="span"/>
+              <label className='field'>Nº CC: </label>
+              <Field
+                autoComplete="off"
+                id="cc"
+                name="CCTecnico"
+                placeholder="Ex. 155555554XW3"
+              />
+              <ErrorMessage name='CCTecnico' component="span" />
 
-          <label>Data Nascimento: </label>
-          <Field autoComplete="off" id="data" name="DataNascimento" type="date" />
-          <ErrorMessage name="DataNascimento" component="span" /> 
-          
-          <label>Tipo de Técnico: </label>
-          <Field as="select" name="TecnicosTypeId">
-            <option value="">Select Tipo de Técnico</option>
-            {tecnicosTypeOptions.map((option) => (
-            <option key={option.id} value={option.id}>
-            {option.Nome}
-            </option>
-            ))}
-          </Field>
-          <ErrorMessage name="TecnicosTypeId" component="span" />
+              <label className='field'>Data Nascimento: </label>
+              <Field autoComplete="off" id="data" name="DataNascimento" type="date" />
+              <ErrorMessage name="DataNascimento" component="span" />
 
-          <label>Imagem: </label>
-          <Field id='imagem' name='Imagem' type='file' accept='image/*'/>
-          <ErrorMessage name='Imagem' component='span' />
+              <label className='field'>Tipo de Técnico: </label>
+              <Field as="select" name="TecnicosTypeId">
+                <option value="">Select Tipo de Técnico</option>
+                {tecnicosTypeOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.Nome}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage name="TecnicosTypeId" component="span" />
 
-          <button type='submit'>Inscrever Técnico</button>
+              <label className='field'>Imagem: </label>
+              <Field id='imagem' name='Imagem' type='file' accept='image/*' />
+              <ErrorMessage name='Imagem' component='span' />
+
+            </div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <button type='submit'>Inscrever Técnico</button>
+          </div>
         </Form>
       </Formik>
     </div>

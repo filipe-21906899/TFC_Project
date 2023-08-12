@@ -1,4 +1,5 @@
 @import "home.css";
+
 .App {
   width: 100vw;
   height: auto;
@@ -16,37 +17,54 @@ body {
   background-color: #A9BA9D;
 }
 
-body .a{
+body .a {
   border-collapse: collapse;
   border: 1px solid black;
   text-align: center;
   table-layout: auto;
-  width: 100%;
+  margin: 2%;
+  width: 70%;
 }
 
-body .a th, td{
+#topo{
+  background-color: #004526;
+  color: lightgray;
   border: 1px solid black;
+  margin: 5px;
 }
 
-body .lander{
+body .a th,
+td {
+  border: 1px solid black;
+  margin: 5px;
+
+}
+
+body .lander {
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
   text-align: center;
+  
 }
-body p{
+
+body p {
   text-align: center;
 }
-body .escalao{
+
+body .escalao {
   text-align: center;
 }
-body .escalao ul{
+
+body .escalao ul {
   display: inline-block;
   text-align: left;
 }
-body .links{
+
+body .links {
   text-align: center;
 }
-body .links ul{
+
+body .links ul {
   display: inline-block;
   text-align: left;
 }
@@ -85,47 +103,142 @@ button {
 /*Inscrição Tecnicos e Jogadores CSS*/
 .Inscrição {
   font-family: Arial, Helvetica, sans-serif;
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
 }
+
+.Inscrição3 {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.formLeft{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 40%;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+
+
+}
+
+.formRight{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 40%;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  width: 100%;
+}
+
+
 
 .formContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 500px;
-  height: auto;
+  height: 20%;
   padding: 20px;
   border-radius: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
+  float: right;
 }
 
-.formContainer #inputCreatePost {
-  height: 40px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 2px solid white;
+.formContainer2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 1000px;
+  height: 20%;
+  padding: 20px;
   border-radius: 5px;
-  padding-left: 10px;
-  font-size: 20px;
+  margin-bottom: 50px;
+  float: right;
 }
 
-.formContainer button {
-  margin-top: 15px;
+.formContainer3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 250px;
+  height: 20%;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 50px;
+  float: right;
+}
+
+.formContainer .field{
+  margin-top: 10px;
+}
+.formContainer3 .field{
+  margin-top: 10px;
+}
+
+.formContainer2 button {
+  margin-top: 0%;
   height: 40px;
   border: none;
-  background-color:  #00452679;
+  background-color: #00452679;
   border-radius: 5px;
   color: white;
+
+}
+
+.formContainer3 button:hover {
+  cursor: pointer;
+  background-color: #004526;
+}
+
+.formContainer3 button {
+  margin-top: 0%;
+  height: 40px;
+  border: none;
+  background-color: #00452679;
+  border-radius: 5px;
+  color: white;
+
+}
+
+.formContainer2 button:hover {
+  cursor: pointer;
+  background-color: #004526;
+}
+
+
+.formContainer button {
+  margin-top: 0%;
+  height: 40px;
+  border: none;
+  background-color: #00452679;
+  border-radius: 5px;
+  color: white;
+
+}
+
+.btnInfo{
+  text-align: center;
+  margin-top: 25px;
 }
 
 .formContainer button:hover {
   cursor: pointer;
-  background-color:  #004526;
+  background-color: #004526;
 }
 
 
@@ -136,19 +249,26 @@ button {
   width: 100%;
   height: 70px;
   background-color: #367c2b;
-  display:flex;
+  display: flex;
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
-  
+
+}
+
+.navbar .Home {
+  color: white;
+  font-weight: bold;
+  text-align: center;
 }
 
 .navbar a {
   margin-left: 20px;
   text-decoration: none;
-  color: black;
+  color: white;
+  border: #A9BA9D;
 }
 
-.navbar .login-right{
+.navbar .login-right {
   flex: 50%;
   height: 100%;
   display: flex;
@@ -157,12 +277,14 @@ button {
 
 }
 
-.navbar button{
+.navbar button {
   width: 150px;
   height: 40px;
   cursor: pointer;
   margin-right: 10px;
-  background-color: lightgray;
+  background-color: #367c2b;
+  border: 2px solid black;
+
 }
 
 .navbar h1 {
@@ -185,24 +307,29 @@ span {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 20px;
   border: 1px solid lightgray;
   font-family: Arial, Helvetica, sans-serif;
-  margin-top: 0;
-  box-shadow: lightgray 0px 2px 8px 0px;
+  margin-left: 20px;
+
 }
 
 .torneio-container {
-  display: flex; /* Create a container for the torneio elements */
-  justify-content: space-between; /* Position the torneio elements with space between */
-  width: 85%; /* Set the width to 100% to span the container */
-  margin-top: 20px; /* Add margin at the top for spacing */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 85%;
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+
 }
 
 .torneio:hover {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: white 0px 7px 29px 0px;
   cursor: pointer;
 }
+
 .torneio .ano {
   flex: 20%;
   border-bottom: 1px solid lightgray;
@@ -228,9 +355,21 @@ span {
 }
 
 .Inscrição .back-button {
-  padding: 5px 10px;
   font-size: 14px;
   margin-right: auto;
+  background-color: #A9BA9D;
+  border: 2px solid black;
+  width: 120px;
+  height: 40px;
+}
+
+.Inscrição3 .back-button {
+  font-size: 14px;
+  margin-right: auto;
+  background-color: #A9BA9D;
+  border: 2px solid black;
+  width: 120px;
+  height: 40px;
 }
 
 .jogo {
@@ -265,6 +404,7 @@ span {
   display: grid;
   place-content: center;
 }
+
 .jogo .Away {
   flex: 60%;
   display: grid;
@@ -382,8 +522,9 @@ span {
   margin-top: 20px;
   border-radius: 5px;
   padding: 10px;
-  overflow: auto; /* Add scrollbar when content overflows */
-  
+  overflow: auto;
+  /* Add scrollbar when content overflows */
+
 }
 
 .info-table table {
@@ -402,7 +543,3 @@ span {
   background-color: #004526;
   color: lightgray;
 }
-
-
-
-

@@ -54,16 +54,40 @@ function CCData() {
       const jogadoresData = jogadoresResponse.data;
       const tecnicosData = tecnicosResponse.data;
       const ccGuardiaoData = ccGuardiaoResponse.data;
+
+      console.log(jogadoresData)
+      console.log(tecnicosData)
+      console.log(ccGuardiaoData)
+
+      const maxIndex = Math.max(jogadoresData.length, ccGuardiaoData.length, tecnicosData.length);
+
+      console.log(jogadoresData.length)
+
+      const mappedData = Array.from({ length: maxIndex }, (_, index) => [
+        jogadoresData[index] || '',
+        ccGuardiaoData[index] || '',
+        tecnicosData[index] || ''
+      ]);
+
+      console.log(mappedData)
   
       // Create a new Excel workbook and sheet
       const workbook = XLSX.utils.book_new();
       const sheet = XLSX.utils.aoa_to_sheet([
         ['CCJogador', 'CCGuardiao', 'CCTecnico'],
-        ...jogadoresData.map((jogador, index) => [jogador.ccNumber, ccGuardiaoData[index]?.ccNumber, tecnicosData[index]?.ccNumber])
+        ...mappedData
       ]);
   
       // Add the sheet to the workbook
       XLSX.utils.book_append_sheet(workbook, sheet, 'CC_Data');
+
+      // Set column widths (adjust these values as needed)
+    const columnWidths = [
+      { wch: 16 }, // CCJogador width
+      { wch: 16 }, // CCGuardiao width
+      { wch: 16 }  // CCTecnico width
+    ];
+    sheet["!cols"] = columnWidths.map(col => ({ width: col.wch }));
   
       // Generate a binary string from the workbook
       const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
@@ -101,8 +125,12 @@ function CCData() {
         <label htmlFor="file-input">Select a file: </label>
         <input disabled type="file" id="file-input" onChange={handleFileUpload} />
       </div>
-      <button disabled onClick={handleSubmit}>Submeter</button>
-      <button disabled onClick={handleDeleteAll}>Delete All</button>
+      {file && (
+        <div>
+          <button onClick={handleSubmit}>Submeter</button>
+          <button onClick={handleDeleteAll}>Delete All</button>
+        </div>
+      )}
       <div>
         <h1>Download CCs para uma folha Exel</h1>
         <button onClick={handleDownload}>Download</button>
