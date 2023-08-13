@@ -26,7 +26,7 @@ body .a {
   width: 70%;
 }
 
-#topo{
+#topo {
   background-color: #004526;
   color: lightgray;
   border: 1px solid black;
@@ -44,7 +44,7 @@ body .lander {
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
   text-align: center;
-  
+
 }
 
 body p {
@@ -121,7 +121,7 @@ button {
   flex-direction: row;
 }
 
-.formLeft{
+.formLeft {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -134,7 +134,7 @@ button {
 
 }
 
-.formRight{
+.formRight {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -183,10 +183,11 @@ button {
   float: right;
 }
 
-.formContainer .field{
+.formContainer .field {
   margin-top: 10px;
 }
-.formContainer3 .field{
+
+.formContainer3 .field {
   margin-top: 10px;
 }
 
@@ -231,7 +232,7 @@ button {
 
 }
 
-.btnInfo{
+.btnInfo {
   text-align: center;
   margin-top: 25px;
 }
@@ -241,6 +242,27 @@ button {
   background-color: #004526;
 }
 
+/*Fichas Jogo e Equipa*/
+.FichaJogo {
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.formLeft2 {
+  flex: 1;
+  padding: 20px;
+}
+
+.formRight2 {
+  flex: 1;
+  padding: 20px;
+}
 
 
 /* NAVBAR */
