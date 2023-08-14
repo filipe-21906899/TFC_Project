@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
+
 
 function Info() {
 
@@ -338,6 +340,41 @@ function Info() {
       console.error('Error updating data:', error);
     }
   };
+
+  const openImageInNewWindow = (imageData) => {
+    const imageWindow = window.open('', '_blank');
+    const content = `
+      <html>
+        <head>
+          <title>Image</title>
+        </head>
+        <body>
+          <img src="${imageData}" alt="Image" />
+        </body>
+      </html>
+    `;
+    imageWindow.document.open();
+    imageWindow.document.write(content);
+    imageWindow.document.close();
+  };
+
+  const openPdfInNewWindow = (pdfUrl) => {
+    const pdfWindow = window.open('', '_blank');
+    const content = `
+      <html>
+        <head>
+          <title>PDF Document</title>
+        </head>
+        <body>
+          <embed src="${pdfUrl}" width="100%" height="100%" type="application/pdf">
+        </body>
+      </html>
+    `;
+    pdfWindow.document.open();
+    pdfWindow.document.write(content);
+    pdfWindow.document.close();
+  };
+  
   
   
 
@@ -500,8 +537,8 @@ function Info() {
                       <td>{item.Email}</td>
                       <td>{item.CCJogador}</td>
                       <td>{item.CCGuardiao}</td>
-                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
-                      <td><a href={item.File} target="_blank" rel="noopener noreferrer">PDF</a></td>
+                      <td><Link to="#" onClick={() => openImageInNewWindow(item.Imagem)}>Foto</Link></td>
+                      <td><Link to="#" onClick={() => openPdfInNewWindow(item.File)}>PDF</Link></td>
                       {/* Add more cells based on the detailed jogadores information */}
                     </tr>
                   ))}
@@ -552,8 +589,8 @@ function Info() {
                       >
                         {item.Reside ? 'Sim' : 'Não'}
                       </td>
-                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
-                      <td><a href={item.File} target="_blank" rel="noopener noreferrer">PDF</a></td>
+                      <td><Link to="#" onClick={() => openImageInNewWindow(item.Imagem)}>Foto</Link></td>
+                      <td><Link to="#" onClick={() => openPdfInNewWindow(item.File)}>PDF</Link></td>
 
                       {/* Add more cells based on the detailed jogadores information */}
                     </tr>
@@ -597,7 +634,7 @@ function Info() {
                       <td>
                         {tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}
                       </td>
-                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
+                      <td><Link to="#" onClick={() => openImageInNewWindow(item.Imagem)}>Foto</Link></td>
                       {/* Add more cells based on the detailed tecnico information */}
                     </tr>
                   ))}
@@ -649,7 +686,7 @@ function Info() {
                       <td>
                         {tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}
                       </td>
-                      <td><a href={item.Imagem} target="_blank" rel="noopener noreferrer">Foto</a></td>
+                      <td><Link to="#" onClick={() => openImageInNewWindow(item.Imagem)}>Foto</Link></td>
                       {/* Add more cells based on the detailed tecnico information */}
                     </tr>
                   ))}

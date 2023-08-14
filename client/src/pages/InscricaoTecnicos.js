@@ -63,11 +63,6 @@ function InscricaoTecnicos() {
     TecnicosTypeId: Yup.string()
       .required("Campo Obrigatório"),
 
-    Imagem: Yup.mixed()
-      .test("fileRequired", "Campo Obrigatório", (value) => {
-        // Check if any file is selected
-        return value && value.length > 0;
-      })
   })
 
   useEffect(() => {
@@ -195,6 +190,32 @@ function InscricaoTecnicos() {
     }
   };
 
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleProfile = async (e, setFieldValue, name) => {
+    const file = e.target.files[0];
+    if (file?.size / 1024 / 1024 < 2) {
+      const base64 = await convertToBase64(file);
+      setFieldValue(name, base64);
+      console.log(base64)
+    }
+    else {
+      console.log('Image size must be of 2MB or less');
+    };
+  }
+
+
 
 
 
@@ -293,9 +314,20 @@ function InscricaoTecnicos() {
               </Field>
               <ErrorMessage name="TecnicosTypeId" component="span" />
 
-              <label className='field'>Imagem: </label>
-              <Field id='imagem' name='Imagem' type='file' accept='image/*' />
-              <ErrorMessage name='Imagem' component='span' />
+              <label>Imagem: </label>
+                <Field name='Imagem' accept='image/*'>
+                  {({ form, field }) => {
+                    const { setFieldValue } = form
+                    return (
+                      <input
+                        type="file"
+                        className='form-control'
+                        onChange={(e) => handleProfile(e, setFieldValue, "Imagem")}
+                      />
+                    )
+                  }}
+                </Field>
+                <ErrorMessage name='Imagem' component='span' />
 
             </div>
           </div>

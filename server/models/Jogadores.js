@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) =>{
             allowNull:false
         },
         File :{
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT('long'),
             allowNull:false
         }
 
