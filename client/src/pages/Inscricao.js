@@ -99,7 +99,12 @@ function Inscricao() {
         return valid || this.createError({ message });
       }),
 
-  
+    Imagem: Yup.mixed()
+      .required('Campo Obrigatório'),
+
+    File: Yup.mixed()
+      .required('Campo Obrigatório'),
+
   })
 
   useEffect(() => {
@@ -251,140 +256,142 @@ function Inscricao() {
   }
 
 
-    return (
-      <div className='Inscrição'>
-        <Formik initialValues={initialValues} onSubmit={submitJogador} validationSchema={validationSchema}>
-          <Form className='formContainer2' encType="multipart/form-data">
-            <div style={{ textAlign: 'center' }}>
-              <h1>Inscrição Jogadores</h1>
+  return (
+    <div className='Inscrição'>
+      <Formik initialValues={initialValues} onSubmit={submitJogador} validationSchema={validationSchema}>
+        <Form className='formContainer2' encType="multipart/form-data">
+          <div style={{ textAlign: 'center' }}>
+            <h1>Inscrição Jogadores</h1>
+          </div>
+
+          <div style={{ display: 'flex' }}>
+
+            <div className='formLeft'>
+
+              <label>Escalão: </label>
+              <Field as="select" name="EscalaoId">
+                <option value="">Select Escalão</option>
+                {escalaoOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.Nome}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage name='EscalaoId' component="span" />
+
+              <Field
+                autoComplete="off"
+                id="clube1"
+                name="Clube"
+                type="hidden" />
+
+              <label>Nome: </label>
+              <Field
+                autoComplete="off"
+                id="name1"
+                name="Nome"
+                placeholder="Ex. João Pedro Pascal" />
+              <ErrorMessage name='Nome' component="span" />
+
+              <label>Morada: </label>
+              <Field
+                autoComplete="off"
+                id="morada1"
+                name="Morada"
+                placeholder="Ex. Rua Mario Santos nº33" />
+              <ErrorMessage name="Morada" component="span" />
+
+              <label>Código Postal: </label>
+              <Field
+                autoComplete="off"
+                id="cpostal1"
+                name="CodigoPostal"
+                placeholder="Ex. 2453-993" />
+              <ErrorMessage name='CodigoPostal' component="span" />
+
+              <label>Contacto: </label>
+              <Field
+                autoComplete="off"
+                id="contacto1"
+                name="Contacto"
+                placeholder="Ex. 945645321" />
+              <ErrorMessage name='Contacto' component="span" />
+
+              <label>Email: </label>
+              <Field
+                autoComplete="off"
+                id="Email1"
+                name="Email"
+                placeholder="Ex. teste@gmail.com" />
+              <ErrorMessage name='Email' component="span" />
+
             </div>
 
-            <div style={{ display: 'flex' }}>
+            <div className='formRight'>
+              <label>Nº CC: </label>
+              <Field
+                autoComplete="off"
+                id="CC"
+                name="CCJogador"
+                placeholder="Ex. 155555554XW3" />
+              <ErrorMessage name='CCJogador' component="span" />
 
-              <div className='formLeft'>
+              <label>Nº CC Guardião: </label>
+              <Field
+                autoComplete="off"
+                id="CCGuardiao"
+                name="CCGuardiao"
+                placeholder="Ex. 155555554XW3" />
+              <ErrorMessage name='CCGuardiao' component="span" />
 
-                <label>Escalão: </label>
-                <Field as="select" name="EscalaoId">
-                  <option value="">Select Escalão</option>
-                  {escalaoOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.Nome}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage name='EscalaoId' component="span" />
+              <label>Data Nascimento: </label>
+              <Field autoComplete="off" id="data" name="DataNascimento" type="date" />
+              <ErrorMessage name="DataNascimento" component="span" />
 
-                <Field
-                  autoComplete="off"
-                  id="clube1"
-                  name="Clube"
-                  type="hidden" />
-
-                <label>Nome: </label>
-                <Field
-                  autoComplete="off"
-                  id="name1"
-                  name="Nome"
-                  placeholder="Ex. João Pedro Pascal" />
-                <ErrorMessage name='Nome' component="span" />
-
-                <label>Morada: </label>
-                <Field
-                  autoComplete="off"
-                  id="morada1"
-                  name="Morada"
-                  placeholder="Ex. Rua Mario Santos nº33" />
-                <ErrorMessage name="Morada" component="span" />
-
-                <label>Código Postal: </label>
-                <Field
-                  autoComplete="off"
-                  id="cpostal1"
-                  name="CodigoPostal"
-                  placeholder="Ex. 2453-993" />
-                <ErrorMessage name='CodigoPostal' component="span" />
-
-                <label>Contacto: </label>
-                <Field
-                  autoComplete="off"
-                  id="contacto1"
-                  name="Contacto"
-                  placeholder="Ex. 945645321" />
-                <ErrorMessage name='Contacto' component="span" />
-
-                <label>Email: </label>
-                <Field
-                  autoComplete="off"
-                  id="Email1"
-                  name="Email"
-                  placeholder="Ex. teste@gmail.com" />
-                <ErrorMessage name='Email' component="span" />
-
-              </div>
-
-              <div className='formRight'>
-                <label>Nº CC: </label>
-                <Field
-                  autoComplete="off"
-                  id="CC"
-                  name="CCJogador"
-                  placeholder="Ex. 155555554XW3" />
-                <ErrorMessage name='CCJogador' component="span" />
-
-                <label>Nº CC Guardião: </label>
-                <Field
-                  autoComplete="off"
-                  id="CCGuardiao"
-                  name="CCGuardiao"
-                  placeholder="Ex. 155555554XW3" />
-                <ErrorMessage name='CCGuardiao' component="span" />
-
-                <label>Data Nascimento: </label>
-                <Field autoComplete="off" id="data" name="DataNascimento" type="date" />
-                <ErrorMessage name="DataNascimento" component="span" />
-
-                <label>Imagem: </label>
-                <Field name='Imagem' accept='image/*'>
-                  {({ form, field }) => {
-                    const { setFieldValue } = form
-                    return (
-                      <input
-                        type="file"
-                        className='form-control'
-                        onChange={(e) => handleProfile(e, setFieldValue, "Imagem")}
-                      />
-                    )
-                  }}
-                </Field>
-                <ErrorMessage name='Imagem' component='span' />
-
-                <label>Ficheiro PDF: </label>
-                <Field name='File' accept='application/pdf'>
+              <label>Imagem: </label>
+              <Field name='Imagem'>
                 {({ form, field }) => {
-                    const { setFieldValue } = form
-                    return (
-                      <input
-                        type="file"
-                        className='form-control'
-                        onChange={(e) => handleProfile(e, setFieldValue, "File")}
-                      />
-                    )
-                  }}
-                </Field>
-                <ErrorMessage name='File' component='span' />
-              </div>
+                  const { setFieldValue } = form
+                  return (
+                    <input
+                      type="file"
+                      accept='image/*'
+                      className='form-control'
+                      onChange={(e) => handleProfile(e, setFieldValue, "Imagem")}
+                    />
+                  )
+                }}
+              </Field>
+              <ErrorMessage name='Imagem' component='span' />
 
-
+              <label>Ficheiro PDF: </label>
+              <Field name='File'>
+                {({ form, field }) => {
+                  const { setFieldValue } = form
+                  return (
+                    <input
+                      type="file"
+                      accept='application/pdf'
+                      className='form-control'
+                      onChange={(e) => handleProfile(e, setFieldValue, "File")}
+                    />
+                  )
+                }}
+              </Field>
+              <ErrorMessage name='File' component='span' />
             </div>
 
-            <div style={{ textAlign: 'center' }}>
-              <button type='submit'>Inscrever Jogador</button>
-            </div>
 
-          </Form>
-        </Formik>
-      </div>
-    )
-  }
+          </div>
 
-  export default Inscricao
+          <div style={{ textAlign: 'center' }}>
+            <button type='submit'>Inscrever Jogador</button>
+          </div>
+
+        </Form>
+      </Formik>
+    </div>
+  )
+}
+
+export default Inscricao

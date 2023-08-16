@@ -63,6 +63,9 @@ function InscricaoTecnicos() {
     TecnicosTypeId: Yup.string()
       .required("Campo Obrigatório"),
 
+    Imagem: Yup.mixed()
+      .required('Campo Obrigatório'),
+
   })
 
   useEffect(() => {
@@ -315,19 +318,20 @@ function InscricaoTecnicos() {
               <ErrorMessage name="TecnicosTypeId" component="span" />
 
               <label>Imagem: </label>
-                <Field name='Imagem' accept='image/*'>
-                  {({ form, field }) => {
-                    const { setFieldValue } = form
-                    return (
-                      <input
-                        type="file"
-                        className='form-control'
-                        onChange={(e) => handleProfile(e, setFieldValue, "Imagem")}
-                      />
-                    )
-                  }}
-                </Field>
-                <ErrorMessage name='Imagem' component='span' />
+              <Field name='Imagem'>
+                {({ form, field }) => {
+                  const { setFieldValue } = form
+                  return (
+                    <input
+                      type="file"
+                      accept='image/*'
+                      className='form-control'
+                      onChange={(e) => handleProfile(e, setFieldValue, "Imagem")}
+                    />
+                  )
+                }}
+              </Field>
+              <ErrorMessage name='Imagem' component='span' />
 
             </div>
           </div>
