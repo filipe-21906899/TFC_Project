@@ -246,22 +246,64 @@ button {
 .FichaJogo {
   display: flex;
   font-family: Arial, Helvetica, sans-serif;
-
-  height: auto;
-  display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px; /* Add some gap between the divs */
 }
 
-.formLeft2 {
-  flex: 1;
-  padding: 20px;
-}
-
+.formLeft2,
 .formRight2 {
   flex: 1;
   padding: 20px;
+  width: 48%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content horizontally */
+}
+
+.bellow {
+  width: 100%;
+  padding: 20px;
+  text-align: center; /* Center the content horizontally */
+}
+
+.info-table2 {
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+
+}
+
+.info-table2 table {
+  width: 40%;
+  border-collapse: collapse;
+}
+
+.info-table2 th,
+.info-table2 td {
+  border: 1px solid #004526;
+  padding: 8px;
+  text-align: left;
+}
+
+.info-table2 th {
+  background-color: #004526;
+  color: lightgray;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.header-info h2 {
+  margin: 0;
+  margin-right: 10px;
 }
 
 
