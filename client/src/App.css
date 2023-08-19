@@ -274,19 +274,21 @@ button {
   border-radius: 5px;
   padding: 10px;
   overflow: auto;
-
+  text-align: center;
 }
 
 .info-table2 table {
   width: 40%;
   border-collapse: collapse;
+  text-align: center;
 }
 
 .info-table2 th,
 .info-table2 td {
   border: 1px solid #004526;
   padding: 8px;
-  text-align: left;
+  text-align: center;
+  border: 1px solid black;
 }
 
 .info-table2 th {
@@ -299,13 +301,37 @@ button {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+  justify-content: center;
 }
 
 .header-info h2 {
   margin: 0;
-  margin-right: 10px;
+  margin-right: 150px;
 }
 
+.sidebside {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.faltasdescontos {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.faltasdescontos th,
+.faltasdescontos td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+.largerCell{
+  width: 15px; /* Adjust width for larger cells */
+
+}
 
 /* NAVBAR */
 

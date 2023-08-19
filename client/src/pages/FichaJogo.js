@@ -374,6 +374,173 @@ function FichaJogo() {
           </>
         )}
       </div>
+      <div className='bellow2'>
+        {formSubmitted && (
+          <>
+            <h2>Sociedade Recreativa e Desportiva de {detailedJogadores[0].Clube || ""}</h2>
+            <div className='header-info'>
+              <h2>Escalão: {escalaoOptions2.find((escalao) => escalao.id === detailedJogadores[0].EscalaoId)?.Nome || ""}</h2>
+              <h2>Adversário: ______________________________</h2>
+            </div>
+            {detailedJogadores.length > 0 && (
+
+              <div className="info-table2">
+                <table>
+                  <thead>
+                    <tr>
+                      <th colSpan={15}>Jogadores</th>
+                      <th colSpan={3}>Cartões</th>
+                    </tr>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Camisola</th>
+                      <th>CAP</th>
+                      <th>SC</th>
+                      <th>GR</th>
+                      <th>G1</th>
+                      <th>G2</th>
+                      <th>G3</th>
+                      <th>G4</th>
+                      <th>G5</th>
+                      <th>G6</th>
+                      <th>G7</th>
+                      <th>G8</th>
+                      <th>G9</th>
+                      <th>G10</th>
+                      <th>A1</th>
+                      <th>A2</th>
+                      <th>V</th>
+                      {/* Add more columns based on the detailed jogadores information */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {detailedJogadores.map((item) => (
+                      <tr key={item.id}>
+                        <td style={{
+                            backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                          }}>
+                          {item.Nome}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        {/* Add more cells based on the detailed jogadores information */}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {detailedTecnico.length > 0 && (
+              <div className='sidebside'>
+                <div className="info-table2">
+                  <table>
+                    <thead>
+                      <th colSpan={2}>EQUIPA TÉCNICA</th>
+                      <tr>
+                        <th>Funcção</th>
+                        <th>Nome</th>
+                        {/* Add more columns based on the detailed tecnico information */}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {detailedTecnico
+                        .filter((item) => tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome === 'Treinador')
+                        .map((item) => (
+                          <tr key={item.id}>
+                            <td> {tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}</td>
+                            <td>{item.Nome}</td>
+                            {/* Add more cells based on the detailed tecnico information */}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+                <table className='faltasdescontos'>
+                  <thead>
+                    <tr>
+                      <th>Faltas próprias</th>
+                      <th>1ºTempo</th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th>2ºTempo</th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                    </tr>
+                    <tr>
+                      <th>Faltas do adversário</th>
+                      <th>1ºTempo</th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th>2ºTempo</th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                    </tr>
+                    <tr>
+                      <th>Descontos próprias</th>
+                      <th>1ºTempo</th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th>2ºTempo</th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                      <th className='largerCell'> </th>
+                    </tr>
+                    <tr>
+                      <th>Descontos do adversário</th>
+                      <th>1ºTempo</th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th> </th>
+                      <th>2ºTempo</th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                      <th>  </th>
+                    </tr>
+                  </thead>
+                </table>
+
+              </div>
+            )}
+            <h2> Resultado: 1ºTempo _____/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Final _____/_____ </h2>
+          </>
+        )}
+      </div>
 
       {showAlert && (
         <div className='custom-alert-overlay2'>
