@@ -249,7 +249,8 @@ button {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px; /* Add some gap between the divs */
+  gap: 20px;
+  /* Add some gap between the divs */
 }
 
 .formLeft2,
@@ -260,13 +261,15 @@ button {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the content horizontally */
+  align-items: center;
+  /* Center the content horizontally */
 }
 
 .bellow {
   width: 100%;
   padding: 20px;
-  text-align: center; /* Center the content horizontally */
+  text-align: center;
+  /* Center the content horizontally */
 }
 
 .info-table2 {
@@ -328,10 +331,184 @@ button {
   text-align: center;
 }
 
-.largerCell{
-  width: 15px; /* Adjust width for larger cells */
+.largerCell {
+  width: 15px;
+}
+
+.largeCell2 {
+  width: 50%;
+}
+
+.largeCell3 {
+  width: 30%;
+}
+
+.homeTable {
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+  text-align: center;
+}
+
+.homeTable table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.homeTable th,
+.homeTable td {
+  border: 1px solid #004526;
+  text-align: center;
+  border: 1px solid black;
+  padding: 10px 10px;
 
 }
+
+.tecnicoTable {
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+  text-align: center;
+}
+
+.tecnicoTable table {
+  width: 70%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.large1 {
+  width: 40%;
+}
+
+.faltas {
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+  text-align: center;
+}
+
+.faltas table {
+  width: 170px;
+  height: 85px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.desconto {
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+  text-align: center;
+}
+
+.desconto table {
+  width: 80px;
+  height: 85px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.delegado {
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+}
+
+.delegado table {
+  width: 250px;
+  height: 85px;
+  border-collapse: collapse;
+  text-align: top;
+}
+
+.delegado th,
+.delegado td {
+  vertical-align: top;
+}
+
+.sBys {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+
+}
+
+.faltas,
+.desconto,
+.delegado {
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+  text-align: center;
+}
+
+.evo {
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+}
+
+.evo table {
+  width: 1000px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.evo th,
+.evo td {
+  border: 1px solid #004526;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.larg {
+  width: auto;
+}
+
+.big {
+  height: 30px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.square-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #000;
+  margin-left: 10px;
+}
+
+.colored {
+  background-color: #004526;
+  padding: 10px;
+  color: white;
+}
+
+.homeAway {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.home {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.away {
+  flex: 1;
+  margin-left: 10px; 
+}
+
+.inheritBackground {
+  background-color: inherit;
+}
+
 
 /* NAVBAR */
 

@@ -5,20 +5,22 @@ import axios from 'axios';
 
 function FichaJogo() {
 
-  //na ficha de jogo verificar se as 2 equipas escolhidas estao inscritas naquele escalao
-  //na ficha de jogo fazer com q se um opção estiver escolhida para a equipa1 nao aparecer para a equipa 2
-  //ver as folhas dadas e criar o template para a folha de jogo e depois meter la a info
-
-  //ficha equipa ver exemplo dado pela junta não é dificil de fazer
+ //falta só converter as tables para pdf e fazer download
 
   const [clubeOptions, setClubeOptions] = useState([]);
   const [escalaoOptions2, setEscalaoOptions2] = useState([]);
   const [clubes, setClubes] = useState([]);
   const [showAlert, setShowAlert] = useState(false)
+  const [showAlert2, setShowAlert2] = useState(false)
   const [detailedJogadores, setDetailedJogadores] = useState([]);
   const [detailedTecnico, setDetailedTecnico] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [tecnicosType, setTecnicosType] = useState([]);
+  const [sameClubsError, setSameClubsError] = useState(false);
+  const [formSubmitted2, setFormSubmitted2] = useState(false);
+  const [detailedJogadores2, setDetailedJogadores2] = useState([]);
+  const [detailedTecnico2, setDetailedTecnico2] = useState([]);
+  const [teamNotRegistered, setTeamNotRegistered] = useState("");
 
 
   const initialValues = {
@@ -36,7 +38,11 @@ function FichaJogo() {
         .required("Campo Obrigatório"),
 
       Away: Yup.string()
-        .required("Campo Obrigatório"),
+        .required("Campo Obrigatório")
+        .test("differentClubs", "Clubes tem de ser diferentes", function (value) {
+          const { Home } = this.parent;
+          return value !== Home;
+        }),
     }
   )
 
@@ -106,7 +112,119 @@ function FichaJogo() {
   }, []);
 
   const fichaJogo = async (values) => {
-    // Implement your logic for fichaJogo here
+    try {
+
+      setFormSubmitted(false);
+      setFormSubmitted2(false);
+      setDetailedJogadores([]);
+      setDetailedTecnico([]);
+      setDetailedJogadores2([]);
+      setDetailedTecnico2([]);
+
+      // Check if both Home and Away club IDs exist for the current year and EscalaoId
+      console.log(values.Home)
+      console.log(values.Away)
+      const homeResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${values.Home}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
+      const awayResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${values.Away}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
+
+      const homeData = await homeResponse.json();
+      const awayData = await awayResponse.json();
+
+      if (homeData.equipaId != null && awayData.equipaId != null) {
+        // Both clubs are registered for the selected Escalao and current year
+        console.log('Both Home and Away clubs exist in equipas table for the current year.');
+        console.log("Home equipaId value:", homeData.equipaId);
+        console.log("Away equipaId value:", awayData.equipaId);
+
+        const jogadoresHome = await fetch(`http://localhost:3001/equipa_jogadores/check?equipaId=${homeData.equipaId}`);
+        const tecnicosHome = await fetch(`http://localhost:3001/equipa_tecnica/check?equipaId=${homeData.equipaId}`);
+
+        const jogadoresHomeData = await jogadoresHome.json();
+        const tecnicosHomeData = await tecnicosHome.json();
+
+        if (jogadoresHomeData.length > 0 && tecnicosHomeData.length > 0) {
+          console.log('Jogadores and tecnicos found in equipaJogadores table and equipaTecnica table for equipaId:', homeData.equipaId);
+          console.log('Jogadores:', jogadoresHomeData);
+          console.log('Tecnicos:', tecnicosHomeData);
+
+          // Fetch detailed information for each JogadoreId in the array
+          const detailedJogadores = await Promise.all(
+            jogadoresHomeData.map(async (jogadorId) => {
+              const jogadorResponse = await fetch(`http://localhost:3001/jogadores/${jogadorId}`);
+              const jogadorInfo = await jogadorResponse.json();
+              return jogadorInfo;
+            })
+          );
+
+          const detailedTecnico = await Promise.all(
+            tecnicosHomeData.map(async (tecnicosIds) => {
+              const tecnicoResponse = await fetch(`http://localhost:3001/tecnicos/${tecnicosIds}`);
+              const tecnicoInfo = await tecnicoResponse.json();
+              return tecnicoInfo;
+            })
+          );
+
+          setDetailedJogadores(detailedJogadores);
+          setDetailedTecnico(detailedTecnico)
+
+          console.log('Detailed Jogadores:', detailedJogadores);
+          console.log('Detailed Tecnicos:', detailedTecnico);
+
+        } else {
+          console.log('No jogadores found in equipaJogadores table for equipaId:', homeData.equipaId);
+        }
+
+        const jogadoresAway = await fetch(`http://localhost:3001/equipa_jogadores/check?equipaId=${awayData.equipaId}`);
+        const tecnicosAway = await fetch(`http://localhost:3001/equipa_tecnica/check?equipaId=${awayData.equipaId}`);
+
+        const jogadoresAwayData = await jogadoresAway.json();
+        const tecnicosAwayData = await tecnicosAway.json();
+
+        if (jogadoresAwayData.length > 0 && tecnicosAwayData.length > 0) {
+          console.log('Jogadores and tecnicos found in equipaJogadores table and equipaTecnica table for equipaId:', awayData.equipaId);
+          console.log('Jogadores:', jogadoresAwayData);
+          console.log('Tecnicos:', tecnicosAwayData);
+
+          // Fetch detailed information for each JogadoreId in the array
+          const detailedJogadores2 = await Promise.all(
+            jogadoresAwayData.map(async (jogadorId) => {
+              const jogadorResponse = await fetch(`http://localhost:3001/jogadores/${jogadorId}`);
+              const jogadorInfo = await jogadorResponse.json();
+              return jogadorInfo;
+            })
+          );
+
+          const detailedTecnico2 = await Promise.all(
+            tecnicosAwayData.map(async (tecnicosIds) => {
+              const tecnicoResponse = await fetch(`http://localhost:3001/tecnicos/${tecnicosIds}`);
+              const tecnicoInfo = await tecnicoResponse.json();
+              return tecnicoInfo;
+            })
+          );
+
+          setDetailedJogadores2(detailedJogadores2);
+          setDetailedTecnico2(detailedTecnico2)
+
+          console.log('Detailed Jogadores:', detailedJogadores2);
+          console.log('Detailed Tecnicos:', detailedTecnico2);
+
+        } else {
+          console.log('No jogadores found in equipaJogadores table neither in equipatecnica table for equipaId:', awayData.equipaId);
+        }
+
+
+      } else {
+        const notRegisteredTeam = homeData.equipaId == null ? 'Equipa 1' : 'Equipa 2';
+        setTeamNotRegistered(notRegisteredTeam);
+        setShowAlert2(true);
+      }
+
+      setFormSubmitted2(true);
+
+    } catch (error) {
+      // Handle error
+      console.error('Error:', error);
+    }
   };
 
   const fichaEquipa = async (values) => {
@@ -115,9 +233,13 @@ function FichaJogo() {
 
       // Clear previous data and set visibility
       setFormSubmitted(false);
+      setFormSubmitted2(false);
       setDetailedJogadores([]);
       setDetailedTecnico([]);
+      setDetailedJogadores2([]);
+      setDetailedTecnico2([]);
 
+      console.log(values.ClubeId)
       const response = await fetch(`http://localhost:3001/equipa/check?ClubeId=${values.ClubeId}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
       const equipaIdData = await response.json();
 
@@ -196,6 +318,7 @@ function FichaJogo() {
 
   const handleCloseAlert = () => {
     setShowAlert(false);
+    setShowAlert2(false);
   };
 
 
@@ -226,7 +349,7 @@ function FichaJogo() {
                 <Field as='select' id='select1' name='Home'>
                   <option value=''>Select an option</option>
                   {clubes.map((clube) => (
-                    <option value={clube.Nome} key={clube.id}>
+                    <option value={clube.id} key={clube.id}>
                       {clube.Nome}
                     </option>
                   ))}
@@ -237,7 +360,7 @@ function FichaJogo() {
                 <Field as='select' id='select2' name='Away'>
                   <option value=''>Select an option</option>
                   {clubes.map((clube) => (
-                    <option value={clube.Nome} key={clube.id}>
+                    <option value={clube.id} key={clube.id}>
                       {clube.Nome}
                     </option>
                   ))}
@@ -417,8 +540,8 @@ function FichaJogo() {
                     {detailedJogadores.map((item) => (
                       <tr key={item.id}>
                         <td style={{
-                            backgroundColor: item.Reside ? 'inherit' : '#A45A52'
-                          }}>
+                          backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                        }}>
                           {item.Nome}
                         </td>
                         <td></td>
@@ -450,7 +573,9 @@ function FichaJogo() {
                 <div className="info-table2">
                   <table>
                     <thead>
-                      <th colSpan={2}>EQUIPA TÉCNICA</th>
+                      <tr>
+                        <th colSpan={2}>EQUIPA TÉCNICA</th>
+                      </tr>
                       <tr>
                         <th>Funcção</th>
                         <th>Nome</th>
@@ -542,11 +667,657 @@ function FichaJogo() {
         )}
       </div>
 
+
+      <div className='jogoBellow'>
+        {formSubmitted2 && (
+          <>
+            <h2>{escalaoOptions2.find((escalao) => escalao.id === detailedJogadores[0].EscalaoId)?.Nome || ""} -- Jornada:______Local:______________________________________________ </h2>
+            <h2>Data e hora:___/____/________ - ____:____</h2>
+            <div className='homeAway'>
+              {detailedJogadores.length > 0 && detailedTecnico.length > 0 && (
+                <div className='home'>
+                  <div className="homeTable">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th className='largeCell2' colSpan={3}>{detailedJogadores[0].Clube || ""}</th>
+                          <th colSpan={1}>Cap.<br />Sub.<br />G.R.</th>
+                          <th className='largeCell3' colSpan={8}>Golos</th>
+                          <th colSpan={3}>Cartões</th>
+                        </tr>
+                        <tr>
+                          <th>Nº</th>
+                          <th>Nome</th>
+                          <th>Castigado</th>
+                          <th className='largerCell'></th>
+                          <th className='largerCell'>1</th>
+                          <th className='largerCell'>2</th>
+                          <th className='largerCell'>3</th>
+                          <th className='largerCell'>4</th>
+                          <th className='largerCell'>5</th>
+                          <th className='largerCell'>6</th>
+                          <th className='largerCell'>7</th>
+                          <th className='largerCell'>8</th>
+                          <th>A</th>
+                          <th>A</th>
+                          <th>V</th>
+                          {/* Add more columns based on the detailed jogadores information */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...Array(18)].map((_, index) => {
+                          const item = detailedJogadores[index] || {}; // Use an empty object if no player data exists
+                          return (
+                            <tr key={index}>
+                              <td></td>
+                              <td style={{
+                                backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                              }}>
+                                {item.Nome || ''} {/* Display player name or an empty string */}
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              {/* Add more empty cells as needed */}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+
+                    <div className='tecnicoTable'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th className='large1'>Função</th>
+                            <th>Nome</th>
+
+                            {/* Add more columns based on the detailed jogadores information */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {detailedTecnico.map((item) => (
+                            <tr key={item.id}>
+                              <td>{tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}</td>
+                              <td style={{
+                                backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                              }}>
+                                {item.Nome}
+                              </td>
+                              {/* Add more cells based on the detailed jogadores information */}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className='sBys'>
+                      <div className='faltas'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th colSpan={6}>Faltas</th>
+                            </tr>
+                            <tr>
+                              <th className='largerCell'>1ºT</th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                            </tr>
+                            <tr>
+                              <th>2ºT</th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+                      <div className='desconto'>
+                        <table>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th colSpan={2}>Desconto</th>
+                              </tr>
+                              <tr>
+                                <th className='largerCell'>1ºT</th>
+                                <th></th>
+                              </tr>
+                              <tr>
+                                <th className='largerCell'>2ºT</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </table>
+                      </div>
+                      <div className='delegado'>
+                        <table>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Delegado:</th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+              {detailedJogadores2.length > 0 && detailedTecnico2.length > 0 && (
+                <div className='away'>
+                  <div className="homeTable">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th className='largeCell2' colSpan={3}>{detailedJogadores2[0].Clube || ""}</th>
+                          <th colSpan={1}>Cap.<br />Sub.<br />G.R.</th>
+                          <th className='largeCell3' colSpan={8}>Golos</th>
+                          <th colSpan={3}>Cartões</th>
+                        </tr>
+                        <tr>
+                          <th>Nº</th>
+                          <th>Nome</th>
+                          <th>Castigado</th>
+                          <th className='largerCell'></th>
+                          <th className='largerCell'>1</th>
+                          <th className='largerCell'>2</th>
+                          <th className='largerCell'>3</th>
+                          <th className='largerCell'>4</th>
+                          <th className='largerCell'>5</th>
+                          <th className='largerCell'>6</th>
+                          <th className='largerCell'>7</th>
+                          <th className='largerCell'>8</th>
+                          <th>A</th>
+                          <th>A</th>
+                          <th>V</th>
+                          {/* Add more columns based on the detailed jogadores information */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {[...Array(18)].map((_, index) => {
+                          const item = detailedJogadores2[index] || {}; // Use an empty object if no player data exists
+                          return (
+                            <tr key={index}>
+                              <td></td>
+                              <td style={{
+                                backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                              }}>
+                                {item.Nome || ''} {/* Display player name or an empty string */}
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              {/* Add more empty cells as needed */}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+
+                    <div className='tecnicoTable'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th className='large1'>Função</th>
+                            <th>Nome</th>
+
+                            {/* Add more columns based on the detailed jogadores information */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {detailedTecnico2.map((item) => (
+                            <tr key={item.id}>
+                              <td>{tecnicosType.find((type) => type.id === item.TecnicosTypeId)?.Nome || 'Unknown'}</td>
+                              <td style={{
+                                backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                              }}>
+                                {item.Nome}
+                              </td>
+                              {/* Add more cells based on the detailed jogadores information */}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className='sBys'>
+                      <div className='faltas'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th colSpan={6}>Faltas</th>
+                            </tr>
+                            <tr>
+                              <th className='largerCell'>1ºT</th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                            </tr>
+                            <tr>
+                              <th>2ºT</th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+                      <div className='desconto'>
+                        <table>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th colSpan={2}>Faltas</th>
+                              </tr>
+                              <tr>
+                                <th className='largerCell'>1ºT</th>
+                                <th></th>
+                              </tr>
+                              <tr>
+                                <th className='largerCell'>2ºT</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </table>
+                      </div>
+                      <div className='delegado'>
+                        <table>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Delegado:</th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              )}
+            </div>
+            <h2>Resultado: 1ºTempo ____/____  Final ____/____  Mesa: _____________________  MVP: _____________________________</h2>
+          </>
+        )}
+      </div>
+
+      <div className='jogoBellow2'>
+        {formSubmitted2 && (
+          <>
+            <div className='evo'>
+              <table>
+                <thead>
+                  <tr className='colored'>
+                    <th className='larg' colSpan={22}>EVOLUÇÃO RESULTADO</th>
+                  </tr>
+                  <tr>
+                    <th colSpan={2}></th>
+                    <th colSpan={20}>Golos</th>
+                  </tr>
+                  <tr>
+                    <th colSpan={2}>Equipa</th>
+                    <th>1º</th>
+                    <th>2º</th>
+                    <th>3º</th>
+                    <th>4º</th>
+                    <th>5º</th>
+                    <th>6º</th>
+                    <th>7º</th>
+                    <th>8º</th>
+                    <th>9º</th>
+                    <th>10º</th>
+                    <th>11º</th>
+                    <th>12º</th>
+                    <th>13º</th>
+                    <th>14º</th>
+                    <th>15º</th>
+                    <th>16º</th>
+                    <th>17º</th>
+                    <th>18º</th>
+                    <th>19º</th>
+                    <th>20º</th>
+                  </tr>
+                  <tr>
+                    <th rowSpan={2}>Casa</th>
+                    <th colSpan={1}>Nº</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <th>Min.</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <th rowSpan={2}>Fora</th>
+                    <th colSpan={1}>Nº</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <th>Min.</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+              </table>
+
+              <table>
+                <thead>
+                  <tr className='colored'>
+                    <th className='larg' colSpan={25}>DISCIPLINA</th>
+                  </tr>
+                  <tr>
+                    <th colSpan={1} rowSpan={2}>Cartões</th>
+                    <th colSpan={3}>1º Cartão</th>
+                    <th colSpan={3}>2º Cartão</th>
+                    <th colSpan={3}>3º Cartão</th>
+                    <th colSpan={3}>4º Cartão</th>
+                    <th colSpan={3}>5º Cartão</th>
+                    <th colSpan={3}>6º Cartão</th>
+                    <th colSpan={3}>7º Cartão</th>
+                    <th colSpan={3}>8º Cartão</th>
+                  </tr>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                    <th>Nº</th>
+                    <th>Min.</th>
+                    <th>Cor</th>
+                  </tr>
+                  <tr>
+                    <th>Casa</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <th>Fora</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+              </table>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th className='colored'>
+                      COMENTÁRIO AO JOGO
+                    </th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                </thead>
+              </table>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th className='colored'>
+                      RELATÓRIO DO DELEGADO DA EQUIPA VISITADA
+                    </th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'>NADA A ASSINALAR <span class="square-box"></span> -  ASSINATURA</th>
+                  </tr>
+                </thead>
+              </table>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th className='colored'>
+                      RELATÓRIO DO DELEGADO DA EQUIPA VISITANTE
+                    </th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'>NADA A ASSINALAR <span class="square-box"></span> -  ASSINATURA</th>
+                  </tr>
+                </thead>
+              </table>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th className='colored'>
+                      RELATÓRIO DA MESA
+                    </th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'></th>
+                  </tr>
+                  <tr>
+                    <th className='big'>NADA A ASSINALAR <span class="square-box"></span> -  ASSINATURA</th>
+                  </tr>
+                </thead>
+              </table>
+
+            </div>
+          </>
+        )}
+      </div>
+
+      {showAlert2 && (
+        <div className='custom-alert-overlay2'>
+          <div className="custom-alert2">
+            <p>{`'${teamNotRegistered}' não inscrita no escalão selecionado!`}</p>
+            <button onClick={handleCloseAlert}>OK</button>
+          </div>
+        </div>
+      )}
+
       {showAlert && (
         <div className='custom-alert-overlay2'>
           <div className="custom-alert2">
             <p>Clube não inscrito no escalão selecionado!</p>
             <button onClick={handleCloseAlert}>OK</button>
+          </div>
+        </div>
+      )}
+      {sameClubsError && (
+        <div className='custom-alert-overlay2'>
+          <div className="custom-alert2">
+            <p>As equipas não podem ser iguais!</p>
+            <button onClick={() => setSameClubsError(false)}>OK</button>
           </div>
         </div>
       )}
