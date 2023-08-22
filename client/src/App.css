@@ -250,7 +250,6 @@ button {
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
-  /* Add some gap between the divs */
 }
 
 .formLeft2,
@@ -262,28 +261,48 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Center the content horizontally */
+
+}
+
+.downloadFichas {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.downloadFichas button{
+  margin-top: 0%;
+  height: 40px;
+  border: none;
+  background-color: #00452679;
+  border-radius: 5px;
+  color: white;
+}
+
+.downloadFichas button:hover {
+  cursor: pointer;
+  background-color: #004526;
 }
 
 .bellow {
-  width: 100%;
   padding: 20px;
   text-align: center;
-  /* Center the content horizontally */
+  justify-content: center;
 }
 
 .info-table2 {
   margin-top: 20px;
-  border-radius: 5px;
-  padding: 10px;
-  overflow: auto;
   text-align: center;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .info-table2 table {
-  width: 40%;
+  width: 100%;
   border-collapse: collapse;
   text-align: center;
+  align-items: center;
 }
 
 .info-table2 th,
@@ -292,43 +311,101 @@ button {
   padding: 8px;
   text-align: center;
   border: 1px solid black;
+  font-size: smaller;
+  line-height: 0.9;
 }
 
-.info-table2 th {
-  background-color: #004526;
-  color: lightgray;
+.bellow2 {
+  padding: 20px;
+  text-align: center;
+  justify-content: center;
 }
+
+.info-table3 {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-table3 table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.info-table3 th,
+.info-table3 td {
+  border: 1px solid #004526;
+  padding: 7px;
+  text-align: center;
+  border: 1px solid black;
+  font-size: smaller;
+  line-height: 0.5;
+}
+
+.info-table4 {
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
+.info-table4 table {
+  border-collapse: collapse;
+  text-align: center;
+  align-items: flex-start;
+}
+
+.info-table4 th,
+.info-table4 td {
+  border: 1px solid #004526;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid black;
+  font-size: smaller;
+  line-height: 0.5;
+}
+
 
 .header-info {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   justify-content: center;
 }
 
 .header-info h2 {
-  margin: 0;
-  margin-right: 150px;
+  margin-right: 50px;
+  font-size: large;
+}
+
+.smallerFont{
+  font-size: large;
+  margin-top: 25px;
 }
 
 .sidebside {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .faltasdescontos {
   border-collapse: collapse;
-  width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200%;
 }
 
 .faltasdescontos th,
 .faltasdescontos td {
   border: 1px solid black;
-  padding: 8px;
+  padding: 7px;
   text-align: center;
+  font-size: smaller;
+  line-height: 0.7;
 }
 
 .largerCell {
@@ -344,7 +421,6 @@ button {
 }
 
 .homeTable {
-  margin-top: 20px;
   border-radius: 5px;
   padding: 10px;
   overflow: auto;
@@ -363,6 +439,8 @@ button {
   text-align: center;
   border: 1px solid black;
   padding: 10px 10px;
+  line-height: 0.8;
+  font-size: smaller;
 
 }
 
@@ -375,7 +453,7 @@ button {
 }
 
 .tecnicoTable table {
-  width: 70%;
+  width: 40%;
   border-collapse: collapse;
   text-align: center;
 }
@@ -433,7 +511,6 @@ button {
 .sBys {
   display: flex;
   align-items: flex-start;
-  gap: 30px;
 
 }
 
@@ -453,7 +530,7 @@ button {
 }
 
 .evo table {
-  width: 1000px;
+  width: 100%;
   border-collapse: collapse;
   text-align: center;
 }
@@ -463,6 +540,8 @@ button {
   border: 1px solid #004526;
   text-align: center;
   border: 1px solid black;
+  line-height: 1;
+  font-size: smaller;
 }
 
 .larg {
@@ -470,8 +549,8 @@ button {
 }
 
 .big {
-  height: 30px;
-  font-size: 18px;
+  height: 20px;
+  font-size: 10px;
   display: flex;
   align-items: center;
 }
@@ -503,10 +582,6 @@ button {
 .away {
   flex: 1;
   margin-left: 10px; 
-}
-
-.inheritBackground {
-  background-color: inherit;
 }
 
 

@@ -211,7 +211,7 @@ function Inscricao() {
           if (equipaJogadoresResponse.ok) {
             const createdEquipaJogadores = await equipaJogadoresResponse.json();
             console.log('Created EquipaJogadores:', createdEquipaJogadores);
-            // Handle success, e.g., show a success message or redirect to another page
+            window.location.reload()
           } else {
             // Handle error response
             console.error('Failed to create EquipaJogadores:', equipaJogadoresResponse);

@@ -6,7 +6,9 @@ import * as Yup from 'yup';
 import { format } from 'date-fns';
 import { useNavigate } from "react-router-dom"
 
+
 function Jogos() {
+
   const { id } = useParams();
   // eslint-disable-next-line no-unused-vars
   const [data, setData] = useState(null);
@@ -15,17 +17,24 @@ function Jogos() {
   const [jogoType, setJogoType] = useState([]);
   const [listOfjogos, setListOfJogos] = useState([]);
   const username = localStorage.getItem('username');
+  const [teamNotRegistered, setTeamNotRegistered] = useState("");
+  const [showAlert2, setShowAlert2] = useState(false)
 
   const go = useNavigate();
   const navigate = useNavigate();
+  const escalaoId = escalaoData ? escalaoData.id : null;
+
 
   const validationSchema = Yup.object().shape({
     DataJogo: Yup.date().required('Quando é que o jogo se irá realizar'),
     JogoTypeId: Yup.date().required('Qual o tipo de Jogo'),
     Home: Yup.string().required('Escolha a equipa 1'),
     Away: Yup.string()
-      .required('Escolha a equipa 2')
-      .notOneOf([Yup.ref('Home')], 'Equipas tem de ser diferentes'),
+      .required("Campo Obrigatório")
+      .test("differentClubs", "Clubes tem de ser diferentes", function (value) {
+        const { Home } = this.parent;
+        return value !== Home;
+      }),
   });
 
   useEffect(() => {
@@ -84,28 +93,60 @@ function Jogos() {
       });
   };
 
+  const handleCloseAlert = () => {
+    setShowAlert2(false);
+  };
+
   const handleSubmit = async (values) => {
     try {
       console.log(values);
+      console.log(escalaoId)
 
-      values.DataJogo = format(new Date(values.DataJogo), 'yyyy-MM-dd');
-
-      const response = await fetch('http://localhost:3001/jogo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
+      const clubesNameToId = {};
+      clubes.forEach((clube) => {
+        clubesNameToId[clube.Nome] = clube.id;
       });
 
-      if (response.ok) {
-        const createdJogo = await response.json();
-        console.log('Created Jogo:', createdJogo);
-        // Handle success, e.g., show a success message or redirect to another page
+      const homeClubId = clubesNameToId[values.Home];
+      const awayClubId = clubesNameToId[values.Away];
+
+
+      const homeResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${homeClubId}&EscalaoId=${escalaoId}&CurrentYear=${new Date().getFullYear()}`);
+      const awayResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${awayClubId}&EscalaoId=${escalaoId}&CurrentYear=${new Date().getFullYear()}`);
+
+      const homeData = await homeResponse.json();
+      const awayData = await awayResponse.json();
+
+      if (homeData.equipaId != null && awayData.equipaId != null) {
+        // Both clubs are registered for the selected Escalao and current year
+        console.log('Both Home and Away clubs exist in equipas table for the current year.');
+        console.log("Home equipaId value:", homeData.equipaId);
+        console.log("Away equipaId value:", awayData.equipaId);
+
+        const response = await fetch('http://localhost:3001/jogo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+
+        if (response.ok) {
+          const createdJogo = await response.json();
+          console.log('Created Jogo:', createdJogo);
+          window.location.reload()
+        } else {
+          // Handle error response
+          console.error('Failed to create Jogo:', response);
+        }
+
+
       } else {
-        // Handle error response
-        console.error('Failed to create Jogo:', response);
+        const notRegisteredTeam = homeData.equipaId == null ? 'Equipa 1' : 'Equipa 2';
+        setTeamNotRegistered(notRegisteredTeam);
+        setShowAlert2(true);
       }
+
     } catch (error) {
       // Handle network error or other exceptions
       console.error('Error creating Jogo:', error);
@@ -133,7 +174,7 @@ function Jogos() {
           </div>
           <label className='field' >Dia do Jogo:</label>
           <Field type='date' id='date' name='DataJogo' />
-          <ErrorMessage name='DataJogo' component='div' className='error' />
+          <ErrorMessage name='DataJogo' component='span' />
 
           <label className='field' >Tipo de Jogo:</label>
           <Field as='select' id='select3' name='JogoTypeId'>
@@ -144,7 +185,7 @@ function Jogos() {
               </option>
             ))}
           </Field>
-          <ErrorMessage name='JogoTypeId' component='div' className='error' />
+          <ErrorMessage name='JogoTypeId' component='span' />
 
           <label className='field'>Equipa 1:</label>
           <Field as='select' id='select1' name='Home'>
@@ -166,7 +207,7 @@ function Jogos() {
               </option>
             ))}
           </Field>
-          <ErrorMessage name='Away' component='div' className='error' />
+          <ErrorMessage name='Away' component='span' />
 
           <div className='btnInfo'>
             <button type='submit'>Submit</button>
@@ -189,6 +230,14 @@ function Jogos() {
           );
         })}
       </div>
+      {showAlert2 && (
+        <div className='custom-alert-overlay2'>
+          <div className="custom-alert2">
+            <p>{`'${teamNotRegistered}' não inscrita no escalão selecionado!`}</p>
+            <button onClick={handleCloseAlert}>OK</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

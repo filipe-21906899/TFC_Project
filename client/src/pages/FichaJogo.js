@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useReactToPrint } from 'react-to-print';
+
 
 function FichaJogo() {
-
- //falta só converter as tables para pdf e fazer download
 
   const [clubeOptions, setClubeOptions] = useState([]);
   const [escalaoOptions2, setEscalaoOptions2] = useState([]);
@@ -21,7 +21,12 @@ function FichaJogo() {
   const [detailedJogadores2, setDetailedJogadores2] = useState([]);
   const [detailedTecnico2, setDetailedTecnico2] = useState([]);
   const [teamNotRegistered, setTeamNotRegistered] = useState("");
+  
 
+  const componentPDF = useRef();
+  const componentPDF2 = useRef();
+  const componentPDF3 = useRef();
+  const componentPDF4 = useRef();
 
   const initialValues = {
     EscalaoId: "",
@@ -321,6 +326,22 @@ function FichaJogo() {
     setShowAlert2(false);
   };
 
+  const generatePDF = useReactToPrint({
+    content: () => componentPDF.current,
+    documentTitle: "JogoData1",
+  });
+  const generatePDF2 = useReactToPrint({
+    content: () => componentPDF2.current,
+    documentTitle: "JogoData1",
+  });
+  const generatePDF3 = useReactToPrint({
+    content: () => componentPDF3.current,
+    documentTitle: "JogoData1",
+  });
+  const generatePDF4 = useReactToPrint({
+    content: () => componentPDF4.current,
+    documentTitle: "JogoData1",
+  });
 
   return (
     <div className='FichaJogo'>
@@ -418,7 +439,23 @@ function FichaJogo() {
           </Form>
         </Formik>
       </div>
-      <div className='bellow'>
+
+      <div className='downloadFichas'>
+        {formSubmitted2 && (
+          <>
+            <button className='btnInfo' onClick={generatePDF}>PDF FichaJogo1</button>
+            <button className='btnInfo' onClick={generatePDF2}>PDF FichaJogo2</button>
+          </>
+        )}
+        {formSubmitted && (
+          <>
+            <button className='btnInfo' onClick={generatePDF3}>PDF FichaEquipa1</button>
+            <button className='btnInfo' onClick={generatePDF4}>PDF FichaEquipa2</button>
+          </>
+        )}
+      </div>
+
+      <div ref={componentPDF3} className='bellow'>
         {formSubmitted && (
           <>
             <div className='header-info'>
@@ -497,17 +534,17 @@ function FichaJogo() {
           </>
         )}
       </div>
-      <div className='bellow2'>
+      <div ref={componentPDF4} className='bellow2'>
         {formSubmitted && (
           <>
-            <h2>Sociedade Recreativa e Desportiva de {detailedJogadores[0].Clube || ""}</h2>
+            <h2 className='smallerFont'>Sociedade Recreativa e Desportiva de {detailedJogadores[0].Clube || ""}</h2>
             <div className='header-info'>
               <h2>Escalão: {escalaoOptions2.find((escalao) => escalao.id === detailedJogadores[0].EscalaoId)?.Nome || ""}</h2>
               <h2>Adversário: ______________________________</h2>
             </div>
             {detailedJogadores.length > 0 && (
 
-              <div className="info-table2">
+              <div className="info-table3">
                 <table>
                   <thead>
                     <tr>
@@ -570,7 +607,7 @@ function FichaJogo() {
             )}
             {detailedTecnico.length > 0 && (
               <div className='sidebside'>
-                <div className="info-table2">
+                <div className="info-table4">
                   <table>
                     <thead>
                       <tr>
@@ -662,17 +699,17 @@ function FichaJogo() {
 
               </div>
             )}
-            <h2> Resultado: 1ºTempo _____/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Final _____/_____ </h2>
+            <h2 className='smallerFont'> Resultado: 1ºTempo _____/_____ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Final _____/_____ </h2>
           </>
         )}
       </div>
 
 
-      <div className='jogoBellow'>
+      <div ref={componentPDF} className='jogoBellow'>
         {formSubmitted2 && (
           <>
-            <h2>{escalaoOptions2.find((escalao) => escalao.id === detailedJogadores[0].EscalaoId)?.Nome || ""} -- Jornada:______Local:______________________________________________ </h2>
-            <h2>Data e hora:___/____/________ - ____:____</h2>
+            <h2 className='smallerFont'>{escalaoOptions2.find((escalao) => escalao.id === detailedJogadores[0].EscalaoId)?.Nome || ""} -- Jornada:______Local:______________________________________________ </h2>
+            <h2 className='smallerFont'>Data e hora:___/____/________ - ____:____</h2>
             <div className='homeAway'>
               {detailedJogadores.length > 0 && detailedTecnico.length > 0 && (
                 <div className='home'>
@@ -680,15 +717,15 @@ function FichaJogo() {
                     <table>
                       <thead>
                         <tr>
-                          <th className='largeCell2' colSpan={3}>{detailedJogadores[0].Clube || ""}</th>
+                          <th className='largeCell2' colSpan={2}>{detailedJogadores[0].Clube || ""}</th>
                           <th colSpan={1}>Cap.<br />Sub.<br />G.R.</th>
                           <th className='largeCell3' colSpan={8}>Golos</th>
                           <th colSpan={3}>Cartões</th>
+                          <th colSpan={1}>Cas.</th>
                         </tr>
                         <tr>
                           <th>Nº</th>
                           <th>Nome</th>
-                          <th>Castigado</th>
                           <th className='largerCell'></th>
                           <th className='largerCell'>1</th>
                           <th className='largerCell'>2</th>
@@ -701,6 +738,7 @@ function FichaJogo() {
                           <th>A</th>
                           <th>A</th>
                           <th>V</th>
+                          <th>S/N</th>
                           {/* Add more columns based on the detailed jogadores information */}
                         </tr>
                       </thead>
@@ -711,7 +749,7 @@ function FichaJogo() {
                             <tr key={index}>
                               <td></td>
                               <td style={{
-                                backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                                backgroundColor: item.Nome ? (item.Reside ? 'inherit' : '#A45A52') : 'inherit'
                               }}>
                                 {item.Nome || ''} {/* Display player name or an empty string */}
                               </td>
@@ -727,7 +765,7 @@ function FichaJogo() {
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td></td>
+                              <td>{item.Nome ? (item.Castigado ? 'Sim' : 'Não') : ''}</td>
                               {/* Add more empty cells as needed */}
                             </tr>
                           );
@@ -789,32 +827,28 @@ function FichaJogo() {
                       </div>
                       <div className='desconto'>
                         <table>
-                          <table>
-                            <thead>
-                              <tr>
-                                <th colSpan={2}>Desconto</th>
-                              </tr>
-                              <tr>
-                                <th className='largerCell'>1ºT</th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <th className='largerCell'>2ºT</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                          </table>
+                          <thead>
+                            <tr>
+                              <th colSpan={2}>Desconto</th>
+                            </tr>
+                            <tr>
+                              <th className='largerCell'>1ºT</th>
+                              <th></th>
+                            </tr>
+                            <tr>
+                              <th className='largerCell'>2ºT</th>
+                              <th></th>
+                            </tr>
+                          </thead>
                         </table>
                       </div>
                       <div className='delegado'>
                         <table>
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Delegado:</th>
-                              </tr>
-                            </thead>
-                          </table>
+                          <thead>
+                            <tr>
+                              <th>Delegado:</th>
+                            </tr>
+                          </thead>
                         </table>
                       </div>
                     </div>
@@ -828,15 +862,15 @@ function FichaJogo() {
                     <table>
                       <thead>
                         <tr>
-                          <th className='largeCell2' colSpan={3}>{detailedJogadores2[0].Clube || ""}</th>
+                          <th className='largeCell2' colSpan={2}>{detailedJogadores2[0].Clube || ""}</th>
                           <th colSpan={1}>Cap.<br />Sub.<br />G.R.</th>
                           <th className='largeCell3' colSpan={8}>Golos</th>
                           <th colSpan={3}>Cartões</th>
+                          <th colSpan={1}>Cas.</th>
                         </tr>
                         <tr>
                           <th>Nº</th>
                           <th>Nome</th>
-                          <th>Castigado</th>
                           <th className='largerCell'></th>
                           <th className='largerCell'>1</th>
                           <th className='largerCell'>2</th>
@@ -849,17 +883,18 @@ function FichaJogo() {
                           <th>A</th>
                           <th>A</th>
                           <th>V</th>
+                          <th>S/N</th>
                           {/* Add more columns based on the detailed jogadores information */}
                         </tr>
                       </thead>
                       <tbody>
-                      {[...Array(18)].map((_, index) => {
+                        {[...Array(18)].map((_, index) => {
                           const item = detailedJogadores2[index] || {}; // Use an empty object if no player data exists
                           return (
                             <tr key={index}>
                               <td></td>
                               <td style={{
-                                backgroundColor: item.Reside ? 'inherit' : '#A45A52'
+                                backgroundColor: item.Nome ? (item.Reside ? 'inherit' : '#A45A52') : 'inherit'
                               }}>
                                 {item.Nome || ''} {/* Display player name or an empty string */}
                               </td>
@@ -875,7 +910,7 @@ function FichaJogo() {
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td></td>
+                              <td>{item.Nome ? (item.Castigado ? 'Sim' : 'Não') : ''}</td>
                               {/* Add more empty cells as needed */}
                             </tr>
                           );
@@ -937,32 +972,28 @@ function FichaJogo() {
                       </div>
                       <div className='desconto'>
                         <table>
-                          <table>
-                            <thead>
-                              <tr>
-                                <th colSpan={2}>Faltas</th>
-                              </tr>
-                              <tr>
-                                <th className='largerCell'>1ºT</th>
-                                <th></th>
-                              </tr>
-                              <tr>
-                                <th className='largerCell'>2ºT</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                          </table>
+                          <thead>
+                            <tr>
+                              <th colSpan={2}>Faltas</th>
+                            </tr>
+                            <tr>
+                              <th className='largerCell'>1ºT</th>
+                              <th></th>
+                            </tr>
+                            <tr>
+                              <th className='largerCell'>2ºT</th>
+                              <th></th>
+                            </tr>
+                          </thead>
                         </table>
                       </div>
                       <div className='delegado'>
                         <table>
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Delegado:</th>
-                              </tr>
-                            </thead>
-                          </table>
+                          <thead>
+                            <tr>
+                              <th>Delegado:</th>
+                            </tr>
+                          </thead>
                         </table>
                       </div>
                     </div>
@@ -972,12 +1003,13 @@ function FichaJogo() {
                 </div>
               )}
             </div>
-            <h2>Resultado: 1ºTempo ____/____  Final ____/____  Mesa: _____________________  MVP: _____________________________</h2>
+            <h2 className='smallerFont'>Resultado: 1ºTempo ____/____  Final ____/____  Mesa: _____________________  MVP: _____________________________</h2>
+
           </>
         )}
       </div>
 
-      <div className='jogoBellow2'>
+      <div ref={componentPDF2} className='jogoBellow2'>
         {formSubmitted2 && (
           <>
             <div className='evo'>
@@ -1239,7 +1271,7 @@ function FichaJogo() {
                     <th className='big'></th>
                   </tr>
                   <tr>
-                    <th className='big'>NADA A ASSINALAR <span class="square-box"></span> -  ASSINATURA</th>
+                    <th className='big'>NADA A ASSINALAR <span className="square-box"></span> -  ASSINATURA</th>
                   </tr>
                 </thead>
               </table>
@@ -1258,7 +1290,7 @@ function FichaJogo() {
                     <th className='big'></th>
                   </tr>
                   <tr>
-                    <th className='big'>NADA A ASSINALAR <span class="square-box"></span> -  ASSINATURA</th>
+                    <th className='big'>NADA A ASSINALAR <span className="square-box"></span> -  ASSINATURA</th>
                   </tr>
                 </thead>
               </table>
@@ -1286,7 +1318,7 @@ function FichaJogo() {
                     <th className='big'></th>
                   </tr>
                   <tr>
-                    <th className='big'>NADA A ASSINALAR <span class="square-box"></span> -  ASSINATURA</th>
+                    <th className='big'>NADA A ASSINALAR <span className="square-box"></span> -  ASSINATURA</th>
                   </tr>
                 </thead>
               </table>

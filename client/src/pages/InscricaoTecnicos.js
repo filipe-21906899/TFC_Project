@@ -174,7 +174,7 @@ function InscricaoTecnicos() {
           if (equipaTecnicaResponse.ok) {
             const createdEquipaTecnica = await equipaTecnicaResponse.json();
             console.log('Created EquipaTecnica:', createdEquipaTecnica);
-            // Handle success, e.g., show a success message or redirect to another page
+            window.location.reload()
           } else {
             // Handle error response
             console.error('Failed to create EquipaTecnica:', equipaTecnicaResponse);
