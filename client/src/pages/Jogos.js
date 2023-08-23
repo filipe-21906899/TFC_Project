@@ -187,6 +187,7 @@ function Jogos() {
 
               const jogoJogadoresData = allDetailedJogadores.map((item) => {
                 return {
+                  JogadorId : item.id,
                   Nome: item.Nome,
                   Clube: item.Clube,
                   Reside: item.Reside,

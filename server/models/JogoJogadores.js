@@ -2,6 +2,10 @@ module.exports = (sequelize, DataTypes) =>{
 
     const JogoJogadores = sequelize.define("JogoJogadores",{
 
+        JogadorId :{
+            type: DataTypes.STRING,
+            allowNull:false
+        },
         Nome :{
             type: DataTypes.STRING,
             allowNull:false
