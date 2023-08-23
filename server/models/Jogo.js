@@ -10,6 +10,14 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.STRING,
             allowNull:false
         },
+        HomeId :{
+            type: DataTypes.STRING,
+            allowNull:false
+        },
+        AwayId :{
+            type: DataTypes.STRING,
+            allowNull:false
+        },
         DataJogo :{
             type: DataTypes.DATE,
             allowNull:false

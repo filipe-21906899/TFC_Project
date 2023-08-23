@@ -8,6 +8,21 @@ router.get("/:userId", async (req, res) =>{
     res.json(clubes); 
 });
 
+router.get("/:clubName", async (req, res) => {
+  const clubName = req.params.clubName;
+  try {
+    const club = await Clubes.findOne({ where: { Nome: clubName } });
+    if (club) {
+      res.json({ id: club.id });
+    } else {
+      res.status(404).json({ message: "Club not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
       const preDefinedValues = [

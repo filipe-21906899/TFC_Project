@@ -124,7 +124,7 @@ function Torneio() {
             
 
             <div className='btnInfo'>
-              <button type="submit">Inscrever Técnico</button>
+              <button type="submit">Criar Torneio</button>
             </div>
 
           </Form>

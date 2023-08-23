@@ -123,6 +123,9 @@ function Jogos() {
         console.log("Home equipaId value:", homeData.equipaId);
         console.log("Away equipaId value:", awayData.equipaId);
 
+        values.HomeId = homeClubId;
+        values.AwayId = awayClubId;
+
         const response = await fetch('http://localhost:3001/jogo', {
           method: 'POST',
           headers: {
