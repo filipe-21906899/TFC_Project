@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) =>{
         Jogo.hasMany(models.Golos, {
             onDelete: "cascade",
         });
+        Jogo.hasMany(models.JogoJogadores, {
+            onDelete: "cascade"
+        })
+
     };
 
     return Jogo

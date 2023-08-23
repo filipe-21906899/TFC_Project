@@ -58,6 +58,9 @@ app.use("/tecnicos_type", TecnicosTypeRouter);
 const TecnicosRouter = require('./routes/Tecnicos');
 app.use("/tecnicos", TecnicosRouter);
 
+const JogoJogadoresRouter = require('./routes/JogoJogadores');
+app.use("/jogo_jogadores", JogoJogadoresRouter);
+
 
 db.sequelize.sync().then(()=> {
     app.listen(3001, () =>{

@@ -60,21 +60,13 @@ function JogoInfo() {
   return (
     <div className='Inscrição3'>
       <button className="back-button" onClick={() => navigate(-1)}>Back</button>
-      {data && (
+      {data && torneioData &&  escalaoName &&(
           <div>
             <h2>Home: {data.Home}</h2>
             <h2>Away: {data.Away}</h2>
             <h2>HomeID: {data.HomeId}</h2>
             <h2>AwayID: {data.AwayId}</h2>
-          </div>
-      )}
-      {torneioData && (
-          <div>
             <h2>EscalaoId : {torneioData.EscalaoId}</h2>
-          </div>
-      )}
-      {escalaoName && (
-          <div>
             <h2>Escalão Name: {escalaoName.Nome}</h2>
           </div>
       )}

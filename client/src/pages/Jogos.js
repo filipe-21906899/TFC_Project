@@ -126,6 +126,8 @@ function Jogos() {
         values.HomeId = homeClubId;
         values.AwayId = awayClubId;
 
+        
+
         const response = await fetch('http://localhost:3001/jogo', {
           method: 'POST',
           headers: {
@@ -137,18 +139,100 @@ function Jogos() {
         if (response.ok) {
           const createdJogo = await response.json();
           console.log('Created Jogo:', createdJogo);
+
+          
+
+          const homeResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${homeClubId}&EscalaoId=${escalaoId}&CurrentYear=${new Date().getFullYear()}`);
+          const awayResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${awayClubId}&EscalaoId=${escalaoId}&CurrentYear=${new Date().getFullYear()}`);
+    
+          const homeData2 = await homeResponse.json();
+          const awayData2 = await awayResponse.json();
+    
+          if (homeData2.equipaId != null && awayData2.equipaId != null) {
+            // Both clubs are registered for the selected Escalao and current year
+            console.log('Both Home and Away clubs exist in equipas table for the current year.');
+            console.log("Home equipaId value:", homeData2.equipaId);
+            console.log("Away equipaId value:", awayData2.equipaId);
+    
+            const jogadoresHome = await fetch(`http://localhost:3001/equipa_jogadores/check?equipaId=${homeData2.equipaId}`);
+            const jogadoresAway = await fetch(`http://localhost:3001/equipa_jogadores/check?equipaId=${awayData2.equipaId}`);
+    
+            const jogadoresHomeData = await jogadoresHome.json();
+            const jogadoresAwayData = await jogadoresAway.json();
+    
+            if (jogadoresAwayData.length > 0 && jogadoresHomeData.length > 0) {
+              console.log('Jogadores found in equipaJogadores table for equipaId:', awayData2.equipaId);
+              console.log('Jogadores found in equipaJogadores table for equipaId:', homeData2.equipaId);
+              console.log('Jogadores:', jogadoresAwayData);
+              console.log('Jogadores:', jogadoresHomeData);
+    
+    
+              const detailedJogadores = await Promise.all(
+                jogadoresHomeData.map(async (jogadorId) => {
+                  const jogadorResponse = await fetch(`http://localhost:3001/jogadores/${jogadorId}`);
+                  const jogadorInfo = await jogadorResponse.json();
+                  return jogadorInfo;
+                })
+              );
+    
+              const detailedJogadores2 = await Promise.all(
+                jogadoresAwayData.map(async (jogadorId) => {
+                  const jogadorResponse = await fetch(`http://localhost:3001/jogadores/${jogadorId}`);
+                  const jogadorInfo2 = await jogadorResponse.json();
+                  return jogadorInfo2;
+                })
+              );
+    
+              const allDetailedJogadores = [...detailedJogadores, ...detailedJogadores2];
+
+              const jogoJogadoresData = allDetailedJogadores.map((item) => {
+                return {
+                  Nome: item.Nome,
+                  Clube: item.Clube,
+                  Reside: item.Reside,
+                  Castigado: item.Castigado,
+                  Escalao: escalaoData?.Nome,
+                  EscalaoId: item.EscalaoId,
+                  JogoId: createdJogo.id, // Use the ID of the created Jogo
+                };
+              });
+
+              console.log('Detailed Jogadores:', jogoJogadoresData);
+              
+
+              await Promise.all(
+                jogoJogadoresData.map(async (playerData) => {
+                  const response = await fetch('http://localhost:3001/jogo_jogadores', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(playerData),
+                  });
+        
+                  if (!response.ok) {
+                    console.error('Failed to add player to JogoJogadores:', response);
+                  }
+                })
+              );
+    
+            } else {
+              console.log('No jogadores found in equipaJogadores table  for equipaId:', awayData.equipaId);
+              console.log('No jogadores found in equipaJogadores table for equipaId:', homeData.equipaId);
+            }
+          }
           window.location.reload()
         } else {
           // Handle error response
           console.error('Failed to create Jogo:', response);
         }
 
-
-      } else {
+      }else {
         const notRegisteredTeam = homeData.equipaId == null ? 'Equipa 1' : 'Equipa 2';
         setTeamNotRegistered(notRegisteredTeam);
         setShowAlert2(true);
       }
+    
 
     } catch (error) {
       // Handle network error or other exceptions
