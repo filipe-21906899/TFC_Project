@@ -584,6 +584,63 @@ button {
   margin-left: 10px; 
 }
 
+/*Jogos Info*/
+
+.tableHome{
+  border-radius: 5px;
+  padding: 10px;
+  overflow: auto;
+  text-align: center;
+}
+
+.tableHome table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.tableHome th,
+.tableHome td {
+  border: 1px solid #004526;
+  text-align: center;
+  border: 1px solid black;
+  padding: 10px 10px;
+  line-height: 1.5;
+  font-size: medium;
+
+}
+
+.tableHome th{
+  background-color: #004526;
+  color: lightgray;
+}
+
+.tableSBS{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 250px;
+}
+.tableSBS2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 250px;
+}
+
+.players{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 300px;
+}
+
+.players2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 300px;
+}
 
 /* NAVBAR */
 
@@ -707,7 +764,6 @@ span {
 
 .Inscrição3 .back-button {
   font-size: 14px;
-  margin-right: auto;
   background-color: #A9BA9D;
   border: 2px solid black;
   width: 120px;

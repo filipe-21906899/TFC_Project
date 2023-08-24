@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.BOOLEAN,
             allowNull:false
         },
+        NCartao :{
+            type: DataTypes.INTEGER,
+            allowNull:false
+        },
         Imagem :{
             type: DataTypes.TEXT('long'),
             allowNull:false
@@ -53,7 +57,7 @@ module.exports = (sequelize, DataTypes) =>{
         File :{
             type: DataTypes.TEXT('long'),
             allowNull:false
-        }
+        },
 
     })
     Jogadores.associate = (models) => {

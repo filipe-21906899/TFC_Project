@@ -51,9 +51,10 @@ function Inscricao() {
     CCJogador: "",
     CCGuardiao: "",
     DataNascimento: "",
-    TecnicosTypeId: "",
+    NCartao: 0,
     Imagem: "",
     File: "",
+
   };
 
   const validationSchema = Yup.object().shape({
@@ -108,7 +109,6 @@ function Inscricao() {
   })
 
   useEffect(() => {
-    // Fetch and set the options for escalao and tecnicosType
     // Example code to fetch options from the server:
     const fetchOptions = async () => {
       try {

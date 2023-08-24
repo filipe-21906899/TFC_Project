@@ -13,4 +13,12 @@ router.post("/", async (req, res) =>{
     res.json(cc);
 })
 
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const jogo = await JogoJogadores.findAll({
+        where: {JogoId: id}
+    });
+    return res.json(jogo);
+  });
+
 module.exports = router
