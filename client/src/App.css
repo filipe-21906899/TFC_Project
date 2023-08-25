@@ -270,7 +270,7 @@ button {
   justify-content: center;
 }
 
-.downloadFichas button{
+.downloadFichas button {
   margin-top: 0%;
   height: 40px;
   border: none;
@@ -380,7 +380,7 @@ button {
   font-size: large;
 }
 
-.smallerFont{
+.smallerFont {
   font-size: large;
   margin-top: 25px;
 }
@@ -581,12 +581,12 @@ button {
 
 .away {
   flex: 1;
-  margin-left: 10px; 
+  margin-left: 10px;
 }
 
 /*Jogos Info*/
 
-.tableHome{
+.tableHome {
   border-radius: 5px;
   padding: 10px;
   overflow: auto;
@@ -610,37 +610,96 @@ button {
 
 }
 
-.tableHome th{
+.tableHome th {
   background-color: #004526;
   color: lightgray;
 }
 
-.tableSBS{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 250px;
-}
-.tableSBS2{
+.tableSBS {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 250px;
 }
 
-.players{
+.tableSBS2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 250px;
+}
+
+.players {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 300px;
 }
 
-.players2{
+.players2 {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 300px;
 }
+
+.btnColor {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.btnColor button {
+  margin-top: 25px;
+  margin-left: 300px;
+  height: 40px;
+  border: none;
+  background-color: #00452679;
+  border-radius: 5px;
+  color: white;
+}
+
+.btnColor button:hover {
+  cursor: pointer;
+  background-color: #004526;
+}
+
+.cG {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 300px;
+}
+
+.formContainer4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 20%;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 50px;
+}
+
+.formContainer4 .field {
+  margin-top: 10px;
+}
+
+.formContainer4 button:hover {
+  cursor: pointer;
+  background-color: #004526;
+}
+
+.formContainer4 button {
+  margin-top: 0%;
+  height: 40px;
+  border: none;
+  background-color: #00452679;
+  border-radius: 5px;
+  color: white;
+}
+
+
 
 /* NAVBAR */
 

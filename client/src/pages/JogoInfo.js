@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-//import { Formik, Form, Field, ErrorMessage } from 'formik';
-//import * as Yup from 'yup';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
 
 function JogoInfo() {
 
@@ -21,6 +22,28 @@ function JogoInfo() {
   const isAdmin = username === 'Admin';
 
   const navigate = useNavigate();
+
+  const initialValues = {
+    JogadoreId: "",
+    TempoJogo: "",
+    JogoId: id,
+  };
+
+  const validationSchema = Yup.object({
+    JogadoreId: Yup.string().required('Indique o Jogador'),
+    TempoJogo: Yup.string().required('Tempo Jogo em falta'),
+  });
+
+  const initialValues2 = {
+    JogadoreId: "",
+    Tipo: "",
+    JogoId: id,
+  };
+
+  const validationSchema2 = Yup.object({
+    JogadoreId: Yup.string().required('Indique o Jogador'),
+    Tipo: Yup.string().required('Indique a cor do cartão'),
+  });
 
   useEffect(() => {
     axios
@@ -164,6 +187,14 @@ function JogoInfo() {
 
     fetchEscaloes();
   }, []);
+
+  const jogoFim = async (values) => { };
+
+  const golosSubmit = async (values) => { };
+
+  const cartoesSubmit = async (values) => { };
+
+  //falta só fazer os submits and depois fazer display dos Cartoes e Golos
 
 
   return (
@@ -332,17 +363,88 @@ function JogoInfo() {
                 </table>
               </div>
             </div>
+          </>
+        )}
+        {isAdmin && jogadores && (
+          <>
+            <div className='btnColor'>
+              <button className='btnInfo' onClick={jogoFim}>Jogo Terminado</button>
+            </div>
+            <div className='cG'>
+              <Formik initialValues={initialValues} onSubmit={golosSubmit} validationSchema={validationSchema}>
+                <Form className='formContainer4' encType="multipart/form-data">
+                  <div style={{ textAlign: 'center' }}>
+                    <h1>Golos</h1>
+                  </div>
+                  <div style={{ display: 'flex' }}>
 
-            <div>
-              <h2>Home: {data.Home}</h2>
-              <h2>Away: {data.Away}</h2>
-              <h2>HomeID: {data.HomeId}</h2>
-              <h2>AwayID: {data.AwayId}</h2>
-              <h2>EscalaoId : {torneioData.EscalaoId}</h2>
-              <h2>Escalão Name: {escalaoName.Nome}</h2>
+                    <div className='formLeft'>
+
+                      <label className='field'>Jogador: </label>
+                      <Field as='select' name='JogadoreId'>
+                        <option value=''>Select Player ID</option>
+                        {jogadores.map((item) => (
+                          <option key={item.id} value={item.JogadorId}>
+                            {`${item.JogadorId} - ${item.Nome}`} {/* Display both JogadorId and Nome */}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage name='JogadoreId' component='span' />
+
+                      <label className='field'>Tempo Jogo:</label>
+                      <Field type='time' id='timeInput' name='TempoJogo' />
+                      <ErrorMessage name='TempoJogo' component='span' />
+
+                      <div className='btnInfo'>
+                        <button type='submit'>Obter Ficha Jogo</button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </Form>
+              </Formik>
+              <Formik initialValues={initialValues2} onSubmit={cartoesSubmit} validationSchema={validationSchema2}>
+                <Form className='formContainer4' encType="multipart/form-data">
+                  <div style={{ textAlign: 'center' }}>
+                    <h1>Cartões</h1>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+
+                    <div className='formLeft'>
+
+                      <label className='field'>Jogador: </label>
+                      <Field as='select' name='JogadoreId'>
+                        <option value=''>Select Player ID</option>
+                        {jogadores.map((item) => (
+                          <option key={item.id} value={item.JogadorId}>
+                            {`${item.JogadorId} - ${item.Nome}`} {/* Display both JogadorId and Nome */}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage name='JogadoreId' component='span' />
+
+                      <label className='field'>Tipo Cartão:</label>
+                      <Field as='select' name='Tipo'>
+                        <option value=''>Select Tipo Cartão</option>
+                        <option value='Amarelo'>Amarelo</option>
+                        <option value='Vermelho'>Vermelho</option>
+                      </Field>
+                      <ErrorMessage name='Tipo' component='span' />
+
+                      <div className='btnInfo'>
+                        <button type='submit'>Obter Ficha Jogo</button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </Form>
+              </Formik>
             </div>
           </>
         )}
+
 
       </div>
     </div>
