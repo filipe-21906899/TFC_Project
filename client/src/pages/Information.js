@@ -490,7 +490,6 @@ function Info() {
         </Formik>
       </div>
 
-
       {formSubmitted && (
         <>
           <Formik initialValues={initialValues2} onSubmit={handleSubmit}>
@@ -528,7 +527,7 @@ function Info() {
                       <option value=''>Select Id</option>
                       {detailedTecnico.map((item) => (
                         <option key={item.id} value={item.id}>
-                          {item.id}
+                          {`${item.id} - ${item.Nome}`}
                         </option>
                       ))}
 
@@ -579,7 +578,7 @@ function Info() {
                       <option value=''>Select Id</option>
                       {detailedTecnico.map((item) => (
                         <option key={item.id} value={item.id}>
-                          {item.id}
+                          {`${item.id} - ${item.Nome}`}
                         </option>
                       ))}
 
@@ -630,7 +629,7 @@ function Info() {
                       <option value=''>Select Id</option>
                       {detailedTecnico.map((item) => (
                         <option key={item.id} value={item.id}>
-                          {item.id}
+                          {`${item.id} - ${item.Nome}`}
                         </option>
                       ))}
 
@@ -838,8 +837,6 @@ function Info() {
           )}
         </>
       )}
-
-
 
       {showAlert && (
         <div className='custom-alert-overlay2'>

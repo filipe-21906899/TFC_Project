@@ -80,5 +80,27 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const tecnicoId = req.params.id;
+
+    // Fetch the Tecnico by ID
+    const tecnico = await Tecnicos.findByPk(tecnicoId);
+
+    if (tecnico) {
+      // Delete the Tecnico
+      await tecnico.destroy();
+
+      res.json({ message: 'Tecnico deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Tecnico not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting Tecnico:', error);
+    res.status(500).json({ error: 'Failed to delete Tecnico' });
+  }
+});
+
+
 
 module.exports = router;
