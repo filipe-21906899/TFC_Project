@@ -13,4 +13,19 @@ router.post("/", async (req, res) =>{
     res.json(cc);
 })
 
+router.get("/:id", async (req, res) => {
+    try {
+      const jogoId = req.params.id;
+      const listOfCartoes = await Cartoes.findAll({
+        where: {
+          JogoId: jogoId
+        }
+      });
+      res.json(listOfCartoes);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
 module.exports = router

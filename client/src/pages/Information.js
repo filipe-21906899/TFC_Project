@@ -341,6 +341,50 @@ function Info() {
     }
   };
 
+  const handleSubmit3 = async (values) => {
+    try {
+      console.log('Form Values:', values);
+  
+      let detailedData = null;
+      let updatedDetailedItems = [];
+  
+      if (detailedJogadores.length > 0) {
+        const response = await fetch(`http://localhost:3001/jogadores/${values.id}`);
+        detailedData = await response.json();
+  
+        if (detailedData) {
+          // Send a DELETE request to delete the player
+          await fetch(`http://localhost:3001/jogadores/${values.id}`, {
+            method: 'DELETE',
+          });
+  
+          updatedDetailedItems = detailedJogadores.filter(item => item.id !== detailedData.id);
+        }
+      } else if (detailedTecnico.length > 0) {
+        const response = await fetch(`http://localhost:3001/tecnicos/${values.id}`);
+        detailedData = await response.json();
+  
+        if (detailedData) {
+          // Send a DELETE request to delete the technician
+          await fetch(`http://localhost:3001/tecnicos/${values.id}`, {
+            method: 'DELETE',
+          });
+  
+          updatedDetailedItems = detailedTecnico.filter(item => item.id !== detailedData.id);
+        }
+      }
+  
+      // Set the appropriate state based on the condition
+      if (detailedJogadores.length > 0) {
+        setDetailedJogadores(updatedDetailedItems);
+      } else if (detailedTecnico.length > 0) {
+        setDetailedTecnico(updatedDetailedItems);
+      }
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  }
+
   const openImageInNewWindow = (imageData) => {
     const imageWindow = window.open('', '_blank');
     const content = `
@@ -375,11 +419,6 @@ function Info() {
     pdfWindow.document.close();
   };
   
-  
-  
-
-
-
   return (
     <div className='info'>
       <div className="form-wrapper">
@@ -455,7 +494,7 @@ function Info() {
       {formSubmitted && (
         <>
           <Formik initialValues={initialValues2} onSubmit={handleSubmit}>
-            <Form className='formContainer3' encType="multipart/form-data">
+            <Form className='formContainer5' encType="multipart/form-data">
               <div className='formRight'>
                 {isAdmin && detailedJogadores.length > 0 && (
                   <>
@@ -467,7 +506,7 @@ function Info() {
                       <option value=''>Select Id</option>
                       {detailedJogadores.map((item) => (
                         <option key={item.id} value={item.id}>
-                          {item.id}
+                          {`${item.id} - ${item.Nome}`}
                         </option>
                       ))}
 
@@ -504,6 +543,109 @@ function Info() {
               </div>
             </Form>
           </Formik>
+
+          <Formik initialValues={initialValues2} onSubmit={handleSubmit3}>
+            <Form className='formContainer5' encType="multipart/form-data">
+              <div className='formRight'>
+                {isAdmin && detailedJogadores.length > 0 && (
+                  <>
+                    <div style={{ textAlign: 'center' }}>
+                      <h1>Remover Jogador</h1>
+                    </div>
+                    <label className='ids'>ID Jogador/Tecnico: </label>
+                    <Field name='id' component='select'>
+                      <option value=''>Select Id</option>
+                      {detailedJogadores.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {`${item.id} - ${item.Nome}`}
+                        </option>
+                      ))}
+
+
+                    </Field>
+                    <ErrorMessage name='id' component='span' />
+                    <div className='btnInfo'>
+                      <button type='submit'> Residente</button>
+                    </div>
+                  </>
+                )}
+                {isAdmin && detailedTecnico.length > 0 && (
+                  <>
+                    <div style={{ textAlign: 'center' }}>
+                      <h1>Remover Técnico</h1>
+                    </div>
+                    <label className='ids'>ID Jogador/Tecnico: </label>
+                    <Field name='id' component='select'>
+                      <option value=''>Select Id</option>
+                      {detailedTecnico.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.id}
+                        </option>
+                      ))}
+
+
+                    </Field>
+                    <ErrorMessage name='id' component='span' />
+                    <div className='btnInfo'>
+                      <button type='submit'>Delete</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </Form>
+          </Formik>
+
+          <Formik initialValues={initialValues2} onSubmit={handleSubmit3}>
+            <Form className='formContainer5' encType="multipart/form-data">
+              <div className='formRight'>
+                {!isAdmin && detailedJogadores.length > 0 && (
+                  <>
+                    <div style={{ textAlign: 'center' }}>
+                      <h1>Remover Jogador</h1>
+                    </div>
+                    <label className='ids'>ID Jogador/Tecnico: </label>
+                    <Field name='id' component='select'>
+                      <option value=''>Select Id</option>
+                      {detailedJogadores.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {`${item.id} - ${item.Nome}`}
+                        </option>
+                      ))}
+
+
+                    </Field>
+                    <ErrorMessage name='id' component='span' />
+                    <div className='btnInfo'>
+                      <button type='submit'> Residente</button>
+                    </div>
+                  </>
+                )}
+                {!isAdmin && detailedTecnico.length > 0 && (
+                  <>
+                    <div style={{ textAlign: 'center' }}>
+                      <h1>Remover Técnico</h1>
+                    </div>
+                    <label className='ids'>ID Jogador/Tecnico: </label>
+                    <Field name='id' component='select'>
+                      <option value=''>Select Id</option>
+                      {detailedTecnico.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.id}
+                        </option>
+                      ))}
+
+
+                    </Field>
+                    <ErrorMessage name='id' component='span' />
+                    <div className='btnInfo'>
+                      <button type='submit'>Delete</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </Form>
+          </Formik>
+
           {!isAdmin && detailedJogadores.length > 0 && (
             <div className="info-table">
               <table>

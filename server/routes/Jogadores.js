@@ -90,5 +90,115 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.put('/:id/ncartao', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+
+    // Fetch the Jogadore by ID
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      // Increment the NCartao field by 1
+      jogadore.NCartao += 1;
+      await jogadore.save(); // Save the updated Jogadore
+
+      res.json(jogadore);
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
+    }
+  } catch (error) {
+    console.error('Error updating Jogadore NCartao:', error);
+    res.status(500).json({ error: 'Failed to update Jogadore NCartao' });
+  }
+});
+
+router.put('/:id/castigado', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+
+    // Fetch the Jogadore by ID
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      // Check conditions and update Castigado
+      if (jogadore.NCartao === 2 && !jogadore.Castigado) {
+        jogadore.Castigado = true;
+        await jogadore.save(); // Save the updated Jogadore
+        res.json(jogadore);
+      } else {
+        res.json(jogadore); // Return the Jogadore without making any changes
+      }
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
+    }
+  } catch (error) {
+    console.error('Error updating Jogadore Castigado:', error);
+    res.status(500).json({ error: 'Failed to update Jogadore Castigado' });
+  }
+});
+
+router.put('/:id/vermelho', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+
+    // Fetch the Jogadore by ID
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      // Update Castigado to true for "Vermelho" cards
+      jogadore.Castigado = true;
+      await jogadore.save(); // Save the updated Jogadore
+      res.json(jogadore);
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
+    }
+  } catch (error) {
+    console.error('Error updating Jogadore Castigado for Vermelho:', error);
+    res.status(500).json({ error: 'Failed to update Jogadore Castigado for Vermelho' });
+  }
+});
+
+router.put('/:id/reset', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+
+    // Fetch the Jogadore by ID
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      jogadore.Castigado = false;
+      jogadore.NCartao = 0;
+      await jogadore.save(); // Save the updated Jogadore
+      res.json(jogadore);
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
+    }
+  } catch (error) {
+    console.error('Error updating Jogadore Castigado for Vermelho:', error);
+    res.status(500).json({ error: 'Failed to update Jogadore Castigado for Vermelho' });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const jogadoreId = req.params.id;
+
+    // Fetch the Jogadore by ID
+    const jogadore = await Jogadores.findByPk(jogadoreId);
+
+    if (jogadore) {
+      // Delete the Jogadore
+      await jogadore.destroy();
+
+      res.json({ message: 'Jogadore deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Jogadore not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting Jogadore:', error);
+    res.status(500).json({ error: 'Failed to delete Jogadore' });
+  }
+});
+
 
 module.exports = router

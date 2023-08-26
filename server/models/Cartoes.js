@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.STRING,
             allowNull:false
         },
+        Nome :{
+            type: DataTypes.STRING,
+            allowNull:false
+        },
     })
     return Cartoes
 }

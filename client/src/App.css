@@ -924,6 +924,27 @@ span {
 
 /* Info Players*/
 
+.formContainer5 {
+  display: flex;
+  justify-content: center;
+  float: right;
+}
+
+.formContainer5 button:hover {
+  cursor: pointer;
+  background-color: #004526;
+}
+
+.formContainer5 button {
+  margin-top: 0%;
+  height: 40px;
+  border: none;
+  background-color: #00452679;
+  border-radius: 5px;
+  color: white;
+
+}
+
 .club-name {
   font-size: 25px;
   margin-bottom: 10px;

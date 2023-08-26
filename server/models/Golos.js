@@ -5,7 +5,11 @@ module.exports = (sequelize, DataTypes) =>{
         TempoJogo :{
             type: DataTypes.TIME,
             allowNull:false
-        }
+        },
+        Nome :{
+            type: DataTypes.STRING,
+            allowNull:false
+        },
     })
     return Golos
 }
