@@ -109,7 +109,6 @@ function Inscricao() {
   })
 
   useEffect(() => {
-    // Example code to fetch options from the server:
     const fetchOptions = async () => {
       try {
         const escalaoResponse = await fetch('http://localhost:3001/escalao');

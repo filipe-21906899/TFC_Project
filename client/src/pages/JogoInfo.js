@@ -377,7 +377,7 @@ function JogoInfo() {
       }
 
       // Reload the page after successful submission
-      //window.location.reload();
+      window.location.reload();
 
       return data; // Return the posted cartao data if needed
     } catch (error) {
