@@ -513,7 +513,7 @@ function Info() {
                     </Field>
                     <ErrorMessage name='id' component='span' />
                     <div className='btnInfo'>
-                      <button type='submit'> Residente</button>
+                      <button type='submit'> Delete</button>
                     </div>
                   </>
                 )}
@@ -564,7 +564,7 @@ function Info() {
                     </Field>
                     <ErrorMessage name='id' component='span' />
                     <div className='btnInfo'>
-                      <button type='submit'> Residente</button>
+                      <button type='submit'> Delete</button>
                     </div>
                   </>
                 )}
@@ -615,7 +615,7 @@ function Info() {
                     </Field>
                     <ErrorMessage name='id' component='span' />
                     <div className='btnInfo'>
-                      <button type='submit'> Residente</button>
+                      <button type='submit'> Delete</button>
                     </div>
                   </>
                 )}

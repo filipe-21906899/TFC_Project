@@ -129,6 +129,7 @@ function FichaJogo() {
       // Check if both Home and Away club IDs exist for the current year and EscalaoId
       console.log(values.Home)
       console.log(values.Away)
+      console.log(values.EscalaoId)
       const homeResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${values.Home}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
       const awayResponse = await fetch(`http://localhost:3001/equipa/check?ClubeId=${values.Away}&EscalaoId=${values.EscalaoId}&CurrentYear=${new Date().getFullYear()}`);
 
@@ -213,6 +214,7 @@ function FichaJogo() {
           console.log('Detailed Jogadores:', detailedJogadores2);
           console.log('Detailed Tecnicos:', detailedTecnico2);
 
+          setFormSubmitted2(true);
         } else {
           console.log('No jogadores found in equipaJogadores table neither in equipatecnica table for equipaId:', awayData.equipaId);
         }
@@ -224,7 +226,6 @@ function FichaJogo() {
         setShowAlert2(true);
       }
 
-      setFormSubmitted2(true);
 
     } catch (error) {
       // Handle error
@@ -301,6 +302,7 @@ function FichaJogo() {
           setDetailedTecnico(detailedTecnico);
 
           console.log('Detailed Tecnicos:', detailedTecnico);
+          setFormSubmitted(true);
 
 
         } else {
@@ -313,7 +315,6 @@ function FichaJogo() {
         // Show a popup message indicating that the combination is not found
         setShowAlert(true);
       }
-      setFormSubmitted(true);
 
     } catch (error) {
       // Handle error
