@@ -335,7 +335,7 @@ function Inscricao() {
                 placeholder="Ex. 155555554XW3" />
               <ErrorMessage name='CCJogador' component="span" />
 
-              <label>Nº CC Guardião: </label>
+              <label>Nº CC Encarregado: </label>
               <Field
                 autoComplete="off"
                 id="CCGuardiao"

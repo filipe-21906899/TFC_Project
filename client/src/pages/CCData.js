@@ -74,7 +74,7 @@ function CCData() {
       // Create a new Excel workbook and sheet
       const workbook = XLSX.utils.book_new();
       const sheet = XLSX.utils.aoa_to_sheet([
-        ['CCJogador', 'CCGuardiao', 'CCTecnico'],
+        ['CCJogador', 'CCEncarregados', 'CCTecnico'],
         ...mappedData
       ]);
   
@@ -84,7 +84,7 @@ function CCData() {
       // Set column widths (adjust these values as needed)
     const columnWidths = [
       { wch: 16 }, // CCJogador width
-      { wch: 16 }, // CCGuardiao width
+      { wch: 16 }, // CCEncarregados width
       { wch: 16 }  // CCTecnico width
     ];
     sheet["!cols"] = columnWidths.map(col => ({ width: col.wch }));

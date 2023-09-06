@@ -513,7 +513,7 @@ function Info() {
                     </Field>
                     <ErrorMessage name='id' component='span' />
                     <div className='btnInfo'>
-                      <button type='submit'> Delete</button>
+                      <button type='submit'> Residente</button>
                     </div>
                   </>
                 )}
@@ -659,7 +659,7 @@ function Info() {
                     <th>Data Nascimento</th>
                     <th>Email</th>
                     <th>CC Jogador</th>
-                    <th>CC Guardião</th>
+                    <th>CC Encarregado</th>
                     <th>Foto</th>
                     <th>PDF</th>
                     {/* Add more columns based on the detailed jogadores information */}
@@ -702,7 +702,7 @@ function Info() {
                     <th>Data Nascimento</th>
                     <th>Email</th>
                     <th>CC Jogador</th>
-                    <th>CC Guardião</th>
+                    <th>CC Encarregado</th>
                     <th>Residente</th>
                     <th>Foto</th>
                     <th>PDF</th>
