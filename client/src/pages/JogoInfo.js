@@ -20,6 +20,7 @@ function JogoInfo() {
   const [escaloes, setEscaloes] = useState([]);
   const [cartoes, setCartoes] = useState([]);
   const [golos, setGolos] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
 
   const isAdmin = username === 'Admin';
 
@@ -46,6 +47,10 @@ function JogoInfo() {
     JogadoreId: Yup.string().required('Indique o Jogador'),
     Tipo: Yup.string().required('Indique a cor do cartão'),
   });
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
   useEffect(() => {
     axios
@@ -238,6 +243,7 @@ function JogoInfo() {
               console.error(`Failed to update player ${jogadorId}`);
             } else {
               console.log(`Player ${jogadorId} updated`);
+              setShowAlert(true);
             }
           }
         }
@@ -245,6 +251,7 @@ function JogoInfo() {
         // If no player is castigado, log the message
         if (!anyPlayerCastigado) {
           console.log("Jogo terminado nenhum Jogador Castigado");
+          setShowAlert(true);
         }
       }
     } catch (error) {
@@ -686,6 +693,14 @@ function JogoInfo() {
 
 
       </div>
+      {showAlert && (
+        <div className='custom-alert-overlay'>
+          <div className="custom-alert">
+            <p>Jogo Terminado!</p>
+            <button onClick={handleCloseAlert}>OK</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

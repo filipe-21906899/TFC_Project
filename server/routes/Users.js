@@ -34,10 +34,10 @@ router.post("/login", async (req, res) => {
       include: [Clubes]
     });
   
-    if (!user) return res.json({ error: "User Doesn't Exist" });
+    if (!user) return res.json({ error: "Utilizador não existe" });
   
     bcrypt.compare(Password, user.Password).then((match) => {
-      if (!match) return res.json({ error: "Wrong Username And Password Combination" });
+      if (!match) return res.json({ error: "Palavra-passe errada" });
   
       let clubId = null;
       let clubName = null;

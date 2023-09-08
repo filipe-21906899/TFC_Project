@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
-//import { useNavigate } from "react-router-dom"
 
 function EquipasInscricao() {
 
@@ -11,7 +10,6 @@ function EquipasInscricao() {
 
   const currentYear = new Date().getFullYear()
 
-  //const go = useNavigate();
 
   const initialValues = {
     EscalaoId: '',
@@ -47,25 +45,6 @@ function EquipasInscricao() {
     setShowAlert(false);
   };
 
-  /*
-
-  const handleSubmit2 = async (values) => {
-    try {
-      // Log the form values
-      console.log('Form Values:', values);
-
-      // Your API call here...
-
-      // For demonstration purposes, we are just logging the success message.
-      console.log('Form submitted successfully!');
-    } catch (error) {
-      // Handle error
-      console.error('Error creating Equipa:', error);
-    }
-  };
-
-  */
-
   const handleSubmit = async (values) => {
     try {
       console.log(values);
@@ -82,7 +61,7 @@ function EquipasInscricao() {
 
       if (response.ok) {
         console.log('Equipa inscrita:', responseData);
-        // Handle success, e.g., show a success message or redirect to another page
+        window.location.reload()
       } else if (response.status === 400) {
         // If the status code is 400, it means the team already exists
         console.error('Equipa already saved:', responseData.error);
